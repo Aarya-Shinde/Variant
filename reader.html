@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readers Hub</title>
+    <link rel="stylesheet" href="/css/otherstyle.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">📚 Readers Hub</div>
+        <a href="#diary">Diary</a>
+        <a href="#add-book">Add Book</a>
+        <a href="#reading-score">Reading Score</a>
+        <a href="#library-stats">Library Stats</a>
+        <div class="user-icon">👤</div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>Welcome to Your Reading World</h1>
+        <p>Track your journey, add books, and explore new reads</p>
+    </header>
+
+    <!-- Diary Section -->
+    <section id="diary" class="feature-section">
+        <h2>My Reading Diary 📖</h2>
+        <div class="diary-container">
+            <div class="diary-entry" onclick="openDiaryEntry()">
+                <img src="images/diary-icon.png" alt="Diary Icon">
+                <p>Write a new review</p>
+            </div>
+            <!-- Additional diary entries could be dynamically generated here -->
+        </div>
+    </section>
+
+    <!-- Add Book Section -->
+    <section id="add-book" class="feature-section">
+        <h2>Add a New Book to Library 📚</h2>
+        <div class="add-book-container" onclick="addNewBook()">
+            <img src="images/add-book-icon.png" alt="Add Book Icon">
+            <p>Add a New Book</p>
+        </div>
+    </section>
+
+    <!-- Reading Score Section -->
+    <section id="reading-score" class="feature-section">
+        <h2>Your Reading Score 🌟</h2>
+        <div class="score-display">
+            <img src="images/score-icon.png" alt="Score Icon">
+            <p>Reading Score: <span id="reading-score">45</span></p>
+        </div>
+    </section>
+
+    <!-- Library Stats Section -->
+    <section id="library-stats" class="feature-section">
+        <h2>Total Library Books 📚</h2>
+        <div class="stats-display">
+            <img src="images/library-icon.png" alt="Library Icon">
+            <p>Total Books in Library: <span id="total-books">128</span></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Readers Hub &copy; 2024</p>
+    </footer>
+</body>
+</html>

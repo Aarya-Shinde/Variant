@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified System for Author and Audience</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="scripts.js" defer></script>
+
+     <!--=============== BOXICONS ===============-->
+     <link
+     rel="stylesheet"
+     href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"/>
+
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <!---font-family: "Edu AU VIC WA NT Pre", cursive;--->
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<body>
+      <!-- Nav Bar -->
+    
+      <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="#">Variant</a>
+            </div>
+            <form>
+                <input type="text" type= "search" placeholder="Search">          
+            </form>
+            <div class="nav">
+                <ul>
+                    <li><a href="reader.html">Reader</a></li>
+                    <li><a href="#">Writer</a></li>
+                    <li><a href="library.html">Library</a></li>
+                    <li><a href="#">Login</a></li>
+
+                </ul>        
+            </div>
+            </div>
+        </div>
+    </header>
+        
+<!-- Nav Bar Ends -->
+
+<body>
+
+    <!-- Header Section with Background Image and Intro Text -->
+    <section class="header">
+        <h1>Welcome to the Ancient Library</h1>
+        <p class="subtitle">A Place for all of Us</p>
+        <div class="header-overlay"></div>
+        <button type="button">Read More</button>
+    </section>
+
+    <!-- Slideshow of Popular Novels with Smooth Transition -->
+    <section class="slideshow">
+        <h2>Popular Novels</h2>
+        <div class="slideshow-container">
+            <div class="slide">
+                <img src="images/ima-6.jpg" alt="Novel 1">
+                <button onclick="window.location.href='book1.html'">Read More</button>
+            </div>
+            <div class="slide">
+                <img src="images/ima-8.webp" alt="Novel 2">
+                <button onclick="window.location.href='book2.html'">Read More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personalized Recommendations with Hover Effect -->
+    <section class="personal-recommendations">
+        <h2>Your Recommendations</h2>
+        <div class="recommendations-container">
+            <div class="recommendation-item">
+                <img src="images/recommended1.jpg" alt="Recommended Book 1">
+                <p>Recommended Book Title 1</p>
+                <button onclick="window.location.href='book2.html'">Check it out</button>
+            </div>
+            <div class="recommendation-item">
+                <img src="images/recommended2.jpg" alt="Recommended Book 2">
+                <p>Recommended Book Title 2</p>
+                <button onclick="window.location.href='book3.html'">Check it out</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section with Enhanced Book Animation -->
+    <section class="about-us">
+        <h2>About Us</h2>
+        <div class="book-container" onclick="togglePage()">
+            <div class="book-page front">
+                <p>Welcome to our Library - A Classic Experience</p>
+            </div>
+            <div class="book-page back hidden">
+                <p>Team Members:</p>
+                <ul>
+                    <li>John Doe</li>
+                    <li>Jane Smith</li>
+                    <li>Alex Lee</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+ 
+    <!-- Footer Section -->
+<footer class="footer">
+    <div class="footer__container">
+      <div class="footer__content col">
+        <h3 class="footer__title">Our Services</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Support</a></li>
+          <li><a href="#" class="footer__link">Donate</a></li>
+          <li><a href="#" class="footer__link">Report a bug</a></li>
+          <li><a href="#" class="footer__link">Terms of Service</a></li>
+        </ul>
+      </div>
+  
+      <div class="footer__content col">
+        <h3 class="footer__title">Our Company</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Blog</a></li>
+          <li><a href="#" class="footer__link">Our mission</a></li>
+          <li><a href="#" class="footer__link">Get in touch</a></li>
+        </ul>
+      </div>
+  
+      <div class="footer__content col">
+        <h3 class="footer__title">Community</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Support</a></li>
+          <li><a href="#" class="footer__link">Questions</a></li>
+          <li><a href="#" class="footer__link">Usage help</a></li>
+        </ul>
+      </div>
+  
+      <div class="footer__social col">
+        <a href="#" class="footer__social-link"><i class="bx bxl-facebook-circle"></i></a>
+        <a href="https://github.com/Aarya-Shinde/Variant/" class="footer__social-link"><i class="bx bxl-github"></i></a>
+        <a href="#" class="footer__social-link"><i class="bx bxl-instagram"></i></a>
+      </div>
+    </div>
+  
+    <p class="footer__copy">&#169; Aarya Shinde. All rights reserved</p>
+  </footer>
+  <!-- Footer Section ends here -->
+  
+</body>
+</html>
