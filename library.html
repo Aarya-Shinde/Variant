@@ -4,26 +4,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+     body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f1de;
+            color: #4b2e2e;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+    /************* Navigation Bar *************/
+    .nav {
+      position: fixed; /* Sticks to the top of the screen */
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #a0522d; /* Wooden brown */
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      z-index: 1000; /* Ensures it's above other content */
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    .nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2); /* Light hover effect */
+    }
+
+    /* Library Content*/
+    .content {
+      padding-top: 80px; /* Adjust for fixed navbar height */
+      
+    }
+
+    .bookshelf-container {
+    width: 60%;
+    border: 2px solid #8c6d45;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #fff8dc;
+    position: relative;
+    max-height: auto; /* Remove height limit */
+    overflow-y: visible; /* Ensure no forced scrolling */
+    margin: 0 auto; /* Center align the container */
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Georgia', serif;
+      color: #a0522d; /* Matching brown */
+    }
+
+    .bookshelf {
+      background: #8b4513; /* Dark brown for the shelf */
+      padding: 20px;
+      gap: 5px;
+      border-radius: 10px;
+      box-shadow: inset 0px -5px 0px #5a3212; /* Shelf shadow for depth */
+      
+    }
+    .bookshelf-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #8c6d45;
+        }
+
+    .shelf-row {
+      display: flex;
+      justify-content: space-evenly;
+      margin-bottom: 20px;
+    }
+
+    .book {
+      background-color: #a0522d; /* Book cover color */
+      color: white;
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      width: 80px;
+      height: 120px;
+    }
+
+    .book:hover {
+      transform: scale(1.1);
+      transition: 0.2s ease-in-out;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    }
+  </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="library.html">Library</a>
-        <a href="add-book.html">Add Book</a>
-        <a href="diary.html">Diary</a>
-    </nav>
+  <!-- Navigation Bar -->
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="diary.html">Books</a>
+    <a href="User.html">Contact</a>
+  </div>
 
-    <!-- Library Content -->
-    <section class="library-section">
-        <h2>Library</h2>
-        <!-- Book Items -->
-        <div class="book-item">
-            <img src="default.jpg" alt="Book">
-            <p>Book Title</p>
+<!-- -----------------Navigation ends here---------------------- -->
+
+
+<!-- ----------------------------all books Library---------------------- -->
+<body>
+    <div class="content">
+    <div class="bookshelf-container">
+        <div class="bookshelf-title">Owned Books</div>
+        <div class="bookshelf">
+            <!-- First shelf -->
+            <div class="shelf-row">
+                <div class="book" onclick="viewBook('Book 1')">Book 1</div>
+                <div class="book" onclick="viewBook('Book 2')">Book 2</div>
+                <div class="book" onclick="viewBook('Book 3')">Book 3</div>
+                <div class="book" onclick="viewBook('Book 4')">Book 4</div>
+                <div class="book" onclick="viewBook('Book 5')">Book 5</div>
+                <div class="book" onclick="viewBook('Book 6')">Book 6</div>
+                <div class="book" onclick="viewBook('Book 7')">Book 7</div>
+                <div class="book" onclick="viewBook('Book 8')">Book 8</div>
+                <div class="book" onclick="viewBook('Book 9')">Book 9</div>
+                <div class="book" onclick="viewBook('Book 10')">Book 10</div>
+                <div class="book" onclick="viewBook('Book 11')">Book 11</div>
+                <div class="book" onclick="viewBook('Book 12')">Book 12</div>
+            </div>
+            <!-- Second shelf -->
+            <div class="shelf-row">
+                <div class="book" onclick="viewBook('Book 13')">Book 13</div>
+                <div class="book" onclick="viewBook('Book 14')">Book 14</div>
+                <div class="book" onclick="viewBook('Book 15')">Book 15</div>
+                <div class="book" onclick="viewBook('Book 16')">Book 16</div>
+                <div class="book" onclick="viewBook('Book 17')">Book 17</div>
+                <div class="book" onclick="viewBook('Book 18')">Book 18</div>
+                <div class="book" onclick="viewBook('Book 19')">Book 19</div>
+                <div class="book" onclick="viewBook('Book 20')">Book 20</div>
+                <div class="book" onclick="viewBook('Book 21')">Book 21</div>
+                <div class="book" onclick="viewBook('Book 22')">Book 22</div>
+                <div class="book" onclick="viewBook('Book 23')">Book 23</div>
+            </div>
+            <!-- Third shelf -->
+            <div class="shelf-row">
+                <div class="book" onclick="viewBook('Book 24')">Book 24</div>
+                <div class="book" onclick="viewBook('Book 25')">Book 25</div>
+                <div class="book" onclick="viewBook('Book 26')">Book 26</div>
+                <div class="book" onclick="viewBook('Book 27')">Book 27</div>
+                <div class="book" onclick="viewBook('Book 28')">Book 28</div>
+                <div class="book" onclick="viewBook('Book 29')">Book 29</div>
+                <div class="book" onclick="viewBook('Book 30')">Book 30</div>
+                <div class="book" onclick="viewBook('Book 31')">Book 31</div>
+                <div class="book" onclick="viewBook('Book 32')">Book 32</div>
+                <div class="book" onclick="viewBook('Book 33')">Book 33</div>
+            </div>
+              <!-- Fourth shelf -->
+              <div class="shelf-row">
+                <div class="book" onclick="viewBook('Book 24')">Book 24</div>
+                <div class="book" onclick="viewBook('Book 25')">Book 25</div>
+                <div class="book" onclick="viewBook('Book 26')">Book 26</div>
+                <div class="book" onclick="viewBook('Book 27')">Book 27</div>
+                <div class="book" onclick="viewBook('Book 28')">Book 28</div>
+                <div class="book" onclick="viewBook('Book 29')">Book 29</div>
+                <div class="book" onclick="viewBook('Book 30')">Book 30</div>
+                <div class="book" onclick="viewBook('Book 31')">Book 31</div>
+                <div class="book" onclick="viewBook('Book 32')">Book 32</div>
+                <div class="book" onclick="viewBook('Book 33')">Book 33</div>
+            </div>
+              <!-- Fifth shelf -->
+              <div class="shelf-row">
+                <div class="book" onclick="viewBook('Book 24')">Book 24</div>
+                <div class="book" onclick="viewBook('Book 25')">Book 25</div>
+                <div class="book" onclick="viewBook('Book 26')">Book 26</div>
+                <div class="book" onclick="viewBook('Book 27')">Book 27</div>
+                <div class="book" onclick="viewBook('Book 28')">Book 28</div>
+                <div class="book" onclick="viewBook('Book 29')">Book 29</div>
+                <div class="book" onclick="viewBook('Book 30')">Book 30</div>
+                <div class="book" onclick="viewBook('Book 31')">Book 31</div>
+                <div class="book" onclick="viewBook('Book 32')">Book 32</div>
+                <div class="book" onclick="viewBook('Book 33')">Book 33</div>
+            </div>
         </div>
-        <!-- Repeat similar items for more books -->
-    </section>
+    </div>
+</div>
+
+
+    <script>
+        function viewBook(bookName) {
+            alert('You clicked on ' + bookName);
+        }
+    </script>
 </body>
 </html>
