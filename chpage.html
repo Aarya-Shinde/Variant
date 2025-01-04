@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .book-container {
+            width: 85%;
+            margin: 30px auto;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        .book-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .book-image img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-details {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .book-title {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .book-author, .book-full-author, .book-published {
+            font-size: 18px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .book-review {
+            font-size: 16px;
+            color: #f1c40f;
+            margin: 10px 0;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button-container button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .about-book, .toc, .recommend-section {
+            margin-top: 30px;
+        }
+
+        .about-book p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .toc h3, .recommend-section h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin: 5px 0;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 16px;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .recommend-books {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .book-card {
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .book-card img {
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card h4 {
+            font-size: 16px;
+            margin: 10px 0 5px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stars {
+            color: #f1c40f;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book-header">
+            <div class="book-image">
+                <img id="bookImage" src="https://via.placeholder.com/300x400?text=Book+Cover" alt="Book Cover">
+            </div>
+            <div class="book-details">
+                <h1 id="bookTitle" class="book-title">Endless Path: Infinite Cosmos</h1>
+                <h2 id="bookAuthor" class="book-author">Author: Einlion</h2>
+                <div class="book-full-author">Full Name: Einlion Exemplar</div>
+                <div class="book-published">Published Year: 2025</div>
+                <div class="book-review">★★★★★</div>
+                <div class="button-container">
+                    <button id="addLibraryButton" onclick="addToLibrary()">Add to Library</button>
+                    <button id="readNowButton" onclick="readBook()">Read Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-book">
+            <p>
+                "Endless Path: Infinite Cosmos" takes readers on a thrilling journey through an infinite universe filled with mysteries and adventures. The protagonist, a young explorer, embarks on a quest that tests the limits of courage and resilience. As they navigate through space and time, they uncover secrets that challenge their understanding of existence and destiny.
+            </p>
+            <p>
+                The narrative intertwines deep philosophical themes with action-packed sequences. The author, Einlion, masterfully blends science fiction and fantasy, creating a world where the possibilities are limitless. With vivid descriptions and compelling characters, this book invites readers to explore the vastness of the cosmos while confronting their own fears and desires.
+            </p>
+        </div>
+
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="chapter.html?chapter=1">Chapter 1: The Beginning</a></li>
+                <li><a href="chapter.html?chapter=2">Chapter 2: The Awakening</a></li>
+                <li><a href="chapter.html?chapter=3">Chapter 3: Through the Void</a></li>
+                <li><a href="chapter.html?chapter=4">Cosmic Truth</a></li>
+                <li><a href="chapter.html?chapter=5">The Chosen Path</a></li>
+            </ul>
+        </div>
+
+        <div class="recommend-section">
+            <h3>You May Also Like</h3>
+            <div class="recommend-books">
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/150x200?text=Book+1" alt="Book 1">
+                    <h4>Reborn in Konoha</h4>
+                    <div class="stars">★★★★☆</div>
+                </div>
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/150x200?text=Book+2" alt="Book 2">
+                    <h4>Bleach: Kishou Arima</h4>
+                    <div class="stars">★★★★★</div>
+                </div>
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/150x200?text=Book+3" alt="Book 3">
+                    <h4>Pokemon Day Care</h4>
+                    <div class="stars">★★★★☆</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addToLibrary() {
+            alert("The book has been added to your library!");
+        }
+
+        function readBook() {
+            window.open('https://example.com/reading-book', '_blank');
+        }
+    </script>
+</body>
+</html>
