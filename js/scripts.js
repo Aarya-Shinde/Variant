@@ -41,3 +41,36 @@ function updateLibraryBooks() {
 }
 
 
+/////////////////////////////////////////////////////
+function togglePage() {
+    const pages = document.querySelectorAll('.book-page');
+    pages.forEach(page => page.classList.toggle('hidden'));
+}
+
+ 
+
+
+const swiper = new Swiper('.featured-slider', {
+    slidesPerView: 3,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+    },
+  });

@@ -156,7 +156,7 @@ header {
 }
 
 /* Slideshow ******************************************************************************************/
-.slideshow-container {
+/* .slideshow-container {
     display: flex;
     overflow-x: auto;
     gap: 20px;
@@ -176,10 +176,10 @@ header {
     width: 500px;
     height: 400px;
     border: 2px solid #0C0B08;
-}
+} */
 
 /* Recommendations with Hover Effect **************************************************************/
-.recommendations-container {
+/* .recommendations-container {
     display: flex;
     gap: 15px;
     justify-content: center;
@@ -196,7 +196,7 @@ header {
 .recommendation-item:hover {
     transform: scale(1.1);
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-}
+} */
 
 /* About Us Section with Book Animation ***************************************************************/
 .about-us {
@@ -308,4 +308,90 @@ header {
       width: 100%;
     }
   }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* Featured Section */
+ .featured {
+    background: #f8f5f1; /* Light cream color */
+    padding: 4rem 9%;
+    text-align: center;
+  }
+
+  .featured .heading {
+    font-size: 2.5rem;
+    color: #3b2c22; /* Dark brown */
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .featured .swiper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured .swiper-wrapper {
+    display: flex;
+  }
+
+  .featured .swiper-slide {
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0.5rem;
+    transition: transform 0.3s;
+  }
+
+  .featured .swiper-slide:hover {
+    transform: scale(1.05);
+  }
+
+  .featured .image img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .featured .content h3 {
+    font-size: 1.6rem;
+    color: #3b2c22; /* Dark brown */
+    margin-bottom: 0.5rem; 
+  } 
+  .featured .content .price 
+  { 
+    font-size: 1.2rem;
+    color: #f16a49; /* Orange */ 
+    margin-bottom: 1rem; 
+  } 
+  .featured .content .price span
+  { 
+    text-decoration: line-through; 
+    color: #999; 
+  } 
+  .featured .btn 
+  { 
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #f16a49; /* Orange */ 
+    color: #fff;
+    border-radius: 0.25rem; 
+    text-transform: uppercase;
+    transition: background 0.3s; 
+  } 
+  .featured .btn:hover 
+  { 
+    background: #c04b36; /* Darker orange */
+  } 
   
