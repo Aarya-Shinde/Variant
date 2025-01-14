@@ -1,0 +1,148 @@
+* {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --desktop-width: 700px;
+    --desktop-height: 700px;
+    --desktop-radius: 25px;
+    --book-depth: 30px;
+    --separator-height: 500px;
+  
+    --bg: #fdf3f2;
+    --book-bg: #fdeae6;
+    --font-color: #807b7b;
+  
+    --transition: transform 0.7s ease-in-out;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg);
+  }
+  
+  .desktop-layout {
+    width: var(--desktop-width);
+    height: var(--desktop-height);
+    perspective: 800px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--desktop-radius);
+    background-color: var(--book-bg);
+    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification-header,
+  .actions {
+    position: absolute;
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    z-index: 10;
+  }
+  
+  .book-cover {
+    position: absolute;
+    width: calc(var(--desktop-width) * 1.5);
+    height: var(--separator-height);
+    background-color: #e7c6c2;
+    transform-origin: center bottom;
+    transform-style: preserve-3d;
+    transition: var(--transition);
+  }
+  
+  .book-cover:hover {
+    transform: rotateX(-45deg) translateY(-50px) scale(0.9);
+  }
+  
+  .book-top {
+    width: 150px;
+    position: absolute;
+    top: 200px;
+    left: 270px;
+    transform: translateZ(var(--book-depth));
+  }
+  
+  .book-side {
+    width: 50px;
+    position: absolute;
+    top: 250px;
+    left: 125px;
+    transform-origin: left;
+    transform: rotateY(90deg) translateZ(var(--book-depth));
+  }
+  
+  .preface {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--desktop-height) / 2);
+    padding: 20px;
+    background: white;
+    transform: translateY(200%);
+    transition: var(--transition);
+    z-index: 5;
+  }
+  
+  .book-cover:hover + .preface {
+    transform: translateY(0%);
+  }
+  
+  .preface .content {
+    color: var(--font-color);
+  }
+  
+  .preface .title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .preface .author {
+    font-style: italic;
+    margin-bottom: 15px;
+  }
+  
+  .preface .body {
+    font-family: 'Quicksand', sans-serif; /* Modern and clean font */
+    font-size: 16px;
+    line-height: 1.8;
+    color: #4a4a4a; /* Neutral and elegant text color */
+    margin-top: 20px;
+  }
+  
+  .preface .body h3 {
+    font-size: 20px;
+    color: #d9534f; /* Attractive red for the header */
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-decoration: underline;
+  }
+  
+  .preface .body ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .preface .body ul li {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  .preface .body ul li a {
+    text-decoration: none;
+    color: #5bc0de; /* Soft blue for links */
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .preface .body ul li a:hover {
+    color: #0275d8; /* Brighter blue for hover state */
+    transform: scale(1.1); /* Subtle hover effect */
+  }

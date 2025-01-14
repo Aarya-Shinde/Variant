@@ -1,3 +1,15 @@
+/*
+All colour palletes-
+
+
+
+
+
+
+
+
+
+*/
 /* General Styles *****************************************************************/
 body {
     font-family: 'Georgia', serif;
@@ -15,12 +27,12 @@ li {
 
 a {
     text-decoration: none;
-    color: #fff;
+    color: #000000;
     font-size: 1rem;
 }
 
 a:hover {
-    color: #f8f1dd; /*eggshell*/
+    color: #7e5c13de; /*eggshell*/
 }
 
 header {
@@ -58,7 +70,7 @@ header {
 }
 
 .highlight {
-    background-color: rgba(255, 255, 255, 0.952);
+    background-color: rgba(83, 13, 0, 0.658);
     color: #fff;
     padding: 0.5rem 1rem;
     border: none;
@@ -154,58 +166,94 @@ header {
     font-size: 1.3rem;
     color: #f8f1dd;
 }
+ 
 
-/* Slideshow ******************************************************************************************/
-/* .slideshow-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 20px;
+
+
+ /************ Featured Section with slideshow styling**********************/
+ .featured {
+  background: #fcd39e; /* Light cream color */
+  padding: 4rem 9%;
+  text-align: center;
 }
 
-.slide {
-    position: relative;
-    transition: transform 0.3s;
+.featured .heading {
+  font-size: 2.5rem;
+  color: #3b2c22; /* Dark brown */
+  margin-bottom: 2rem;
+  text-transform: uppercase;
 }
 
-.slide:hover {
-    transform: scale(1.05);
+.featured .swiper {
+  position: relative;
+  overflow: hidden;
 }
 
-.slide img {
-    width: 500px;
-    height: 400px;
-    border: 2px solid #0C0B08;
-} */
-
-/* Recommendations with Hover Effect **************************************************************/
-/* .recommendations-container {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 20px;
+.featured .swiper-wrapper {
+  display: flex;
 }
 
-.recommendation-item {
-    text-align: center;
-    width: 150px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    background: #251304;
+.featured .swiper-slide {
+  background: #2a4123;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0.5rem;
+  transition: transform 0.3s;
 }
 
-.recommendation-item:hover {
-    transform: scale(1.1);
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-} */
+.featured .swiper-slide:hover {
+  transform: scale(1.05);
+}
+
+.featured .image img {
+  width: 50%;
+  height: 150px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-top: 10px;
+}
+
+.featured .content h3 {
+  font-size: 1.6rem;
+  color: #3a2213; /* Dark brown */
+  margin-bottom: 0.5rem; 
+} 
+.featured .content .price 
+{ 
+  font-size: 1.2rem;
+  color: #fffd9e; /* Orange */ 
+  margin-bottom: 1rem; 
+} 
+.featured .content .price span
+{ 
+  text-decoration: line-through; 
+  color: #fad9d9; 
+} 
+.featured .btn 
+{ 
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-bottom: 10px;
+  background: #10565f; /* Orange */ 
+  color: #fff;
+  border-radius: 0.25rem; 
+  text-transform: uppercase;
+  transition: background 0.3s; 
+} 
+.featured .btn:hover 
+{ 
+  background: #081164; /* Darker orange */
+} 
+
+
 
 /* About Us Section with Book Animation ***************************************************************/
-.about-us {
+/* .about-us {
     text-align: center;
     padding: 20px;
     position: relative;
-}
+} */
 
-.book-container {
+/* .book-container {
     position: relative;
     width: 300px;
     height: 200px;
@@ -232,6 +280,169 @@ header {
     transform: rotateY(90deg);
     color: #d9c3a5;
 }
+
+ */
+
+
+
+
+
+/* General Styles */
+/* body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+
+} */
+.about-us {
+  margin-bottom: 50px;
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Space between the elements */
+  align-items: center;
+  perspective: 1200px;
+  background-color: #be9662;
+  padding: 0 50px; /* Add padding for better spacing */
+}
+
+.about-us h1 {
+  font-size: 4em; /* Large letters */
+  font-weight: bold; /* Bold font */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #ffffff; /* Dark color for contrast */
+  margin: 0; /* Remove margin */
+  flex: 1; /* Allow space adjustment */
+  text-align: left; /* Align to the left */
+}
+
+.book {
+  transform-style: preserve-3d;
+  position: relative;
+  height: 400px;
+  width: auto;
+  cursor: pointer;
+  backface-visibility: visible;
+  flex: 1; /* Allow space adjustment */
+  display: flex;
+  justify-content: flex-end; /* Align book to the right */
+}
+
+
+.front, .back, .page1, .page2, .page3, .page4, .page5, .page6 {
+  transform-style: preserve-3d;
+  position: absolute;
+  width: 280px;
+  height: 100%;
+  top: 0; left: 0;
+  transform-origin: left center;
+  transition: transform .5s ease-in-out, box-shadow .35s ease-in-out;
+}
+
+.front, .back {
+  background: brown;
+}
+
+.front, .page1, .page3, .page5 {
+  border-bottom-right-radius: .5em;
+  border-top-right-radius: .5em;
+}
+
+.back, .page2, .page4, .page6 {
+  border-bottom-right-radius: .5em;
+  border-top-right-radius: .5em;
+}
+
+.page1, .page2, .page3, .page4, .page5, .page6 {
+  background: #f5f5f5;
+}
+
+.book:hover .front {
+  transform: rotateY(-160deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page1 {
+  transform: rotateY(-150deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page2 {
+  transform: rotateY(-30deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page3 {
+  transform: rotateY(-140deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page4 {
+  transform: rotateY(-40deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page5 {
+  transform: rotateY(-130deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .page6 {
+  transform: rotateY(-50deg) scale(1.1);
+  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, .2);
+}
+
+.book:hover .back {
+  transform: rotateY(-20deg) scale(1.1);
+}
+
+/* Content inside the pages */
+.content {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #000000;
+}
+
+p, ul {
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  list-style: disc;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Footer***************************************************************************************** */
 .footer {
@@ -323,75 +534,3 @@ header {
 
 
 
- /* Featured Section */
- .featured {
-    background: #f8f5f1; /* Light cream color */
-    padding: 4rem 9%;
-    text-align: center;
-  }
-
-  .featured .heading {
-    font-size: 2.5rem;
-    color: #3b2c22; /* Dark brown */
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-  }
-
-  .featured .swiper {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .featured .swiper-wrapper {
-    display: flex;
-  }
-
-  .featured .swiper-slide {
-    background: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 0.5rem;
-    transition: transform 0.3s;
-  }
-
-  .featured .swiper-slide:hover {
-    transform: scale(1.05);
-  }
-
-  .featured .image img {
-    width: 50%;
-    height: 100px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .featured .content h3 {
-    font-size: 1.6rem;
-    color: #3b2c22; /* Dark brown */
-    margin-bottom: 0.5rem; 
-  } 
-  .featured .content .price 
-  { 
-    font-size: 1.2rem;
-    color: #f16a49; /* Orange */ 
-    margin-bottom: 1rem; 
-  } 
-  .featured .content .price span
-  { 
-    text-decoration: line-through; 
-    color: #999; 
-  } 
-  .featured .btn 
-  { 
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: #f16a49; /* Orange */ 
-    color: #fff;
-    border-radius: 0.25rem; 
-    text-transform: uppercase;
-    transition: background 0.3s; 
-  } 
-  .featured .btn:hover 
-  { 
-    background: #c04b36; /* Darker orange */
-  } 
-  

@@ -6,9 +6,9 @@
     <title>Variant</title>
 
     <!-- ------------------linking css js files------------------- -->
-    <link rel="stylesheet" href="indexstyle.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="indexstyle.css"> 
     <script src="/js/scripts.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 
      <!--=============== BOXICONS ===============-->
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"/>
@@ -21,6 +21,8 @@
      <!---font-family: "Edu AU VIC WA NT Pre", cursive;--->
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+     
 
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -39,10 +41,14 @@
         <div class="navbar">
              <!-- variant logo image here -->
             <div class="logo"> <a href="index.html"><img src="images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
-            <form class="search-bar"> 
-              <input type="text" placeholder="Search"> 
-            </form>
-          
+            
+           <!-- Search Bar -->
+           <div class="search-container"> 
+            <input type="text" class="search-input" placeholder="Search . . ." required>
+            <button class="search-btn"> 
+              <i class="bx bx-search"></i> </button> 
+            </div>
+              
             <div class="nav">
                 <ul>
                     <li><a href="reader.html">Reader</a></li>
@@ -67,8 +73,8 @@
         <button type="button">Read More</button>
     </section>
 
-    <!-- Slideshow of Popular Novels with Smooth Transition -->
-  
+
+    <!------- Slideshow of Popular featured Novels with Smooth Transition -->
   
 <section class="featured" id="featured">
     <h1 class="heading"><span>Featured Books</span></h1>
@@ -88,10 +94,10 @@
         <!-- Book 2 -->
         <div class="swiper-slide box">
           <div class="image">
-            <img src="image/book-2.png" alt="Book 2" />
+            <img src="images/images.png" alt="Book 2" />
           </div>
           <div class="content">
-            <h3>Featured Book</h3>
+            <h3>Featured Books</h3>
             <div class="price">$12.99 <span>$18.99</span></div>
             <a href="#" class="btn">Add To Cart</a>
           </div>
@@ -99,7 +105,7 @@
         <!-- Book 3 -->
         <div class="swiper-slide box">
           <div class="image">
-            <img src="image/book-3.png" alt="Book 3" />
+            <img src="images/images (1).jpeg" alt="Book 3" />
           </div>
           <div class="content">
             <h3>Featured Book</h3>
@@ -110,7 +116,7 @@
         <!-- Book 4 -->
         <div class="swiper-slide box">
           <div class="image">
-            <img src="image/book-4.png" alt="Book 4" />
+            <img src="images/images (2).jpeg" alt="Book 4" />
           </div>
           <div class="content">
             <h3>Featured Book</h3>
@@ -121,7 +127,7 @@
         <!-- Book 5 -->
         <div class="swiper-slide box">
           <div class="image">
-            <img src="image/book-5.png" alt="Book 5" />
+            <img src="images/images (3).jpeg" alt="Book 5" />
           </div>
           <div class="content">
             <h3>Featured Book</h3>
@@ -132,7 +138,7 @@
         <!-- Book 6 -->
         <div class="swiper-slide box">
           <div class="image">
-            <img src="image/book-6.png" alt="Book 6" />
+            <img src="images/remakin.jpg" alt="Book 6" />
           </div>
           <div class="content">
             <h3>Featured Book</h3>
@@ -149,34 +155,35 @@
   </section>
   
   
+  /*****************************Slideshow js scriscript*********************/
+  <script>
+    const swiper = new Swiper('.featured-slider', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        },
+      });
+    </script>
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <!-- <section class="slideshow">
-        <h2>Popular Novels</h2>
-        <div class="slideshow-container">
-            <div class="slide">
-                <img src="images/ima-6.jpg" alt="Novel 1">
-                <button onclick="window.location.href='book1.html'">Read More</button>
-            </div>
-            <div class="slide">
-                <img src="images/ima-8.webp" alt="Novel 2">
-                <button onclick="window.location.href='book2.html'">Read More</button>
-            </div>
-        </div>
-    </section> -->
 
     <!-- Personalized Recommendations with Hover Effect -->
     <section class="personal-recommendations">
@@ -195,8 +202,8 @@
         </div>
     </section>
 
-    <!-- About Us Section with Enhanced Book Animation -->
-    <section class="about-us">
+    <!------------ About Us Section with Enhanced Book Animation ------------>
+    <!-- <section class="about-us">
         <h2>About Us</h2>
         <div class="book-container" onclick="togglePage()">
             <div class="book-page front">
@@ -211,7 +218,71 @@
                 </ul>
             </div>
         </div>
-    </section>
+    </section> -->
+
+
+    <section class="about-us">
+      <h1>About Us</h1>
+    <div class="book">
+      <div class="back"> 
+          <div class="content">
+        
+          </div>
+      </div>
+      <div class="page6"> 
+          <div class="content">
+              <h2>Contact Us</h2>
+              <p>Email: contact@library.com</p>
+              <p>Phone: (123) 456-7890</p>
+          </div>
+      </div>
+      <div class="page5">
+          <div class="content">
+                 
+          </div>
+      </div>
+      <div class="page4">
+          <div class="content">
+            
+          </div>
+      </div>
+      <div class="page3">
+          <div class="content">
+              
+          </div>
+      </div>
+      <div class="page2">
+          <div class="content">
+       
+          </div>
+      </div>
+      <div class="page1">
+          <div class="content">
+        
+          </div>
+      </div>
+      <div class="front"> 
+          <div class="content">
+              <h2> </h2>
+              <p></p>
+          </div>
+      </div>
+  </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Footer Section -->
  
