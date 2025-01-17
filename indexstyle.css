@@ -61,6 +61,7 @@ header {
     align-items: center;
     margin-left: auto;
     margin-right: 0;
+    text-decoration: none;
 }
 
 .navbar .highlight {
@@ -343,7 +344,7 @@ header {
 }
 
 .front, .back {
-  background: brown;
+  background: #540804;
 }
 
 .front, .page1, .page3, .page5 {

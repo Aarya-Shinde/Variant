@@ -3,69 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Readers Hub</title>
-    <link rel="stylesheet" href="/css/otherstyle.css">
-    <script src="scripts.js" defer></script>
+    <title>Book Buttons</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e6ccb2;
+        }
+        /****************** Actual working buttons styling ********************** */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin: auto;
+        }
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 280px;
+            height: 50px;
+            background-color: #764134; /* Brown color */
+            color: #fff;
+            font-size: large;
+            border: 1px solid #654321;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+        .button:before, .button:after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background-color: #654321;
+        }
+        .button:before {
+            left: -10px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        .button:after {
+            right: -10px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button:hover {
+            background-color: #411d0c;
+            transform: translateY(-3px);
+        }
+        .button:active {
+            background-color: #2c1d0e;
+            transform: translateY(0);
+        }
+
+
+        /*********** Books container with book decoration *********/
+        .book-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 200px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .book {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 50px;
+            background-color: #EDE0D4; /* Brown color */
+            color: #fff;
+            font-size: large;
+            border: 1px solid #654321;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+      
+        }
+        .book:before, .book:after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background-color: #654321;
+        }
+        .book:before {
+            left: -10px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        .book:after {
+            right: -10px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .book:hover {
+            background-color: #411d0c;
+            transform: translateY(-3px);
+        }
+        .book:active {
+            background-color: #2c1d0e;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">📚 Readers Hub</div>
-        <a href="#diary">Diary</a>
-        <a href="#add-book">Add Book</a>
-        <a href="#reading-score">Reading Score</a>
-        <a href="#library-stats">Library Stats</a>
-        <div class="user-icon">👤</div>
-    </nav>
 
-    <!-- Header -->
-    <header class="header">
-        <h1>Welcome to Your Reading World</h1>
-        <p>Track your journey, add books, and explore new reads</p>
-    </header>
+    <div class="book-container">
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+    </div>
 
-    <!-- Diary Section -->
-    <section id="diary" class="feature-section">
-        <h2>My Reading Diary 📖</h2>
-        <div class="diary-container">
-            <div class="diary-entry" onclick="openDiaryEntry()">
-                <img src="images/diary-icon.png" alt="Diary Icon">
-                <p>Write a new review</p>
-            </div>
-            <!-- Additional diary entries could be dynamically generated here -->
-        </div>
-    </section>
+    <div class="button-container">
+        <button class="button">Diary</button>
+        <button class="button">Library</button>
+        <button class="button">Explore</button>
+        <button class="button">Add Book</button>
+    </div>
+    <div class="book-container">
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+        <button class="book"> </button>
+    </div>
 
-    <!-- Add Book Section -->
-    <section id="add-book" class="feature-section">
-        <h2>Add a New Book to Library 📚</h2>
-        <div class="add-book-container" onclick="addNewBook()">
-            <img src="images/add-book-icon.png" alt="Add Book Icon">
-            <p>Add a New Book</p>
-        </div>
-    </section>
-
-    <!-- Reading Score Section -->
-    <section id="reading-score" class="feature-section">
-        <h2>Your Reading Score 🌟</h2>
-        <div class="score-display">
-            <img src="images/score-icon.png" alt="Score Icon">
-            <p>Reading Score: <span id="reading-score">45</span></p>
-        </div>
-    </section>
-
-    <!-- Library Stats Section -->
-    <section id="library-stats" class="feature-section">
-        <h2>Total Library Books 📚</h2>
-        <div class="stats-display">
-            <img src="images/library-icon.png" alt="Library Icon">
-            <p>Total Books in Library: <span id="total-books">128</span></p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Readers Hub &copy; 2024</p>
-    </footer>
+    <script>
+        
+        document.querySelectorAll('.book').forEach(book => { 
+            const randomOffset = Math.floor(Math.random() * 21) - 10; 
+            // Generates a random number between -10 and 10 
+            book.style.transform = `translateX(${randomOffset}px)`; }); 
+            
+            document.querySelectorAll('.button').forEach(button => { 
+                const randomOffset = Math.floor(Math.random() * 21) - 10; 
+                // Generates a random number between -10 and 10 
+                button.style.transform = `translateX(${randomOffset}px)`;
+            });
+        </script>
 </body>
 </html>
