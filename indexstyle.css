@@ -195,7 +195,7 @@ header {
 }
 
 .featured .swiper-slide {
-  background: #2a4123;
+  background: #f3ce7d;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 0.5rem;
@@ -215,7 +215,7 @@ header {
 
 .featured .content h3 {
   font-size: 1.6rem;
-  color: #3a2213; /* Dark brown */
+  color: #88634c; /* Dark brown */
   margin-bottom: 0.5rem; 
 } 
 .featured .content .price 
@@ -234,7 +234,7 @@ header {
   display: inline-block;
   padding: 0.5rem 1rem;
   margin-bottom: 10px;
-  background: #10565f; /* Orange */ 
+  background: #3b2006;  
   color: #fff;
   border-radius: 0.25rem; 
   text-transform: uppercase;
@@ -242,7 +242,7 @@ header {
 } 
 .featured .btn:hover 
 { 
-  background: #081164; /* Darker orange */
+  background: #cbff90; /* Darker orange */
 } 
 
 

@@ -156,7 +156,7 @@
   </section>
   
   
-  /*****************************Slideshow js scriscript*********************/
+  <!-- *****************************Slideshow js scriscript********************* -->
   <script>
     const swiper = new Swiper('.featured-slider', {
         slidesPerView: 3,
@@ -186,8 +186,9 @@
   
   
 
-    <!-- Personalized Recommendations with Hover Effect -->
-    <section class="personal-recommendations">
+    <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
+    
+    <!-- <section class="personal-recommendations">
         <h2>Your Recommendations</h2>
         <div class="recommendations-container">
             <div class="recommendation-item">
@@ -201,7 +202,32 @@
                 <button onclick="window.location.href='book3.html'">Check it out</button>
             </div>
         </div>
-    </section>
+    </section> -->
+
+
+
+    <div class="container"> 
+      <h1>Book Recommendations</h1> 
+      <form id="recommendation-form"> 
+        <label for="genre">Choose a genre:</label> 
+        <select id="genre" name="genre"> <option value="fiction">Fiction</option> 
+          <option value="non-fiction">Non-Fiction</option> <option value="fantasy">Fantasy</option> 
+          <option value="mystery">Mystery</option> <option value="sci-fi">Sci-Fi</option> 
+        </select> <button type="submit">Get Recommendations</button> 
+      </form> 
+      <div id="book-list"> 
+        <!-- Book recommendations will be displayed here -->
+      </div>
+    </div> 
+    <script></script>
+
+
+
+
+
+
+
+
 
     <!------------ About Us Section with Enhanced Book Animation ------------>
     <!-- <section class="about-us">

@@ -1,119 +1,231 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-
-        .chapter-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .chapter-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .chapter-content {
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .back-link {
-            margin-top: 20px;
-            display: block;
-            text-decoration: none;
-            color: #3498db;
-            font-size: 16px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="chapter-container">
-        <h1 class="chapter-title" id="chapterTitle"></h1>
-        <div class="chapter-content" id="chapterContent"></div>
-        <a href="book.html" class="back-link">&larr; Back to Book Details</a>
+<div class="container">
+    <div class="info">
+      Laptop - Try hovering
     </div>
-
-    <script>
-        // Define chapter data
-        const chapters = {
-            1: {
-                title: "Chapter 1: The Beginning",
-                content: "The journey began on a distant planet, shrouded in mystery and teeming with life. The protagonist ventures into the unknown, seeking answers to the universe's deepest secrets."
-            },
-            2: {
-                title: "Chapter 2: The Awakening",
-                content: "As the protagonist explores the infinite cosmos, they encounter ancient civilizations and learn the truth about their origins and the forces that govern the universe."
-            },
-            3: {
-                title: "Chapter 3: Through the Void",
-                content: "A harrowing journey through a perilous void tests the hero's courage and resilience, revealing hidden strengths and newfound allies."
-            },
-            4: {
-                title: "Chapter 4: Cosmic Truth",
-                content: "The protagonist uncovers the secrets of the cosmos and begins to understand the delicate balance that sustains existence."
-            },
-            5: {
-                title: "Chapter 5: The Chosen Path",
-                content: "Faced with a pivotal choice, the hero must decide between personal desires and the greater good of the universe."
-            },
-            6: {
-                title: "Chapter 6: Infinite Realms",
-                content: "The protagonist explores infinite realms, each more wondrous and challenging than the last, expanding their understanding of the multiverse."
-            },
-            7: {
-                title: "Chapter 7: The Inner Journey",
-                content: "An introspective journey leads the hero to confront their deepest fears and desires, unlocking the potential within."
-            },
-            8: {
-                title: "Chapter 8: The Great Trial",
-                content: "The protagonist faces a monumental trial that will determine the fate of the cosmos, testing everything they've learned."
-            },
-            9: {
-                title: "Chapter 9: Endless Possibilities",
-                content: "The hero discovers the limitless possibilities of the cosmos and the power of choice in shaping their destiny."
-            },
-            10: {
-                title: "Chapter 10: The Final Revelation",
-                content: "In a climactic conclusion, the protagonist unveils the ultimate truth and fulfills their destiny, altering the course of the universe forever."
-            }
-        };
-
-        // Get chapter number from URL
-        const params = new URLSearchParams(window.location.search);
-        const chapterNumber = params.get('chapter');
-
-        // Get DOM elements
-        const chapterTitle = document.getElementById('chapterTitle');
-        const chapterContent = document.getElementById('chapterContent');
-
-        // Display chapter data
-        if (chapters[chapterNumber]) {
-            chapterTitle.textContent = chapters[chapterNumber].title;
-            chapterContent.textContent = chapters[chapterNumber].content;
-        } else {
-            chapterTitle.textContent = "Chapter Not Found";
-            chapterContent.textContent = "The chapter you're looking for doesn't exist.";
-        }
-    </script>
-</body>
-</html>
+    <div class="laptop-layout">
+      <div class="notification-header">
+        <div class="time">
+          9:41
+        </div>
+        <div class="necessities">
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </div>
+      </div>
+      <div class="actions">
+        <i class="fas fa-chevron-left"></i>
+        <i class="fas fa-bookmark"></i>
+      </div>  
+      <div class="book-cover">
+          <img class="book-top" src="https://raw.githubusercontent.com/atomic-variable/images-repo/e37f432405904a280858e5437ce1960753bc78a3/book-top.svg" alt="book-top" />
+        <img class="book-side" src="https://raw.githubusercontent.com/atomic-variable/images-repo/e37f432405904a280858e5437ce1960753bc78a3/book-side.svg" alt="book-side" /> 
+      </div>
+      <div class="preface">
+        <div class="content">
+          <div class="header">
+            <div class="title">The Diary of a Young Girl</div>
+            <div class="icon">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="author">by Anne Frank</div>
+          <div class="body">
+            <p>
+              also known as The Diary of Anne Frank, is a book of the writings from the Dutch-language diary kept by Anne Frank while she was in hiding for two years with her family during the Nazi occupation of the Netherlands
+            </p>
+            <p>
+              Anne calls her diary "Kitty", so almost all of the letters are written to Kitty. 
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>* {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --laptop-width: 900px;
+    --laptop-height: 1400px;
+    --laptop-radius: 35px;
+    --separator-height: 700px;
+    
+    --bg: #fdf3f2;
+    --laptop-bg: #fdeae6;
+    --intro-bg: #eed7d1;
+    --font-color: #807b7b;
+    
+    --transition: transform 0.7s ease-in-out;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg);
+  }
+  
+  .info {
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-style: italic;
+    font-size: 30px;
+    margin-top: 10px;
+    color: var(--font-color);
+  }
+  
+  .laptop-layout {
+    width: var(--laptop-width);
+    height: var(--laptop-height);
+    margin: 30px 0;
+    border-radius: var(--laptop-radius);
+    perspective: 800px;
+    overflow: hidden;
+    color: var(--font-color);
+    background-color: var(--laptop-bg);
+    box-shadow: 36px 36px 50px 15px #eed7d1d1;
+  }
+  
+  .notification-header {
+    position: fixed;
+    top: 10px;
+    width: 100%;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    z-index: 6;
+  }
+  
+  .actions { 
+    position: fixed;
+    top: 70px;
+    width: 100%;
+    padding: 80px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    z-index: 6;
+  }
+  
+  .book-cover {
+    position: relative;
+    height: var(--separator-height);
+    width: calc(var(--laptop-width) * 2);
+    left: -50%;
+    border-top-left-radius: var(--laptop-radius);
+    border-top-right-radius: var(--laptop-radius);
+    background-color: var(--intro-bg);
+    transform-style: preserve-3d;
+    transform-origin: 50% 40%;
+    transition: var(--transition);
+    z-index: 4;
+  }
+  
+  .book-top {
+    width: 300px;
+    position: absolute;
+    top: 300px;
+    left: 700px;
+    z-index: 5;
+    transform: translateZ(45px);
+  }
+  
+  .book-side {
+    position: absolute;
+    top: 120px; /* Adjust to align with the book top */
+    left: 50px; /* Align with the book cover */
+    width: 170px; /* Same width as the book top */
+    height: 20px; /* Visible thickness of the book */
+   /* background: linear-gradient(to right, #e8d9d3, #d1c1b5 50%, #b9ada2 90%);  */
+    background-color: white;
+    box-shadow: 
+      inset -5px 0 8px rgba(0, 0, 0, 0.15), /* Inner shadow for depth */
+      -3px 3px 6px rgba(0, 0, 0, 0.2); /* Outer shadow to lift the side */
+    border-radius: 2px; /* Slight rounding for a realistic look */
+    transform: skewX(-5deg); /* Perspective adjustment to make it more visible */
+    z-index: 1; /* Ensure it appears above the background */
+  }
+  
+  /* Optional: Spine Details */
+  .book-side::before {
+    content: '';
+    position: absolute;
+    width: 160px; /* Slightly smaller for a border effect */
+    height: 3px; /* Simulates spine grooves */
+    background: rgba(100, 90, 80, 0.6); /* Darker groove color for visibility */
+    top: 7px; /* Place near the center of the side */
+    left: 5px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle depth effect */
+  }
+  
+  .book-side::after {
+    content: '';
+    position: absolute;
+    width: 160px;
+    height: 3px;
+    background: rgba(100, 90, 80, 0.6);
+    top: 14px; /* Slightly below the first groove */
+    left: 5px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  .book-cover:hover {
+    transform: rotateX(60deg) translateZ(10px) scale(0.9);
+  }
+  
+  .book-cover:hover + .preface {
+    transform: translateY(-450px);
+    .icon {
+      transform: rotateX(180deg);
+    }
+  }
+  
+  .preface {
+    height: var(--separator-height);
+    padding: 80px;
+    transition: var(--transition);
+    background: white;
+  
+    .header {
+      display: flex;
+      align-items: center;
+    }
+  
+    .title {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+  
+    .author {
+      font-family: 'Open Sans', sans-serif;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+  
+    .icon {
+      transform-origin: top;
+      transition: var(--transition);
+    }
+  
+    .body {
+      font-family: 'Quicksand', sans-serif;
+    }
+  
+    .body p:first-child {
+      margin-bottom: 20px;
+    }
+  }
+  </style>
