@@ -188,39 +188,70 @@
 
     <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
     
-    <!-- <section class="personal-recommendations">
-        <h2>Your Recommendations</h2>
-        <div class="recommendations-container">
-            <div class="recommendation-item">
-                <img src="images/recommended1.jpg" alt="Recommended Book 1">
-                <p>Recommended Book Title 1</p>
-                <button onclick="window.location.href='book2.html'">Check it out</button>
-            </div>
-            <div class="recommendation-item">
-                <img src="images/recommended2.jpg" alt="Recommended Book 2">
-                <p>Recommended Book Title 2</p>
-                <button onclick="window.location.href='book3.html'">Check it out</button>
-            </div>
-        </div>
-    </section> -->
-
-
-
-    <div class="container"> 
-      <h1>Book Recommendations</h1> 
-      <form id="recommendation-form"> 
-        <label for="genre">Choose a genre:</label> 
-        <select id="genre" name="genre"> <option value="fiction">Fiction</option> 
-          <option value="non-fiction">Non-Fiction</option> <option value="fantasy">Fantasy</option> 
-          <option value="mystery">Mystery</option> <option value="sci-fi">Sci-Fi</option> 
-        </select> <button type="submit">Get Recommendations</button> 
-      </form> 
-      <div id="book-list"> 
-        <!-- Book recommendations will be displayed here -->
+<div class="recommendations">
+    <div class="rec-container">
+      <h1>Book Recommendations</h1>
+      <div class="genre-container">
+          <div class="genre-card" data-genre="fiction">
+              <p class="genre-name">Fiction</p>
+          </div>
+          <div class="genre-card" data-genre="non-fiction">
+              <p class="genre-name">Non-Fiction</p>
+          </div>
+          <div class="genre-card" data-genre="fantasy">
+              <p class="genre-name">Fantasy</p>
+          </div>
+          <div class="genre-card" data-genre="mystery">
+              <p class="genre-name">Mystery</p>
+          </div>
+          <div class="genre-card" data-genre="sci-fi">
+              <p class="genre-name">Sci-Fi</p>
+          </div>
       </div>
-    </div> 
-    <script></script>
+      <div id="book-list">
+          <!-- Book recommendations will be displayed here -->
+      </div>
+  </div>
+</div>
 
+
+  <script>
+  document.querySelectorAll('.genre-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const genre = this.getAttribute('data-genre');
+        fetchBooks(genre);
+    });
+});
+
+function fetchBooks(genre) {
+    // Simulate fetching books from a database or API
+    const books = [
+        { title: 'Book 1', genre: 'fiction', image: 'https://in.pinterest.com/pin/480970435187487465/' },
+        { title: 'Book 2', genre: 'fantasy', image: 'https://in.pinterest.com/pin/48343395994947180/' },
+        { title: 'Book 3', genre: 'mystery', image: 'https://via.placeholder.com/150' },
+        { title: 'Book 4', genre: 'sci-fi', image: 'https://via.placeholder.com/150' },
+        { title: 'Book 5', genre: 'non-fiction', image: 'https://via.placeholder.com/150' }
+    ];
+
+    const filteredBooks = books.filter(book => book.genre.toLowerCase() === genre.toLowerCase());
+    displayBooks(filteredBooks);
+}
+
+function displayBooks(books) {
+    const bookList = document.getElementById('book-list');
+    bookList.innerHTML = '';
+    books.forEach(book => {
+        const bookCard = document.createElement('div');
+        bookCard.className = 'book-card';
+        bookCard.innerHTML = `
+            <img class="book-image" src="${book.image}" alt="${book.title}">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-genre">${book.genre}</p>
+        `;
+        bookList.appendChild(bookCard);
+    });
+}
+</script>
 
 
 
@@ -230,6 +261,7 @@
 
 
     <!------------ About Us Section with Enhanced Book Animation ------------>
+
     <!-- <section class="about-us">
         <h2>About Us</h2>
         <div class="book-container" onclick="togglePage()">
@@ -250,48 +282,39 @@
 
     <section class="about-us">
       <h1>About Us</h1>
-    <div class="book">
-      <div class="back"> 
+    <div class="book"> 
+      <div class="back">  
           <div class="content">
+             
         
           </div>
       </div>
       <div class="page6"> 
           <div class="content">
               <h2>Contact Us</h2>
-              <p>Email: contact@library.com</p>
+              <p>Email: Aarya@library.com</p>
               <p>Phone: (123) 456-7890</p>
           </div>
       </div>
       <div class="page5">
-          <div class="content">
-                 
-          </div>
+          <div class="content"></div>
       </div>
       <div class="page4">
-          <div class="content">
-            
-          </div>
+          <div class="content"></div>
       </div>
       <div class="page3">
-          <div class="content">
-              
-          </div>
+          <div class="content"></div>
       </div>
       <div class="page2">
-          <div class="content">
-       
-          </div>
+          <div class="content"> </div>
       </div>
       <div class="page1">
-          <div class="content">
-        
-          </div>
+          <div class="content"></div>
       </div>
       <div class="front"> 
           <div class="content">
-              <h2> </h2>
-              <p></p>
+              <h2> Creator-</h2>
+              <p>Aarya Shinde</p>
           </div>
       </div>
   </div>
@@ -304,16 +327,9 @@
 
 
 
-
-
-
-
-
-
-
-    <!-- Footer Section -->
+    <!---- Footer Section -->
  
-    <!-- Footer Section -->
+
 <footer class="footer">
     <div class="footer__container">
       <div class="footer__content col">

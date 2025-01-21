@@ -1,4 +1,4 @@
-<?php
+<?php 
 include '../db/dbconnect.php'; // Ensure $conn is correctly initialized in this file
 
 $message = "";
@@ -29,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     session_regenerate_id(true);
                     $_SESSION['email'] = $email;
 
-                    header("Location: ../index.html");
+                    //// Redirect to the dashboard page
+                    header("Location: ../pages/dashboard.php");
                     exit();
                 } else {
                     $message = "Incorrect password";
@@ -57,16 +58,117 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../css/login.css">
     <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <style>
+        body {
+            background-size: cover;
+            font-family: 'Cormorant Garamond', serif;
+            color: #4a3c31;
+        }
+
+        .form-wrapper {
+            max-width: 450px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 248, 235, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #d4a373;
+        }
+
+        .form-wrapper h2 {
+            text-align: center;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #5a4231;
+            border-bottom: 2px solid #d4a373;
+            padding-bottom: 10px;
+        }
+
+        .form-wrapper label {
+            font-weight: bold;
+        }
+
+        .form-wrapper input {
+            background: #faf3eb;
+            border: 1px solid #d4a373;
+            border-radius: 5px;
+        }
+
+        .form-wrapper input:focus {
+            border-color: #bf8450;
+            box-shadow: 0 0 5px #bf8450;
+            background: #f8f1e9;
+        }
+
+        .form-wrapper .btn {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .form-wrapper .btn:hover {
+            background-color: #bf8450;
+            transform: scale(1.05);
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            background: rgba(210, 180, 140, 0.9);
+            padding: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-bar a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-bar a:hover {
+            color: #d4a373;
+        }
+
+        .toast {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 235, 205, 0.9);
+            color: #4a3c31;
+            border: 1px solid #d4a373;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #5a4231;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container p-5 d-flex flex-column align-items-center">
-        <!-- Display toast message -->
+<body>
+    <!-- Navbar -->
+    <div class="nav-bar">
+        <a href="#">Home</a>
+        <a href="#">Library</a>
+        <a href="#">Reader</a>
+        <a href="#">Diary</a>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-wrapper">
+        <h2>Login</h2>
         <?php if ($message): ?>
-            <div class="toast align-items-center text-white <?php echo $toastClass; ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast align-items-center text-white border-0 show" role="alert">
                 <div class="d-flex">
                     <div class="toast-body">
                         <?php echo htmlspecialchars($message); ?>
@@ -75,39 +177,26 @@ $conn->close();
                 </div>
             </div>
         <?php endif; ?>
-
-        <!-- Login form -->
-        <form action="" method="post" class="form-control mt-5 p-4" style="width:380px; box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
-            <div class="row">
-                <i class="fa fa-user-circle-o fa-3x mt-1 mb-2" style="text-align: center; color: green;"></i>
-                <h5 class="text-center p-4" style="font-weight: 700;">Login Into Your Account</h5>
+        <form method="POST" action="#">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
             </div>
-            <div class="col-mb-3">
-                <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                <input type="text" name="email" id="email" class="form-control" required>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <div class="col mb-3 mt-3">
-                <label for="password"><i class="fa fa-lock"></i> Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
-            </div>
-            <div class="col mb-3 mt-3">
-                <button type="submit" class="btn btn-success bg-success" style="font-weight: 600;">Login</button>
-            </div>
-            <div class="col mb-2 mt-4">
-                <p class="text-center" style="font-weight: 600; color: navy;">
-                    <a href="./register.php" style="text-decoration: none;">Create Account</a> OR 
-                    <a href="./resetpassword.php" style="text-decoration: none;">Forgot Password</a>
-                </p>
-            </div>
+            <button type="submit" class="btn w-100">Login</button>
         </form>
+        <div class="text-center mt-3">
+            Don't have an account? <a href="./register.php" style="color: #d4a373;">Register</a>
+        </div>
     </div>
 
-    <script>
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl, { delay: 3000 });
-        });
-        toastList.forEach(toast => toast.show());
-    </script>
+    <footer>
+        &copy; 2025 Unified System for Author and Audience. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
