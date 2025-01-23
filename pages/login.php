@@ -158,7 +158,7 @@ $conn->close();
 <body>
     <!-- Navbar -->
     <div class="nav-bar">
-        <a href="#">Home</a>
+        <a href="../index.html">Home</a>
         <a href="#">Library</a>
         <a href="#">Reader</a>
         <a href="#">Diary</a>
@@ -189,12 +189,19 @@ $conn->close();
             <button type="submit" class="btn w-100">Login</button>
         </form>
         <div class="text-center mt-3">
-            Don't have an account? <a href="./register.php" style="color: #d4a373;">Register</a>
-        </div>
+
+        <!-- Add Forgot Password Link -->
+    <div class="mt-3">
+        <a href="forgotpassword.php" style="color: #007bff; text-decoration: none;">Forgot Password?</a>
+        or 
+        <br>Don't have an account? 
+        <a href="./register.php" style="color: #d4a373; text-decoration: none;">Register</a>
     </div>
 
+
     <footer>
-        &copy; 2025 Unified System for Author and Audience. All rights reserved.
+        &copy; 2025 Unified System for Author and Audience. <br>
+        All rights reserved.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
