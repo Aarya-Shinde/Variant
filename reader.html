@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Buttons</title>
+    <title>Readers's Page</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -36,6 +36,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
             position: relative;
+            text-decoration: none;
         }
         .button:before, .button:after {
             content: '';
@@ -134,11 +135,13 @@
     </div>
 
     <div class="button-container">
-        <button class="button">Diary</button>
-        <button class="button">Library</button>
-        <button class="button">Explore</button>
-        <button class="button">Add Book</button>
+        <a class="button" href="diary.html">Diary</a>
+        <a class="button" href="library.html">Library</a>
+        <a class="button" href="explore.html">Explore</a>
+        <a class="button" href="add-book.html">Add Book</a>
+        <a class="button" href="index.html">Home</a>
     </div>
+    
     <div class="book-container">
         <button class="book"> </button>
         <button class="book"> </button>

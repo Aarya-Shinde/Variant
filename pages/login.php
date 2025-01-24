@@ -159,9 +159,9 @@ $conn->close();
     <!-- Navbar -->
     <div class="nav-bar">
         <a href="../index.html">Home</a>
-        <a href="#">Library</a>
-        <a href="#">Reader</a>
-        <a href="#">Diary</a>
+        <a href="../library.html">Library</a>
+        <a href="../reader.html">Reader</a>
+        <a href="../writer.html">Writer</a>
     </div>
 
     <!-- Login Form -->

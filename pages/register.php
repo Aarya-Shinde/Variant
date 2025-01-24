@@ -158,7 +158,7 @@ $mysqli->close();
         <a href="../index.html">Home</a>
         <a href="../library.html">Library</a>
         <a href="../reader.html">Reader</a>
-        <a href="#">Writer</a>
+        <a href="../writer.html">Writer</a>
     </div>
 
     <!-- Registration Form -->
