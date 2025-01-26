@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+        <!-- ------------------linking css js files------------------- -->
+        <link rel="stylesheet" href="/indexstyle.css"> 
+        <script src="/js/scripts.js" defer></script>
+    
+    
+         <!--=============== BOXICONS ===============-->
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"/>
+    
+    
+         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+         <!---font-family: "Edu AU VIC WA NT Pre", cursive;--->
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+         <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+         
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
+    
+    <!-- --------------------------------------------Adding favicon to website-------------- -->
+         <link rel="icon" type="image/png" sizes="32x32" href="/images/images.png">
+        </head>
+    
+    <!------------------------------------------- Nav Bar------------------------------>
+        
+          <header>
+            <div class="navbar">
+                 <!-- variant logo image here -->
+                <div class="logo"> <a href="index.html"><img src="/images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
+                
+              <!-- Search Bar -->
+              <div class="search-container"> 
+                <input type="text" class="search-input" placeholder="Search . . ." required>
+                <button class="search-btn"> 
+                    <i class="bx bx-search"></i> 
+                </button> 
+              </div>
+                  
+                <div class="nav">
+                    <ul>
+                      <li><a href="explore.php">Explore</a></li>
+                        <li><a href="reader.html">Reader</a></li>
+                        <li><a href="writer.html">Writer</a></li>
+                        <li><a href="library.html">Library</a></li>
+                        <li><a href="pages/login.php">Login</a></li>
+                    </ul>        
+                </div>
+                </div>
+            </div>
+        </header>
+            
+    <!-- Nav Bar Ends
+    <style>
+        */
+        /* General Styles *****************************************************************/
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #191610; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /**** Nav Bar ***************************************************************************/
+        
+        li {
+          list-style: none;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 1rem;
+        }
+        
+        a:hover {
+            color: #ffd7e0;  
+        }
+        
+        header {
+            position: relative;
+            padding: 0 2rem;
+            background-color: #ca7f68;
+        }
+        
+        .navbar {
+            width: 100%;
+            height: 65px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .navbar .logo a {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .navbar .nav ul {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 0;
+            text-decoration: none;
+        }
+        
+        .navbar .highlight {
+            display: block;
+            margin-left: 0;
+            margin-right: 1rem;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 247, 246, 0.658);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            outline: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: scale 0.2s ease;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .highlight:hover {
+            transform: scale(1.05);
+            color: #000;
+        }
+        
+        .highlight:active {
+            transform: scale(0.95);
+        }
+        
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          height: 100vh;
+          background-color: transparent;
+        }
+        
+        
+        /* Search Bar Styles */
+        /* Search Bar Styles */
+        .search-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 2rem;
+          position: relative;
+          height: 50px; /* Increased height */
+        }
+        
+        .search-input {
+          border: 2px solid #ca7f68; /* matches nav bar color */
+          border-radius: 25px 0 0 25px; /* Adjusted border radius to match new height */
+          padding: 0 1rem;
+          width: 250px;
+          height: 100%; /* Ensures input takes up full container height */
+          outline: none;
+          transition: all 0.3s ease-in-out;
+          font-size: 1rem;
+        }
+        
+        .search-input:focus {
+          width: 300px; /* expands when focused */
+          border-color: #bf6450; /* slightly darker border on focus */
+        }
+        
+        .search-btn {
+          background-color: #ca7f68; /* matches nav bar color */
+          border: 2px solid #ca7f68;
+          border-radius: 0 25px 25px 0; /* Adjusted border radius to match new height */
+          height: 100%; /* Ensures button takes up full container height */
+          padding: 0 1rem;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+          background-color: #bf6450; /* slightly darker on hover */
+        }
+        
+        .search-btn i {
+          color: #fff;
+          font-size: 1.2rem;
+        }
+        
+        .search-container::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -8px;
+          height: 5px;
+          width: 100%;
+          background: #ca7f68;
+          border-radius: 5px;
+          z-index: -1;
+          transition: all 0.3s ease-in-out;
+        }
+        
+        .search-container:hover::after {
+          height: 50px; /* Adjusted to match new height */
+        }
+        
+        
+        
+        /* Nav Bar Ends **********************************************************************************/
+        
+        /* Responsive************************************************************************************ */
+        
+        @media (max-width: 992px) {
+            .navbar .nav ul {
+                display: none;
+            }
+            
+            .navbar .menu {
+                display: flex;
+            }
+            
+            .navbar .menu i {
+                display: inline-block;
+            }
+            
+            .navbar .highlight {
+                display: none;
+            }
+            
+            .dropdown-menu {
+                display: block;
+            }
+            
+            .dropdown-menu .highlight {
+                display: block;
+                margin-top: 1rem;
+            }
+        }
+        </style> -->
+</body>
+</html>
