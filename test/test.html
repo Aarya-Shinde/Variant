@@ -1,0 +1,28 @@
+<?php 
+
+//Conecting to the database
+$conn = mysqli_connect('localhost', 'root', '@pokemon1' , 'practice');
+
+//Checking the database connection
+if(!$conn) {
+    echo 'Connection error :' .mysqli_connect_error();
+}
+
+//SQL query to get title and suthor name
+$sql = 'select title, author_name from books;'
+
+// inatializing var result to make query and get result
+$result = mysqli_query($conn, $sql);
+
+//fetching  the resulting row as array
+$novels = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+// result from memory
+mysqli_free_result($result);
+
+//Closing database connection
+mysqli_close($conn);
+
+print_r($novels)
+
+?>

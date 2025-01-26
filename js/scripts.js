@@ -1,8 +1,3 @@
-function togglePage() {
-    const pages = document.querySelectorAll('.book-page');
-    pages.forEach(page => page.classList.toggle('hidden'));
-}
-
 // /////////////////////////Slideshow Functionality////////////////////////////////////////////////////////////////////////////////
 let slideIndex = 0;
 showSlides();
@@ -40,12 +35,6 @@ function updateLibraryBooks() {
     totalBooks.textContent = parseInt(totalBooks.textContent) + 1;
 }
 
-
-/////////////////////////////////////////////////////
-function togglePage() {
-    const pages = document.querySelectorAll('.book-page');
-    pages.forEach(page => page.classList.toggle('hidden'));
-}
 
  
 

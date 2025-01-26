@@ -190,7 +190,9 @@
     </script>
 
   
+<!--------------------------------- Library or recently read books ----------------------------------->
   
+
 
     <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
     
@@ -213,6 +215,12 @@
           <div class="genre-card" data-genre="sci-fi">
               <p class="genre-name">Sci-Fi</p>
           </div>
+          <div class="genre-card" data-genre="romance">
+            <p class="genre-name">Romance</p>
+        </div>
+        <div class="genre-card" data-genre="thriller">
+          <p class="genre-name">Thriller</p>
+      </div>
       </div>
       <div id="book-list">
           <!-- Book recommendations will be displayed here -->
@@ -236,7 +244,9 @@ function fetchBooks(genre) {
         { title: 'Book 2', genre: 'fantasy', image: 'https://in.pinterest.com/pin/48343395994947180/' },
         { title: 'Book 3', genre: 'mystery', image: 'images/book.png' },
         { title: 'Book 4', genre: 'sci-fi', image: 'images/book (1).png' },
-        { title: 'Book 5', genre: 'non-fiction', image: 'https://via.placeholder.com/150' }
+        { title: 'Book 5', genre: 'non-fiction', image: 'https://via.placeholder.com/150' },
+        { title: 'Book 6', genre: 'romance', image: 'https://via.placeholder.com/150' },
+        { title: 'Book 7', genre: 'thriller', image: 'https://via.placeholder.com/150' }
     ];
 
     const filteredBooks = books.filter(book => book.genre.toLowerCase() === genre.toLowerCase());
@@ -262,23 +272,6 @@ function displayBooks(books) {
 
 
     <!------------ About Us Section with Enhanced Book Animation ------------>
-
-    <!-- <section class="about-us">
-        <h2>About Us</h2>
-        <div class="book-container" onclick="togglePage()">
-            <div class="book-page front">
-                <p>Welcome to our Library - A Classic Experience</p>
-            </div>
-            <div class="book-page back hidden">
-                <p>Team Members:</p>
-                <ul>
-                    <li>John Doe</li>
-                    <li>Jane Smith</li>
-                    <li>Alex Lee</li>
-                </ul>
-            </div>
-        </div>
-    </section> -->
 
 
     <section class="about-us">
@@ -321,7 +314,6 @@ function displayBooks(books) {
   </div>
 
 </section>
-
 
 
     <!---- Footer Section -->

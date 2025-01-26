@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Team A4</title>
+    <!-- <link rel="stylesheet" href="styles.css"> External CSS file -->
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f5f0;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: #d4a373;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('images/team-a4.jpg') no-repeat center center/cover;
+            color: #fdfcfa;
+            text-align: center;
+            padding: 150px 20px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin: 15px 0;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .header button {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounceIn 2s ease;
+        }
+
+        .header button:hover {
+            background-color: #ad7d4d;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .about-section h2 {
+            font-size: 2.4rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            text-align: justify;
+            margin: 0 0 20px;
+        }
+
+        .about-section img {
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Team Section */
+        .team-section {
+            background: #d4a373;
+            padding: 50px 20px;
+            color: #fff;
+        }
+
+        .team-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .team-section .members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .team-section .member-card {
+            background: #fff;
+            color: #333;
+            text-align: center;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-section .member-card img {
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .team-section .member-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-section .member-card h3 {
+            margin: 10px 0 5px;
+        }
+
+        .team-section .member-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <section class="header">
+        <h1>About Us</h1>
+        <p>"Empowering knowledge, imagination, and innovation."</p>
+        <button>Explore More</button>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <h2>Our Story</h2>
+        <p>
+            We are Team A4, a group of passionate and innovative students from SRTTC Pune, specializing in creating
+            impactful digital solutions. Our project aims to bridge the gap between readers and writers in a unified
+            system, fostering creativity and community engagement.
+        </p>
+        <p>
+            As a dedicated team of tech enthusiasts, we believe in the transformative power of technology to solve
+            real-world challenges. Our project, "Unified System for Author and Audience," showcases our collaborative
+            efforts and technical expertise.
+        </p>
+        <img src="/images/bg1.jpg" alt="Our Project">
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <h2>Meet the Team</h2>
+        <div class="members">
+            <div class="member-card">
+                <img src="/images/bg2.png" alt="Team Member 1">
+                <h3>Aarya Shinde</h3>
+                <p>Researcher/Frontend Developer</p>
+            </div>
+            <div class="member-card">
+                <img src="images/member2.jpg" alt="Team Member 2">
+                <h3>Aarya Shinde</h3>
+                <p>Frontend/Backend Developer</p>
+            </div>
+            <div class="member-card">
+                <img src="images/member3.jpg" alt="Team Member 3">
+                <h3>Atharv Urkude</h3>
+                <p>UI/UX Designer/Developer</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 Team A4 | SRTTC Pune | All Rights Reserved
+    </footer>
+</body>
+</html>
