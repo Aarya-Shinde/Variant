@@ -5,188 +5,259 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Books</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(120deg, #DABAA5 60%, #A37C70 30%, #DCAE96 10%);
-            color: #0B0A07;
-        }
+ 
+    .header {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: #343a40;
+        color: white;
+    }
 
-        .header {
-            background-color: #88292F;
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+        margin-top: 50px;
+        padding: 1rem;
+        max-width: 100%; /* Ensure container takes full width */
+    }
 
-        .container {
-            padding: 2rem;
-        }
+    .search-filter {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
 
-        .search-filter {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+    .search-filter input, .search-filter select {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
-        .search-filter input {
-            width: 60%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        width: 100%; /* Ensure grid takes full width */
+    }
 
-        .filter {
-            position: relative;
-        }
+    .book-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
 
-        .filter select {
-            padding: 1rem;
-            font-size: 1.1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .book-card:hover {
+        transform: scale(1.05);
+    }
 
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
+    .book-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
 
-        .book-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+    .content {
+        padding: 1rem;
+    }
 
-        .book-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
+    .content .title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
 
-        .book-card img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
+    .content .author {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
 
-        .book-card .content {
-            padding: 1rem;
-            text-align: center;
-        }
+    .content .description {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 1rem;
+    }
 
-        .book-card .title {
-            font-size: 1.3rem;
-            margin: 0.5rem 0;
-            font-weight: bold;
-            color: #88292F;
-        }
+    .content button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        .book-card .author {
-            font-size: 1rem;
-            color: #6b7280;
-        }
+    .content button:hover {
+        background-color: #0056b3;
+    }
+ 
 
-        .book-card .description {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #333;
-        }
-
-        .book-card button {
-            margin-top: 1rem;
-            padding: 0.6rem 1.2rem;
-            background-color: #A77464;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .book-card button:hover {
-            background-color: #88292F;
-        }
     </style>
 </head>
+
+
+    <!-- ------------------linking css js files------------------- -->
+    <link rel="stylesheet" href="nav.css"> 
+    <script src="/js/scripts.js" defer></script>
+
+
+    <!--=============== BOXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"/>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!---font-family: "Edu AU VIC WA NT Pre", cursive;--->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
+    
+    <!-- --------------------------------------------Adding favicon to website-------------- -->
+         <link rel="icon" type="image/png" sizes="32x32" href="/images/images.png">
+    </head>
+
 <body>
-    <div class="header">Explore Books & More</div>
+    <?php
+    // PHP section to fetch books from the database
+    include './db/dbconnect.php';
+
+    $sql = "SELECT 
+                novel_id, 
+                title, 
+                author_name, 
+                genre, 
+                cover_image_url, 
+                description 
+            FROM Novels 
+            ORDER BY created_at DESC";
+
+    $result = $conn->query($sql);
+    $books = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $books[] = $row;
+        }
+    }
+    $conn->close();
+    ?>
+
+    <!------------------------------------------- Nav Bar------------------------------>
+        
+    <header>
+        <div class="navbar">
+                <!-- variant logo image here -->
+            <div class="logo"> <a href="index.html"><img src="/images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container"> 
+            <input type="text" class="search-input" placeholder="Search . . ." required>
+            <button class="search-btn"> 
+                <i class="bx bx-search"></i> 
+            </button> 
+            </div>
+                
+            <div class="nav">
+                <ul>
+                    <li><a href="explore.php">Explore</a></li>
+                    <li><a href="reader.html">Reader</a></li>
+                    <li><a href="writer.html">Writer</a></li>
+                    <li><a href="library.html">Library</a></li>
+                    <li><a href="pages/login.php">Login</a></li>
+                </ul>        
+            </div>
+            </div>
+        </div>
+    </header>
 
     <div class="container">
         <div class="search-filter">
-            <input type="text" placeholder="Search for books, authors, genres, or categories...">
+            <input id="searchInput" type="text" placeholder="Search for books, authors, genres, or categories...">
             <div class="filter">
                 <select id="categoryFilter">
                     <option value="all">All Categories</option>
                     <option value="novels">Novels</option>
-                    <option value="comics">Comics</option>
+                    <option value="fiction">Fiction</option>
                     <option value="manga">Manga</option>
-                    <option value="manhwa">Manhwa</option>
-                    <option value="horror">Horror</option>
                     <option value="romance">Romance</option>
                     <option value="thriller">Thriller</option>
                     <option value="fantasy">Fantasy</option>
-                    <option value="scientific">Scientific</option>
                 </select>
             </div>
         </div>
 
-        <div class="book-grid" id="bookGrid"></div>
+        <div class="book-grid" id="bookGrid">
+            <!-- Books will be dynamically rendered here -->
+        </div>
     </div>
 
     <script>
-        const books = [
-            { title: "The Great Gatsby", author: "F. Scott Fitzgerald", category: "novels", description: "A tale of love and ambition in the roaring twenties.", image: "https://via.placeholder.com/250x300?text=The+Great+Gatsby" },
-            { title: "Naruto", author: "Masashi Kishimoto", category: "manga", description: "Follow Naruto Uzumaki's ninja journey.", image: "https://via.placeholder.com/250x300?text=Naruto" },
-            { title: "The Hobbit", author: "J.R.R. Tolkien", category: "fantasy", description: "An epic journey through Middle-earth.", image: "https://via.placeholder.com/250x300?text=The+Hobbit" },
-            { title: "Attack on Titan", author: "Hajime Isayama", category: "manga", description: "A fight against human-eating giants.", image: "https://via.placeholder.com/250x300?text=Attack+on+Titan" },
-            { title: "Spider-Man", author: "Marvel Comics", category: "comics", description: "The adventures of Peter Parker, aka Spider-Man.", image: "https://via.placeholder.com/250x300?text=Spider-Man" },
-            { title: "Jane Eyre", author: "Charlotte Brontë", category: "novels", description: "A story of love and resilience.", image: "https://via.placeholder.com/250x300?text=Jane+Eyre" },
-            { title: "Dr. Stone", author: "Riichiro Inagaki", category: "scientific", description: "Reviving humanity through science.", image: "https://via.placeholder.com/250x300?text=Dr.+Stone" },
-            { title: "Solo Leveling", author: "Chu-Gong", category: "manhwa", description: "The journey of the weakest hunter.", image: "https://via.placeholder.com/250x300?text=Solo+Leveling" },
-            { title: "Chainsaw Man", author: "Tatsuki Fujimoto", category: "manga", description: "A devil-hunting saga.", image: "https://via.placeholder.com/250x300?text=Chainsaw+Man" },
-            { title: "Demon Slayer", author: "Koyoharu Gotouge", category: "manga", description: "Fighting demons to save humanity.", image: "https://via.placeholder.com/250x300?text=Demon+Slayer" },
-            { title: "Pride and Prejudice", author: "Jane Austen", category: "romance", description: "A timeless romantic tale.", image: "https://via.placeholder.com/250x300?text=Pride+and+Prejudice" },
-            { title: "The Odyssey", author: "Homer", category: "thriller", description: "A thrilling journey of Odysseus.", image: "https://via.placeholder.com/250x300?text=The+Odyssey" }
-        ];
-
+        const books = <?php echo json_encode($books); ?>;
         const bookGrid = document.getElementById('bookGrid');
         const categoryFilter = document.getElementById('categoryFilter');
+        const searchInput = document.getElementById('searchInput');
 
-        function displayBooks(category = 'all') {
-            bookGrid.innerHTML = '';
-            const filteredBooks = category === 'all' ? books : books.filter(book => book.category === category);
-            filteredBooks.forEach(book => {
-                const bookCard = document.createElement('div');
-                bookCard.classList.add('book-card');
-                bookCard.innerHTML = `
-                    <img src="${book.image}" alt="${book.title}">
-                    <div class="content">
-                        <div class="title">${book.title}</div>
-                        <div class="author">${book.author}</div>
-                        <div class="description">${book.description}</div>
-                        <button>View Details</button>
-                    </div>
-                `;
-                bookGrid.appendChild(bookCard);
-            });
+        function displayBooks(filteredBooks) {
+        bookGrid.innerHTML = '';
+
+        if (filteredBooks.length === 0) {
+            bookGrid.innerHTML = '<p>No books found</p>';
+            return;
         }
 
-        categoryFilter.addEventListener('change', () => {
-            displayBooks(categoryFilter.value);
-        });
+        filteredBooks.forEach(book => {
+            const truncatedDescription = book.description.length > 100 
+                ? book.description.substring(0, 100) + '...' 
+                : book.description;
 
-        displayBooks();
+            const bookCard = document.createElement('div');
+            bookCard.classList.add('book-card');
+            bookCard.innerHTML = `
+                <img src="${book.cover_image_url}" alt="${book.title}">
+                <div class="content">
+                    <div class="title">${book.title}</div>
+                    <div class="author">${book.author_name}</div>
+                    <div class="description">${truncatedDescription}</div>
+                    <button>View Details</button>
+                </div>
+            `;
+            bookGrid.appendChild(bookCard);
+        });
+    }
+
+
+        function filterBooks() {
+            const category = categoryFilter.value.toLowerCase();
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const filteredBooks = books.filter(book => {
+                return (
+                    (category === 'all' || book.genre.toLowerCase() === category) &&
+                    (book.title.toLowerCase().includes(searchTerm) ||
+                     book.author_name.toLowerCase().includes(searchTerm))
+                );
+            });
+
+            displayBooks(filteredBooks);
+        }
+
+        categoryFilter.addEventListener('change', filterBooks);
+        searchInput.addEventListener('input', filterBooks);
+
+        // Initialize with all books displayed
+        displayBooks(books);
     </script>
 </body>
 </html>

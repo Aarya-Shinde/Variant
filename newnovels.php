@@ -106,7 +106,7 @@ $result = $conn->query($sql);
                             <p><strong>Series:</strong> {$row['series_name']} (Book {$row['series_position']})</p>
                             <p><strong>Rating:</strong> ⭐{$row['rating']}</p>
                             <p><strong>Language:</strong> {$row['language']}</p>
-                            <p><strong>Description:</strong> {$row['description']}</p>
+                            <!-- <p><strong>Description:</strong> {$row['description']}</p> -->
                             <p><strong>Published:</strong> {$row['publication_date']}</p>
                         </div>
                         ";
