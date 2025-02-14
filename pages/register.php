@@ -1,4 +1,5 @@
 <?php
+
 // Database connection
 $mysqli = new mysqli("localhost", "root", "@pokemon1", "variant");
 
@@ -7,6 +8,8 @@ if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
 echo "Connected successfully";
+
+
 
 // Initialize variables
 $message = '';

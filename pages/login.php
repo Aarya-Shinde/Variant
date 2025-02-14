@@ -1,36 +1,37 @@
 <?php 
-include '../db/dbconnect.php'; // Ensure $conn is correctly initialized in this file
+include '../db/dbconnect.php'; // Ensure $conn is correctly initialized
+
+session_start();
 
 $message = "";
 $toastClass = "";
 
-// Start session at the beginning
-session_start();
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL); // Validate and sanitize email
-    $password = trim($_POST['password']); // Trim password input
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $password = trim($_POST['password']);
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        // Prepared statement to check if email exists
-        $stmt = $conn->prepare("SELECT password_hash FROM Users WHERE email = ?");
+        $stmt = $conn->prepare("SELECT password_hash, is_admin FROM Users WHERE email = ?");
         if ($stmt) {
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $stmt->store_result();
 
             if ($stmt->num_rows > 0) {
-                $stmt->bind_result($db_password_hash);
+                $stmt->bind_result($db_password_hash, $is_admin);
                 $stmt->fetch();
 
-                // Validate password
                 if (password_verify($password, $db_password_hash)) {
-                    // Regenerate session ID to prevent fixation
                     session_regenerate_id(true);
                     $_SESSION['email'] = $email;
+                    $_SESSION['is_admin'] = $is_admin;
 
-                    //// Redirect to the dashboard page
-                    header("Location: ../pages/dashboard.php");
+                    // Redirect based on role
+                    if ($is_admin) {
+                        header("Location: admin_dashboard.php");
+                    } else {
+                        header("Location: user_dashboard.php");
+                    }
                     exit();
                 } else {
                     $message = "Incorrect password";
@@ -67,7 +68,6 @@ $conn->close();
             font-family: 'Cormorant Garamond', serif;
             color: #4a3c31;
         }
-
         .form-wrapper {
             max-width: 450px;
             margin: 50px auto;
@@ -77,7 +77,6 @@ $conn->close();
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border: 2px solid #d4a373;
         }
-
         .form-wrapper h2 {
             text-align: center;
             font-weight: bold;
@@ -87,23 +86,19 @@ $conn->close();
             border-bottom: 2px solid #d4a373;
             padding-bottom: 10px;
         }
-
         .form-wrapper label {
             font-weight: bold;
         }
-
         .form-wrapper input {
             background: #faf3eb;
             border: 1px solid #d4a373;
             border-radius: 5px;
         }
-
         .form-wrapper input:focus {
             border-color: #bf8450;
             box-shadow: 0 0 5px #bf8450;
             background: #f8f1e9;
         }
-
         .form-wrapper .btn {
             background-color: #d4a373;
             color: #fff;
@@ -111,12 +106,10 @@ $conn->close();
             font-size: 1.2rem;
             transition: all 0.3s;
         }
-
         .form-wrapper .btn:hover {
             background-color: #bf8450;
             transform: scale(1.05);
         }
-
         .nav-bar {
             display: flex;
             justify-content: center;
@@ -124,7 +117,6 @@ $conn->close();
             padding: 15px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
-
         .nav-bar a {
             color: #fff;
             margin: 0 15px;
@@ -133,11 +125,9 @@ $conn->close();
             font-weight: bold;
             transition: color 0.3s;
         }
-
         .nav-bar a:hover {
             color: #d4a373;
         }
-
         .toast {
             position: absolute;
             top: 20px;
@@ -146,7 +136,6 @@ $conn->close();
             color: #4a3c31;
             border: 1px solid #d4a373;
         }
-
         footer {
             text-align: center;
             margin-top: 30px;
@@ -159,9 +148,9 @@ $conn->close();
     <!-- Navbar -->
     <div class="nav-bar">
         <a href="../index.html">Home</a>
-        <a href="../library.html">Library</a>
+        <a href="../library.html">Writer</a>
         <a href="../reader.html">Reader</a>
-        <a href="../writer.html">Writer</a>
+        <a href="adminlogin.php">Admin</a>
     </div>
 
     <!-- Login Form -->
@@ -189,15 +178,14 @@ $conn->close();
             <button type="submit" class="btn w-100">Login</button>
         </form>
         <div class="text-center mt-3">
-
-        <!-- Add Forgot Password Link -->
-    <div class="mt-3">
-        <a href="forgotpassword.php" style="color: #007bff; text-decoration: none;">Forgot Password?</a>
-        or 
-        <br>Don't have an account? 
-        <a href="./register.php" style="color: #d4a373; text-decoration: none;">Register</a>
+            <div class="mt-3">
+                <a href="forgotpassword.php" style="color: #007bff; text-decoration: none;">Forgot Password?</a>
+                or 
+                <br>Don't have an account? 
+                <a href="./register.php" style="color: #d4a373; text-decoration: none;">Register</a>
+            </div>
+        </div>
     </div>
-
 
     <footer>
         &copy; 2025 Unified System for Author and Audience. <br>
