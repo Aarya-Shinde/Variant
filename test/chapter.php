@@ -1,15 +1,30 @@
 <?php
-include '../db/dbconnect.php';  // Include database connection file
+include '../db/dbconnect.php';
 
-$novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 14; // Default to novel ID 1
-$sql = "SELECT n.title AS novel_title, n.author_name, n.cover_image_url, 
-               c.chapter_number, c.title AS chapter_title, c.content 
-        FROM Novels n 
-        JOIN Chapters c ON n.novel_id = c.novel_id 
-        WHERE n.novel_id = $novel_id 
-        ORDER BY c.chapter_number ASC";
+// Get novel ID and chapter number from URL (defaults to first chapter)
+$novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 14;
+$chapter_number = isset($_GET['chapter']) ? intval($_GET['chapter']) : 1;
 
-$result = $conn->query($sql);
+// Fetch novel details
+$novelQuery = "SELECT title, author_name, cover_image_url FROM Novels WHERE novel_id = $novel_id";
+$novelResult = $conn->query($novelQuery);
+$novel = $novelResult->fetch_assoc();
+
+// Fetch the current chapter
+$chapterQuery = "SELECT * FROM Chapters WHERE novel_id = $novel_id AND chapter_number = $chapter_number";
+$chapterResult = $conn->query($chapterQuery);
+$chapter = $chapterResult->fetch_assoc();
+
+// Fetch all chapters for TOC navigation
+$chaptersQuery = "SELECT chapter_number, title FROM Chapters WHERE novel_id = $novel_id ORDER BY chapter_number";
+$chaptersResult = $conn->query($chaptersQuery);
+
+// Fetch total chapters
+$totalChaptersQuery = "SELECT COUNT(*) AS total FROM Chapters WHERE novel_id = $novel_id";
+$totalChaptersResult = $conn->query($totalChaptersQuery);
+$totalChapters = $totalChaptersResult->fetch_assoc()['total'];
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -17,54 +32,179 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novel Reader</title>
-    <link rel="stylesheet" href="styles.css"> 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Read: <?php echo htmlspecialchars($novel['title']); ?></title>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        :root {
+            --background-light: #fffaf0;
+            --text-light: #3e2723;
+            --border-light: #d4c0a1;
+            --background-dark: #121212;
+            --text-dark: #f5f5f5;
+            --border-dark: #333;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            background: var(--background-light);
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: auto;
+            background: var(--background-light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+        }
+
+        .novel-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8b4513;
+            text-align: center;
+        }
+        .author {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #5d4037;
+        }
+        .chapter-title {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            color: #8b4513;
+            text-align: center;
+        }
+        .content {
+            font-size: 1.2rem;
+            text-align: justify;
+            line-height: 1.8;
+            margin-top: 20px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:disabled {
+            background: #d4c0a1;
+            cursor: not-allowed;
+        }
+        /* Table of Contents */
+        .toc {
+            background: #fdf8f2;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        .toc h3 {
+            margin: 0;
+            text-align: center;
+            font-size: 1.4rem;
+            color: #8b4513;
+        }
+        .toc select {
+            width: 100%;
+            padding: 8px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        /* Dark Mode */
+        .dark-mode {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+        .dark-mode .container {
+            background: var(--background-dark);
+            border: 2px solid var(--border-dark);
+        }
+        .dark-mode .toc {
+            background: #1e1e1e;
+            border: 1px solid var(--border-dark);
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
+<!-- Dark Mode Toggle -->
+<button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
 <div class="container">
-    <?php if ($result->num_rows > 0) {
-        $firstRow = $result->fetch_assoc(); ?>
-        <div class="info">Reading: <?php echo htmlspecialchars($firstRow['novel_title']); ?></div>
-        <div class="laptop-layout">
-            <div class="notification-header">
-                <div class="time">9:41</div>
-                <div class="necessities">
-                    <i class="fas fa-signal"></i>
-                    <i class="fas fa-wifi"></i>
-                    <i class="fas fa-battery-full"></i>
-                </div>
-            </div>
-            <div class="actions">
-                <i class="fas fa-chevron-left"></i>
-                <i class="fas fa-bookmark"></i>
-            </div>  
-            <div class="book-cover">
-                <img class="book-top" src="<?php echo htmlspecialchars($firstRow['cover_image_url']); ?>" alt="Book Cover" />
-            </div>
-            <div class="preface">
-                <div class="content">
-                    <div class="header">
-                        <div class="title"><?php echo htmlspecialchars($firstRow['novel_title']); ?></div>
-                        <div class="icon"><i class="fas fa-chevron-down"></i></div>
-                    </div>
-                    <div class="author">by <?php echo htmlspecialchars($firstRow['author_name']); ?></div>
-                    <div class="body">
-                        <?php do { ?>
-                            <h3>Chapter <?php echo $firstRow['chapter_number']; ?>: <?php echo htmlspecialchars($firstRow['chapter_title']); ?></h3>
-                            <p><?php echo nl2br(htmlspecialchars($firstRow['content'])); ?></p>
-                        <?php } while ($firstRow = $result->fetch_assoc()); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <?php } else { ?>
-        <div class="info">No Chapters Found</div>
-    <?php } ?>
+    <div class="novel-title"><?php echo htmlspecialchars($novel['title']); ?></div>
+    <div class="author">by <?php echo htmlspecialchars($novel['author_name']); ?></div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+        <h3>Jump to Chapter</h3>
+        <select onchange="location = this.value;">
+            <?php while ($row = $chaptersResult->fetch_assoc()) { ?>
+                <option value="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $row['chapter_number']; ?>"
+                    <?php echo ($row['chapter_number'] == $chapter_number) ? 'selected' : ''; ?>>
+                    Chapter <?php echo $row['chapter_number']; ?>: <?php echo htmlspecialchars($row['title']); ?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
+
+    <div class="chapter-title">
+        Chapter <?php echo $chapter['chapter_number']; ?>: <?php echo htmlspecialchars($chapter['title']); ?>
+    </div>
+
+    <div class="content">
+        <p><?php echo nl2br(htmlspecialchars($chapter['content'])); ?></p>
+    </div>
+
+
+    <div class="nav-buttons">
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number - 1; ?>"
+           class="btn" <?php echo ($chapter_number <= 1) ? 'disabled' : ''; ?>>← Previous</a>
+
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number + 1; ?>"
+           class="btn" <?php echo ($chapter_number >= $totalChapters) ? 'disabled' : ''; ?>>Next →</a>
+    </div>
 </div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        let mode = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+        localStorage.setItem('theme', mode);
+    }
+    // Load stored theme
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
 
 </body>
 </html>
-
-<?php $conn->close(); ?>

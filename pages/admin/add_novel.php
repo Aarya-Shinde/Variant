@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a class="nav-link" href="../../index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                        <a class="nav-link" href="../admin_dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="manage_novels.php">Manage Novels</a>

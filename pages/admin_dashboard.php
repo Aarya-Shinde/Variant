@@ -26,6 +26,28 @@ $totalUsers = $conn->query("SELECT COUNT(*) AS count FROM Users")->fetch_assoc()
 // $totalCategories = $conn->query("SELECT COUNT(*) AS count FROM Categories")->fetch_assoc()['count'];
 // $totalReports = $conn->query("SELECT COUNT(*) AS count FROM Reports")->fetch_assoc()['count'];
 
+//Search novels query
+
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+
+$novels = [];
+if (!empty($search)) {
+    $searchQuery = "SELECT * FROM Novels WHERE title LIKE '%$search%' OR author_name LIKE '%$search%'";
+    $searchResult = $conn->query($searchQuery);
+
+    while ($row = $searchResult->fetch_assoc()) {
+        $novels[] = $row;
+    }
+} else {
+    $novelQuery = "SELECT * FROM Novels";
+    $novelResult = $conn->query($novelQuery);
+
+    while ($row = $novelResult->fetch_assoc()) {
+        $novels[] = $row;
+    }
+}
+
+
 // Handle novel deletion
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     $delete_id = $_POST['delete_id'];
@@ -49,9 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #1f1c2c, #928dab);
-            color: white;
+            background: linear-gradient(to right, #a67c52, #8b6f4e);
+            color: #3e2723;
         }
+
         .sidebar {
             width: 250px;
             background: rgba(0, 0, 0, 0.8);
@@ -59,23 +82,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             position: fixed;
             height: 100%;
             padding: 1rem;
-            border-radius: 10px 0 0 10px;
+            border-radius: 0px 0 0 10px;
             backdrop-filter: blur(10px);
         }
+
         .sidebar .logo {
             font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
             margin-bottom: 2rem;
-            color: #708090;
+            color: #8b4513;
         }
+
         .sidebar ul {
             list-style: none;
             padding: 0;
         }
+
         .sidebar ul li {
             margin: 1.5rem 0;
         }
+
         .sidebar ul li a {
             text-decoration: none;
             color: white;
@@ -86,15 +113,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             transition: 0.3s;
             background-color: rgba(0, 0, 0, 0);
         }
+
         .sidebar ul li a:hover {
-            background-color: #708090;
+            background-color: #8b4513;
             transform: scale(1.05);
         }
-      
+
         .main-content {
             margin-left: 270px;
             padding: 2rem;
         }
+
         .header {
             background: linear-gradient(to right, #DABAA5, #A37C70);
             color: white;
@@ -105,12 +134,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             font-weight: bold;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-top: 2rem;
         }
+
         .stat-card {
             background: rgba(255, 255, 255, 0.1);
             padding: 1.5rem;
@@ -120,16 +151,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             backdrop-filter: blur(10px);
             transition: 0.3s;
         }
+
         .stat-card:hover {
             transform: scale(1.05);
             box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
         }
+
         .novel-container {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin-top: 2rem;
         }
+
         .novel-card {
             background: rgba(255, 255, 255, 0.2);
             padding: 1rem;
@@ -139,26 +173,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: 0.3s;
         }
+
         .novel-card:hover {
             transform: scale(1.05);
             box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
         }
+
         .novel-card img {
             width: 100%;
             border-radius: 5px;
         }
-        .btn-danger {
-            background: #708090;
+
+        .btn-primary {
+            background: #8b4513;
             border: none;
         }
+
+        .btn-primary:hover {
+            background: #a0522d;
+        }
+
+        .btn-danger {
+            background: #8b4513;
+            border: none;
+        }
+
         .btn-danger:hover {
             background: #c0392b;
         }
+
         .search-box {
             margin-top: 2rem;
             display: flex;
             gap: 1rem;
         }
+
+
+
     </style>
 </head>
 <body>
@@ -193,6 +244,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             <input type="text" name="search" placeholder="Search Novel..." class="form-control">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
+         <!-- Working the search button -->
+                <?php if (!empty($novels)): ?>
+            <div class="novel-container">
+                <?php foreach ($novels as $novel): ?>
+                    <div class="novel-card">
+                        <img src="<?php echo htmlspecialchars($novel['cover_image_url']); ?>" alt="Cover Image">
+                        <h5><?php echo htmlspecialchars($novel['title']); ?></h5>
+                        <p>By: <?php echo htmlspecialchars($novel['author_name']); ?></p>
+                        <a href="edit_novel.php?id=<?php echo $novel['novel_id']; ?>" class="btn btn-primary">Edit</a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-muted">No novels found.</p>
+        <?php endif; ?>
+
     </div>
 
 </body>
