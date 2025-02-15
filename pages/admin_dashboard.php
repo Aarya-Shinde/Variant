@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         <div class="logo">Admin Panel</div>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="add_book.php"><i class="fa fa-book"></i> Manage Novels</a></li>
+            <li><a href="admin/manage_novels.php"><i class="fa fa-book"></i> Manage Novels</a></li>
             <li><a href="categories.php"><i class="fa fa-list"></i> Categories</a></li>
             <li><a href="users.php"><i class="fa fa-users"></i> Users</a></li>
             <li><a href="reports.php"><i class="fa fa-flag"></i> Reports</a></li>

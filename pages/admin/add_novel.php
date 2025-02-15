@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../db/dbconnect.php';  // Include your database connection
+include '../../db/dbconnect.php';  // Include your database connection
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -55,15 +55,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
+                        <a class="nav-link" href="../../index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">View Books</a>
+                        <a class="nav-link" href="manage_novels.php">Manage Novels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add_chapter.php">Add Chapters</a>
                     </li>
                 </ul>
             </div>
@@ -142,11 +145,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .navbar-brand, .nav-link {
             color: #fff !important;
         }
+        .navbar-nav .nav-item {
+            margin-right: 20px; /* Add spacing between items */
+        }
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
         .container {
             background-color: #fffaf0;
             border: 2px solid #8b4513;
             border-radius: 5px;
             padding: 20px;
+            margin-bottom: 30px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {

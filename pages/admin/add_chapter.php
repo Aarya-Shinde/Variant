@@ -1,6 +1,6 @@
 <?php
 
-include '../db/dbconnect.php';  // Include database connection file
+include '../../db/dbconnect.php';  // Include database connection file
 
 // Fetch existing novels
 $novelQuery = "SELECT novel_id, title FROM Novels ORDER BY title ASC";
@@ -29,12 +29,40 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Chapter</title>
-    <link rel="stylesheet" href="admin_styles.css">
-</head>
-<body>
+
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Variant</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin_dashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="manage_novels.php">Manage Novels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add_novel.php">Add Novels</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+ </head>
+
+    <body>
 
 <div class="container">
     <h2>Add New Chapter</h2>
@@ -65,11 +93,11 @@ $conn->close();
 </div>
 
 <style>
-    body {
+   body {
         font-family: 'Georgia', serif;
         background-color: #f2e6d9;
         margin: 0;
-        padding: 20px;
+        padding: 0px;
         line-height: 1.6;
         color: #333;
     }
@@ -79,6 +107,7 @@ $conn->close();
         margin: auto;
         background: #fff;
         padding: 30px;
+        
         border-radius: 12px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border: 2px solid #d4c0a1;
@@ -135,6 +164,21 @@ $conn->close();
     .error {
         color: #b22222;
         font-weight: bold;
+    }
+
+    /* **************navbar styling*************** */
+    .navbar {
+        background-color: #8b4513;
+        color: #fff;
+    }
+    .navbar-brand, .nav-link {
+        color: #fff !important;
+    }
+    .navbar-nav .nav-item {
+        margin-right: 20px; /* Add spacing between items */
+    }
+    .navbar-nav.ms-auto {
+        margin-left: auto;
     }
 
 </style>
