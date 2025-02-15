@@ -26,3 +26,58 @@ mysqli_close($conn);
 print_r($novels)
 
 ?>
+
+
+
+
+
+
+<?php
+// Fetch novels from the database
+$query = "SELECT title, cover_image_url FROM Novels";
+$result = $conn->query($query);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div class="novel-container">
+    <?php while ($novel = $result->fetch_assoc()): ?>
+        <div class="novel-card">
+            <img src="<?php echo htmlspecialchars($novel['cover_image_url']); ?>" alt="Book Cover">
+            <h3><?php echo htmlspecialchars($novel['title']); ?></h3>
+        </div>
+    <?php endwhile; ?>
+</div>
+</body>
+</html>
+
+
+<style>
+    .novel-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+    .novel-card {
+        background: #f9fafb;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 200px;
+        text-align: center;
+    }
+    .novel-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+</style>
+
+
+

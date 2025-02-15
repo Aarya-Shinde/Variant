@@ -4,7 +4,7 @@ include '../db/dbconnect.php';  // Include database connection file
 
 // Check if the user is logged in
 if (!isset($_SESSION['email']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    header("Location: login.php"); // Redirect to login page if not an admin
+    header("Location: login.php");
     exit();
 }
 
@@ -19,6 +19,20 @@ $user = $result->fetch_assoc();
 
 // Handle cases where no user is found
 $username = $user ? htmlspecialchars($user['username']) : "Admin";
+
+// Fetch total counts
+$totalBooks = $conn->query("SELECT COUNT(*) AS count FROM Novels")->fetch_assoc()['count'];
+$totalUsers = $conn->query("SELECT COUNT(*) AS count FROM Users")->fetch_assoc()['count'];
+// $totalCategories = $conn->query("SELECT COUNT(*) AS count FROM Categories")->fetch_assoc()['count'];
+// $totalReports = $conn->query("SELECT COUNT(*) AS count FROM Reports")->fetch_assoc()['count'];
+
+// Handle novel deletion
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
+    $delete_id = $_POST['delete_id'];
+    $conn->query("DELETE FROM Novels WHERE id = '$delete_id'");
+    header("Location: dashboard.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,60 +46,28 @@ $username = $user ? htmlspecialchars($user['username']) : "Admin";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
 
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-sm navbar-light">
-        <div class="container">
-            <a class="navbar-brand text-white" href="#" style="font-weight: bold;"></a>
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavId">
-                <ul class="navbar-nav m-auto mt-2 mt-lg-0"></ul>
-                <form class="d-flex my-2 my-lg-0">
-                    <a href="logout.php" class="btn btn-light btn-logout my-2 my-sm-0">Logout</a>
-                </form>
-            </div>
-        </div>
-    </nav>
-
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
-            color: #333;
-        }
-        nav {
-            background-color: #0b0a07;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-        .btn-logout {
-            color: brown;
-            font-weight: bold;
-            background-color: black;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #1f1c2c, #928dab);
+            color: white;
         }
         .sidebar {
             width: 250px;
-            background-color: #0b0a07;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
             position: fixed;
-            top: 0;
-            left: 0;
             height: 100%;
-            padding: 0.5rem;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            border-radius: 10px 0 0 10px;
+            backdrop-filter: blur(10px);
         }
         .sidebar .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            margin-bottom: 2.5rem;
-            color: #a2a79e;
             text-align: center;
+            margin-bottom: 2rem;
+            color: #708090;
         }
         .sidebar ul {
             list-style: none;
@@ -101,112 +83,117 @@ $username = $user ? htmlspecialchars($user['username']) : "Admin";
             display: block;
             padding: 0.7rem 1rem;
             border-radius: 8px;
-            transition: background-color 0.3s;
+            transition: 0.3s;
+            background-color: rgba(0, 0, 0, 0);
         }
         .sidebar ul li a:hover {
-            background-color: #a77464;
+            background-color: #708090;
+            transform: scale(1.05);
         }
+      
         .main-content {
-            margin-left: 250px;
+            margin-left: 270px;
             padding: 2rem;
         }
         .header {
-            background: linear-gradient(to right, #88292f, #a77464);
+            background: linear-gradient(to right, #DABAA5, #A37C70);
             color: white;
             padding: 1.5rem;
             text-align: center;
-            font-size: 2.2rem;
-            font-weight: bold;
+            font-size: 2rem;
             border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            font-weight: bold;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-top: 2rem;
         }
         .stat-card {
-            background: linear-gradient(135deg, #a2a79e 60%, #88292f 30%, #0b0a07 10%);
-            color: white;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
         }
         .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
         }
-         
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
+        .novel-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
         }
-        table th, table td {
-            border: 1px solid #ddd;
+        .novel-card {
+            background: rgba(255, 255, 255, 0.2);
             padding: 1rem;
-            text-align: left;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
         }
-        table th {
-            background-color: #a77464;
-            color: white;
+        .novel-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
         }
-        table td {
-            background-color: #f9fafb;
+        .novel-card img {
+            width: 100%;
+            border-radius: 5px;
         }
-        .add-button {
-            padding: 0.8rem 1.5rem;
-            background-color: #3b82f6;
-            color: white;
+        .btn-danger {
+            background: #708090;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
         }
-        .add-button:hover {
-            background-color: #2563eb;
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .search-box {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
         }
     </style>
+</head>
+<body>
 
+    <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">Admin Panel</div>
         <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="add_book.php">Manage Books</a></li>
-            <li><a href="#">Manage Categories</a></li>
-            <li><a href="#">User Management</a></li>
-            <li><a href="#">Novels</a></li>
+            <li><a href="admin_dashboard.php"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="add_book.php"><i class="fa fa-book"></i> Manage Novels</a></li>
+            <li><a href="categories.php"><i class="fa fa-list"></i> Categories</a></li>
+            <li><a href="users.php"><i class="fa fa-users"></i> Users</a></li>
+            <li><a href="reports.php"><i class="fa fa-flag"></i> Reports</a></li>
+            <li><a href="logout.php" class="btn btn-light"><i class="fa fa-sign-out"></i> Logout</a></li>
         </ul>
     </div>
 
+    <!-- Main Content -->
     <div class="main-content">
-        <div class="header">Welcome to Admin Dashboard</div>
+        <div class="header">Welcome, <?php echo $username; ?>!</div>
 
+        <!-- Stats Section -->
         <div class="stats">
-            <div class="stat-card">
-                <h3>Total Books</h3>
-                <p>1,234</p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <p>567</p>
-            </div>
-            <div class="stat-card">
-                <h3>Categories</h3>
-                <p>12</p>
-            </div>
-            <div class="stat-card">
-                <h3>Reports</h3>
-                <p>34</p>
-            </div>
+            <div class="stat-card">Total Books: <strong><?php echo $totalBooks; ?></strong></div>
+            <div class="stat-card">Total Users: <strong><?php echo $totalUsers; ?></strong></div>
+            <div class="stat-card">Categories: <strong><?php echo $totalCategories; ?></strong></div>
+            <div class="stat-card">Reports: <strong><?php echo $totalReports; ?></strong></div>
         </div>
- 
+
+        <!-- Search & Display Novels -->
+        <form method="GET" action="" class="search-box">
+            <input type="text" name="search" placeholder="Search Novel..." class="form-control">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
     </div>
- 
+
 </body>
 </html>

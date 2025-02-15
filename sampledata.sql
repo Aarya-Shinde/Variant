@@ -1,7 +1,9 @@
 use Variant;
+show tables;
 
 select * from Users;
 select * from novels;
+select * from chapters;
 
 -- sample novel Data to input in 
 
@@ -74,8 +76,9 @@ UPDATE Novels
 SET cover_image_url = 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1598823299i/42844155.jpg'
 WHERE novel_id = 11;
 
+-- Dummy data for chapters
+INSERT INTO Chapters (novel_id, chapter_number, title, content) VALUES
+(14, 1, 'The Reaping', 'The sun rises over District 12, casting a pale light on the run-down houses. Katniss Everdeen wakes up to the sound of her sister\'s cries...'),
+(14, 2, 'The Train Ride', 'Katniss and Peeta board the train to the Capitol, leaving behind their families and everything they have ever known...'),
+(14, 3, 'The Capitol', 'The train arrives in the Capitol, a place of unimaginable luxury and excess. Katniss is overwhelmed by the opulence...');
 
--- ('To Kill a Mockingbird', 6, 'Harper Lee', '1960-07-11', 'Fiction', 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1553383690i/2657.jpg', 31, 'N/A', 1, 'Scout Finch recounts her childhood in the racially divided Deep South, focusing on her father, Atticus Finch, defending an innocent Black man accused of a crime.', '9780061120084', 4.8, 'English'),
--- ('1984', 7, 'George Orwell', '1949-06-08', 'Dystopian', 'https://m.media-amazon.com/images/I/71kxa1-0wfL._AC_UY218_.jpg', 24, 'N/A', 1, 'In a dystopian future, Winston Smith secretly rebels against the totalitarian regime of Big Brother, grappling with surveillance, propaganda, and the loss of individuality.', '9780451524935', 4.7, 'English'),
--- ('The Great Gatsby', 8, 'F. Scott Fitzgerald', '1925-04-10', 'Fiction', 'https://m.media-amazon.com/images/I/81nLrrpE2zL._AC_UY218_.jpg', 9, 'N/A', 1, 'Narrated by Nick Carraway, this novel explores the mysterious life of Jay Gatsby and his unyielding love for Daisy Buchanan during the Roaring Twenties.', '9780743273565', 4.4, 'English'),
--- ('Pride and Prejudice', 9, 'Jane Austen', '1813-01-28', 'Romance', 'https://m.media-amazon.com/images/I/81lHkchD6QL._AC_UY218_.jpg', 61, 'N/A', 1, 'Elizabeth Bennet faces the challenges of love, prejudice, and social expectations in her evolving relationship with the enigmatic Mr. Darcy in Regency-era England.', '9780486284736', 4.3, 'English');
