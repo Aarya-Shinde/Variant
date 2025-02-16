@@ -22,10 +22,10 @@ $username = htmlspecialchars($user['username']);
 $role = $user['is_admin'] ? 'Admin' : ($user['is_writer'] ? 'Writer' : 'Reader');
 $created_at = htmlspecialchars($user['created_at']);
 
-$query = "SELECT Novels.title, Novels.author_name, Novels.genre, User_Books.read_status 
+$query = "SELECT Novels.title, Novels.author_name, Novels.genre, Library.read_status 
           FROM Novels 
-          JOIN User_Books ON Novels.novel_id = User_Books.novel_id 
-          WHERE User_Books.user_id = ?";
+          JOIN Library ON Novels.novel_id = Library.novel_id 
+          WHERE Library.user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user['user_id']);
 $stmt->execute();
@@ -60,7 +60,7 @@ $result = $stmt->get_result();
     <h4 class="text-center text-white">Dashboard</h4>
     <a href="../index.html" ><i class="fa fa-home"></i> Home</a>
     <a href="reader_dashboard.php"><i class="fa fa-user"></i> Profile</a>
-    <a href="#" onclick="loadPage('library'); return false;"><i class="fa fa-book"></i> My Library</a>
+    <a href="./reader/library.php"><i class="fa fa-book"></i> My Library</a>
     <a href="#" onclick="loadPage('settings'); return false;"><i class="fa fa-cog"></i> Settings</a>
     <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a>
     <a href="#" onclick="toggleDarkMode()"><i class="fa fa-moon-o"></i> Dark Mode</a>

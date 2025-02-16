@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../db/dbconnect.php';  // Include database connection file
 
 if (!$conn) {

@@ -1,58 +1,46 @@
-<?php 
-include '../db/dbconnect.php'; // Ensure $conn is correctly initialized
-
+<?php  
+include '../db/dbconnect.php';
 session_start();
 
-$message = "";
-$toastClass = "";
+$message = "";  // Initialize message variable
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $password = trim($_POST['password']);
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $stmt = $conn->prepare("SELECT password_hash, is_admin FROM Users WHERE email = ?");
-        if ($stmt) {
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows > 0) {
-                $stmt->bind_result($db_password_hash, $is_admin);
-                $stmt->fetch();
-
-                if (password_verify($password, $db_password_hash)) {
-                    session_regenerate_id(true);
-                    $_SESSION['email'] = $email;
-                    $_SESSION['is_admin'] = $is_admin;
-
-                    // Redirect based on role
-                    if ($is_admin) {
-                        header("Location: admin_dashboard.php");
-                    } else {
-                        header("Location: reader_dashboard.php");
-                    }
-                    exit();
-                } else {
-                    $message = "Incorrect password";
-                    $toastClass = "bg-danger";
-                }
-            } else {
-                $message = "Email not found";
-                $toastClass = "bg-warning";
-            }
-            $stmt->close();
-        } else {
-            die("SQL prepare failed: " . $conn->error);
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Error: Invalid email format.";
     } else {
-        $message = "Invalid email format";
-        $toastClass = "bg-warning";
+        $stmt = $conn->prepare("SELECT user_id, password_hash, is_admin FROM Users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($user_id, $db_password_hash, $is_admin);
+            $stmt->fetch();
+
+            if (password_verify($password, $db_password_hash)) {
+                session_regenerate_id(true);
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['email'] = $email;
+                $_SESSION['is_admin'] = $is_admin;
+
+                setcookie("user_id", $user_id, time() + (86400 * 10), "/");
+
+                header("Location: reader_dashboard.php");
+                exit();
+            } else {
+                $message = "Error: Incorrect password.";
+            }
+        } else {
+            $message = "Error: Email not found.";
+        }
     }
 }
-
-$conn->close();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -156,7 +144,7 @@ $conn->close();
     <!-- Login Form -->
     <div class="form-wrapper">
         <h2>Login</h2>
-        <?php if ($message): ?>
+        <?php if (!empty($message)): ?>
             <div class="toast align-items-center text-white border-0 show" role="alert">
                 <div class="d-flex">
                     <div class="toast-body">
