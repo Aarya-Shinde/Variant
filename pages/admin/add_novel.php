@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                       $total_chapters, $series_name, $series_position, $description, $isbn, $rating, $language);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Book added successfully!'); window.location.href='add_book.php';</script>";
+        echo "<script>alert('Book added successfully!'); window.location.href='add_novel.php';</script>";
     } else {
         echo "<script>alert('Error adding book!');</script>";
     }
@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Form for adding book information -->
     <div class="container mt-5">
         <h2 class="text-center">Add a New Book</h2>
-        <form method="POST" action="add_book.php">
+        <form method="POST" action="add_novel.php">
             <div class="mb-3">
                 <label class="form-label">Title</label>
                 <input type="text" class="form-control" name="title" required>

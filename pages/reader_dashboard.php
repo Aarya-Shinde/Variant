@@ -41,7 +41,16 @@ $result = $stmt->get_result();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body { background-color: #f4f0e6; font-family: 'Merriweather', serif; }
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: row; /* Sidebar on the left, content on the right */
+            align-items: flex-start; /* Aligns content properly */
+            height: 100vh;
+            margin: 0;
+            background-color: #e6ccb2;
+        }
+
         .sidebar { height: 100vh; width: 250px; position: fixed; top: 0; left: 0; background-color: #4b3f3f; padding-top: 20px; border-right: 5px solid #dbc1ac; color: #fff; }
         .sidebar a { padding: 10px; text-decoration: none; font-size: 18px; color: #ffffff; display: block; }
         .sidebar a:hover { background-color: #6b5f5f; }
@@ -51,6 +60,8 @@ $result = $stmt->get_result();
         .dark-mode { background-color: #212529; color: white; }
         .dark-mode .sidebar, .dark-mode .card { background-color: #343a40; color: white; }
         .dark-mode .table thead { background-color: #555; color: white; }
+
+        
     </style>
 </head>
 <body>
@@ -60,7 +71,7 @@ $result = $stmt->get_result();
     <h4 class="text-center text-white">Dashboard</h4>
     <a href="../index.html" ><i class="fa fa-home"></i> Home</a>
     <a href="reader_dashboard.php"><i class="fa fa-user"></i> Profile</a>
-    <a href="./reader/library.php"><i class="fa fa-book"></i> My Library</a>
+    <a href="#" onclick="loadPage('reader_space'); return false;"><i class="fa fa-book"></i> My Space</a>
     <a href="#" onclick="loadPage('settings'); return false;"><i class="fa fa-cog"></i> Settings</a>
     <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a>
     <a href="#" onclick="toggleDarkMode()"><i class="fa fa-moon-o"></i> Dark Mode</a>
@@ -113,6 +124,12 @@ $result = $stmt->get_result();
 function loadPage(page) {
     $("#main-content").load("reader/" + page + ".php");
 }
+     //to load my space page
+function loadPage(page) {
+    $("#main-content").html('<div id="reader-space-container"></div>'); // Clear and set correct container
+    $("#reader-space-container").load("reader/" + page + ".html");
+}
+
 
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");

@@ -2,7 +2,7 @@
 include '../db/dbconnect.php';
 session_start();
 
-$message = "";  // Initialize message variable
+$message = "";  
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
@@ -11,13 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $message = "Error: Invalid email format.";
     } else {
-        $stmt = $conn->prepare("SELECT user_id, password_hash, is_admin FROM Users WHERE email = ?");
+        $stmt = $conn->prepare("SELECT user_id, password_hash, is_admin, is_writer FROM Users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($user_id, $db_password_hash, $is_admin);
+            $stmt->bind_result($user_id, $db_password_hash, $is_admin, $is_writer);
             $stmt->fetch();
 
             if (password_verify($password, $db_password_hash)) {
@@ -25,10 +25,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['email'] = $email;
                 $_SESSION['is_admin'] = $is_admin;
+                $_SESSION['is_writer'] = $is_writer;
 
                 setcookie("user_id", $user_id, time() + (86400 * 10), "/");
 
-                header("Location: reader_dashboard.php");
+                // Redirect based on roles
+                if ($is_admin || $is_writer) {
+                    $_SESSION['role_choice'] = true;
+                    header("Location: choose_dashboard.php");
+                } else {
+                    header("Location: reader_dashboard.php");
+                }
                 exit();
             } else {
                 $message = "Error: Incorrect password.";
@@ -39,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 
@@ -136,9 +144,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Navbar -->
     <div class="nav-bar">
         <a href="../index.html">Home</a>
-        <a href="../library.html">Writer</a>
-        <a href="../reader.html">Reader</a>
-        <a href="adminlogin.php">Admin</a>
+        <a href="writer_dashboard.php">Writer</a>
+        <a href="reader_dashboard.php">Reader</a>
+        <a href="admin_dashboard.php">Admin</a>
     </div>
 
     <!-- Login Form -->
