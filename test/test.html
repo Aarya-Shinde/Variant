@@ -81,3 +81,37 @@ $result = $conn->query($query);
 
 
 
+
+
+
+
+
+
+
+<!-- 
+
+2. Add a Book to the User’s Library (Start Reading)
+When a user starts reading a book, insert an entry:
+
+
+function addBookToLibrary($conn, $user_id, $novel_id) {
+    $query = "INSERT INTO User_Books (user_id, novel_id) VALUES (?, ?)";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) { die("Query Error: " . $conn->error); }
+    $stmt->bind_param("ii", $user_id, $novel_id);
+    return $stmt->execute();
+}
+Call this function when a user clicks "Start Reading" on a book.
+
+3. Mark a Book as Completed
+When a user finishes reading, update their status:
+
+
+function markBookAsCompleted($conn, $user_id, $novel_id) {
+    $query = "UPDATE User_Books SET read_status = 'completed', finished_at = NOW() WHERE user_id = ? AND novel_id = ?";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) { die("Query Error: " . $conn->error); }
+    $stmt->bind_param("ii", $user_id, $novel_id);
+    return $stmt->execute();
+}
+Call this function when the user finishes a book. -->

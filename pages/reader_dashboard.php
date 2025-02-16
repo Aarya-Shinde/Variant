@@ -1,13 +1,7 @@
 <?php
 session_start();
-include '../db/dbconnect.php'; // Ensure this file correctly establishes $conn
+include '../db/dbconnect.php';
 
-// Check database connection
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
-
-// Check if the user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
@@ -15,98 +9,69 @@ if (!isset($_SESSION['email'])) {
 
 $email = $_SESSION['email'];
 
-// Fetch user details
 $query = "SELECT * FROM Users WHERE email = ?";
 $stmt = $conn->prepare($query);
-
-if (!$stmt) {
-    die("Query preparation failed: " . $conn->error);
-}
-
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if (!$user) {
-    die("User not found in database.");
-}
+if (!$user) { die("User not found."); }
 
 $username = htmlspecialchars($user['username']);
-$email = htmlspecialchars($user['email']);
 $role = $user['is_admin'] ? 'Admin' : ($user['is_writer'] ? 'Writer' : 'Reader');
 $created_at = htmlspecialchars($user['created_at']);
 
-// Fetch user's book history
-$historyQuery = "SELECT Novels.title, Novels.author_name, Novels.genre, Novels.publication_date 
-                 FROM Novels 
-                 JOIN Chapters ON Novels.novel_id = Chapters.novel_id 
-                 WHERE Novels.novel_id IN (SELECT novel_id FROM Chapters) 
-                 ORDER BY Novels.publication_date DESC";
-
-$historyResult = $conn->query($historyQuery);
+$query = "SELECT Novels.title, Novels.author_name, Novels.genre, User_Books.read_status 
+          FROM Novels 
+          JOIN User_Books ON Novels.novel_id = User_Books.novel_id 
+          WHERE User_Books.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user['user_id']);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>User Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            height: 100vh;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            padding: 10px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #ffffff;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-        .card {
-            border-radius: 8px;
-        }
+        body { background-color: #f4f0e6; font-family: 'Merriweather', serif; }
+        .sidebar { height: 100vh; width: 250px; position: fixed; top: 0; left: 0; background-color: #4b3f3f; padding-top: 20px; border-right: 5px solid #dbc1ac; color: #fff; }
+        .sidebar a { padding: 10px; text-decoration: none; font-size: 18px; color: #ffffff; display: block; }
+        .sidebar a:hover { background-color: #6b5f5f; }
+        .content { margin-left: 260px; padding: 20px; }
+        .card { border-radius: 8px; border: 2px solid #dbc1ac; background-color: #f9f5e3; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
+        .card-header { background-color: #dbc1ac; color: #4b3f3f; font-size: 24px; }
+        .dark-mode { background-color: #212529; color: white; }
+        .dark-mode .sidebar, .dark-mode .card { background-color: #343a40; color: white; }
+        .dark-mode .table thead { background-color: #555; color: white; }
     </style>
 </head>
 <body>
 
-<!-- Sidebar Navigation -->
+<!-- Sidebar -->
 <div class="sidebar">
     <h4 class="text-center text-white">Dashboard</h4>
-    <a href="#"><i class="fa fa-user"></i> Profile</a>
-    <a href="#"><i class="fa fa-book"></i> My Library</a>
-    <a href="#"><i class="fa fa-cog"></i> Settings</a>
+    <a href="../index.html" ><i class="fa fa-home"></i> Home</a>
+    <a href="reader_dashboard.php"><i class="fa fa-user"></i> Profile</a>
+    <a href="#" onclick="loadPage('library'); return false;"><i class="fa fa-book"></i> My Library</a>
+    <a href="#" onclick="loadPage('settings'); return false;"><i class="fa fa-cog"></i> Settings</a>
     <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a>
+    <a href="#" onclick="toggleDarkMode()"><i class="fa fa-moon-o"></i> Dark Mode</a>
+
 </div>
 
 <!-- Main Content -->
-<div class="content">
+<div class="content" id="main-content">
     <div class="container mt-4">
-        <!-- User Info -->
         <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4>Welcome, <?php echo $username; ?>!</h4>
-            </div>
+            <div class="card-header">Welcome, <?php echo $username; ?>!</div>
             <div class="card-body">
                 <p><strong>Email:</strong> <?php echo $email; ?></p>
                 <p><strong>Role:</strong> <?php echo $role; ?></p>
@@ -114,35 +79,45 @@ $historyResult = $conn->query($historyQuery);
             </div>
         </div>
 
-        <!-- User Library History -->
+        <!-- Books Read -->
         <div class="mt-4">
-            <h4>Library History</h4>
+            <h4>Books Read</h4>
             <table class="table table-bordered mt-2">
                 <thead class="table-dark">
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
                         <th>Genre</th>
-                        <th>Publication Date</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($historyResult->num_rows > 0) { 
-                        while ($row = $historyResult->fetch_assoc()) { ?>
+                    <?php while ($row = $result->fetch_assoc()) { ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['title']); ?></td>
                             <td><?php echo htmlspecialchars($row['author_name']); ?></td>
                             <td><?php echo htmlspecialchars($row['genre']); ?></td>
-                            <td><?php echo htmlspecialchars($row['publication_date']); ?></td>
+                            <td><?php echo ucfirst($row['read_status']); ?></td>
                         </tr>
-                    <?php }} else { ?>
-                        <tr><td colspan="4" class="text-center">No books found.</td></tr>
                     <?php } ?>
                 </tbody>
-            </table>
+            </table>        
         </div>
     </div>
 </div>
+
+<script>
+
+
+    //to load settings page
+function loadPage(page) {
+    $("#main-content").load("reader/" + page + ".php");
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
 
 </body>
 </html>
