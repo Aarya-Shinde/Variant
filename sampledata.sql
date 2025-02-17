@@ -76,6 +76,11 @@ UPDATE Novels
 SET cover_image_url = 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1598823299i/42844155.jpg'
 WHERE novel_id = 11;
 
+-- Dummy data for library 
+INSERT INTO Library (user_id, novel_id, read_status)
+VALUES (4, 21, 'reading'),
+(4, 22, 'reading');
+
 -- Dummy data for chapters
 INSERT INTO Chapters (novel_id, chapter_number, title, content) VALUES
 (14, 1, 'The Reaping', 'The sun rises over District 12, casting a pale light on the run-down houses. Katniss Everdeen wakes up to the sound of her sister\'s cries...'),

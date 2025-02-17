@@ -1,3 +1,5 @@
+<!-- Add published book to reader's library -->
+
 <?php
 session_start();
 include '../../db/dbconnect.php';
