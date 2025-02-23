@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Reader's Space</title>
     <style>
         body {
@@ -129,6 +125,7 @@
         .button:hover {
             background-color: #411d0c;
             transform: translateY(-4px) scale(1.05);
+            color: #ffffff;
         }
 
         /* Click effect */
@@ -157,41 +154,76 @@
         .button {
             animation: buttonEntry 0.8s ease-in-out;
         }
+
+/******** Styling books in darktoogle mode  ***********/
+.dark-mode body {
+    background-color: #212529 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode #reader-space-container {
+    background-color: #1b1f23 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .book {
+    background-color: #2c3034 !important;
+    color: #e0e0e0 !important;
+    border: 2px solid #555 !important;
+}
+
+.dark-mode .book:hover {
+    background-color: #4a4f54 !important;
+}
+
+.dark-mode .button {
+    background-color: #343a40 !important;
+    color: #e0e0e0 !important;
+    border: 2px solid #555 !important;
+}
+
+.dark-mode .button:hover {
+    background-color: #495057 !important;
+}
+
     </style>
-</head>
-<body>
+
+
     <div id="reader-space-container">
         <!-- Left Side: First Bookshelf -->
         <div class="book-container left">
-            <button class="book">Book 1</button>
-            <button class="book">Book 2</button>
-            <button class="book">Book 3</button>
-            <button class="book">Book 4</button>
-            <button class="book">Book 5</button>
-            <button class="book">Book 5</button>
-            <button class="book">Book 5</button>
-            <button class="book">Book 5</button>
+            <button class="book">The Hobbit</button>
+            <button class="book">Catching Fire</button>
+            <button class="book">The Death Cure</button>
+            <button class="book">A Game of Thrones</button>
+            <button class="book">The Catcher in the Rye</button>
+            <button class="book">The Maze Runner</button>
+            <button class="book">The Death Cure</button>
+            <button class="book">The Sea of Monsters</button>
         </div>
 
         <!-- Center: Buttons -->
         <div class="button-container">
             <a class="button" href="diary.html">Diary</a>
-            <a class="button" href="library.php">Library</a>
+            <!-- Library button (opens in a new tab) -->
+            <a class="button" href="/Variant/pages/reader/library.php">Library</a>
+
+
             <a class="button" href="../../explore.php">Explore</a>
             <a class="button" href="add-book.html">Add Book</a>
         </div>
 
         <!-- Right Side: Second Bookshelf -->
         <div class="book-container right">
-            <button class="book">Book 6</button>
-            <button class="book">Book 7</button>
-            <button class="book">Book 8</button>
-            <button class="book">Book 9</button>
-            <button class="book">Book 10</button>
-            <button class="book">Book 10</button>
-            <button class="book">Book 10</button>
-            <button class="book">Book 10</button>
-            <button class="book">Book 10</button>
+            <button class="book">Mancled</button>
+            <button class="book">The Scorch Trials</button>
+            <button class="book">Iron Flame</button>
+            <button class="book">Catching Fire</button>
+            <button class="book">Onyx Storm</button>
+            <button class="book">Fourth Wing</button>
+            <button class="book">The Chronicles of Narnia</button>
+            <button class="book">Twisted Lies</button>
+            <button class="book">The Way of Kings</button>
         </div>
     </div>
 
@@ -209,5 +241,3 @@
         });
     </script>
 
-</body>
-</html>

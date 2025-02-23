@@ -72,7 +72,7 @@ $result = $stmt->get_result();
     }
 
     .bookshelf-container {
-        width: 60%;
+        width: 75%;
         border: 2px solid #8c6d45;
         border-radius: 8px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -102,6 +102,31 @@ $result = $stmt->get_result();
         align-items: center;
         gap: 25px;
         max-width: 100%;
+    }
+
+    .bookshelf-title {
+        font-family: 'Merriweather', serif;
+        font-size: 2.5em;
+        color: #333;
+        text-align: center;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+        background-color: #f4f4f4;
+        border-bottom: 5px solid #c49a6c;
+        border-top: 5px solid #c49a6c;
+        margin: 20px auto;
+        width: 80%;
+        letter-spacing: 1px;
+    }
+
+    .bookshelf-title::before {
+        content: '📜';
+        margin-right: 10px;
+    }
+
+    .bookshelf-title::after {
+        content: '🖋️';
+        margin-left: 10px;
     }
 
     /* Shelf Rows - 10 Books Per Row */
@@ -147,7 +172,7 @@ $result = $stmt->get_result();
         text-align: center;
         
         /* ✅ **Fixed Book Size** */
-        width: 80px;  /* ✅ Wider */
+        width: 65px;  /* ✅ Wider */
         height: 220px; /* ✅ Shorter */
         
         /* ✅ **Text Wrapping** */
@@ -195,8 +220,8 @@ $result = $stmt->get_result();
 <body>
     <!-- Navigation Bar -->
     <div class="nav">
-        <a href="../../index.html">Home</a>
-        <a href="about.html">About</a>
+        <a href="../../index.html">Variant</a>
+        <a href="../../template/about.html">About</a>
         <a href="diary.html">Diary</a>
         <a href="../reader_dashboard.php">User</a>
     </div>
