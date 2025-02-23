@@ -66,7 +66,7 @@ $result = $stmt->get_result();
         background-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* Library Content */
+    /******************* */ Library booksContent **************/
     .content {
         padding-top: 80px;
     }
@@ -76,10 +76,10 @@ $result = $stmt->get_result();
         border: 2px solid #8c6d45;
         border-radius: 8px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+        padding: 50px;
         background-color: #fff8dc;
         position: relative;
-        margin: 0 auto;
+        margin: 60px auto;
     }
 
     h1 {
@@ -104,30 +104,59 @@ $result = $stmt->get_result();
         max-width: 100%;
     }
 
+/* Bookshelf Title */
     .bookshelf-title {
+        display: flex;  /* Aligns title and button in one row */
+        align-items: center;
+        justify-content: space-between; /* Title on left, button on right */
         font-family: 'Merriweather', serif;
-        font-size: 2.5em;
+        font-size: 2.2em;
         color: #333;
-        text-align: center;
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 10px 20px;
         background-color: #f4f4f4;
         border-bottom: 5px solid #c49a6c;
         border-top: 5px solid #c49a6c;
-        margin: 20px auto;
+        padding: 12px 20px;
         width: 80%;
+        margin: 10px auto;
         letter-spacing: 1px;
     }
 
     .bookshelf-title::before {
-        content: '📜';
         margin-right: 10px;
     }
 
     .bookshelf-title::after {
-        content: '🖋️';
         margin-left: 10px;
     }
+
+    /*************Adding book in Library Styling***************** */
+
+  /* Add Book Button */
+    .add-book-btn {
+        font-family: 'EB Garamond', serif;
+        font-size: 1em;
+        color: #fff;
+        background-color: #a0522d; 
+        border: 2px solid #4b2e2e;
+        border-radius: 6px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        font-size: 1em;
+    }
+
+    .add-book-btn:hover {
+        background-color: #4b2e2e;
+        transform: scale(1.05);
+    }
+
+    .add-book-btn:focus {
+        outline: none;
+        box-shadow: 0 0 8px #a0522d;
+    }
+
+
+
 
     /* Shelf Rows - 10 Books Per Row */
     .shelf-row {
@@ -226,9 +255,18 @@ $result = $stmt->get_result();
         <a href="../reader_dashboard.php">User</a>
     </div>
 
+
+
+    <!-- Library added books -->
     <div class="content">
-        <div class="bookshelf-container">
-            <div class="bookshelf-title">Owned Books</div>
+    <div class="bookshelf-container">
+        <div class="bookshelf-title">
+            <span> Owned Books </span>
+            <a href="add_API_novel.html">
+                <button class="add-book-btn">➕ Add Book</button>
+            </a>
+        </div>
+
             <div class="bookshelf">
                 <div class="shelf-row">
                     <?php while ($row = $result->fetch_assoc()) { ?>
@@ -240,6 +278,7 @@ $result = $stmt->get_result();
             </div>
         </div>
     </div>
+
 
     <script>
         function viewBook(bookName) {
