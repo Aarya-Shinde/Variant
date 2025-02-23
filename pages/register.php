@@ -1,55 +1,70 @@
 <?php
-
-// Database connection
-$mysqli = new mysqli("localhost", "root", "@pokemon1", "variant");
-
-// Check connection
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
-echo "Connected successfully";
-
-
+// Include database connection
+include '../db/dbconnect.php';
 
 // Initialize variables
 $message = '';
 $toastClass = '';
 
-// Assuming form data is passed via POST
+// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $password_hash = password_hash($password, PASSWORD_BCRYPT);
+    // Sanitize inputs
+    $username = trim(htmlspecialchars($_POST['username']));
+    $email = trim(htmlspecialchars($_POST['email']));
+    $password = $_POST['password']; 
 
-    // Prepare the SQL statement
-    $stmt = $mysqli->prepare("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)");
-
-    // Check if prepare() succeeded
-    if (!$stmt) {
-        $message = "Database error: " . $mysqli->error;
-        $toastClass = 'red'; // Bootstrap red background for error
+    // Validate inputs
+    if (empty($username) || empty($email) || empty($password)) {
+        $message = "All fields are required.";
+        $toastClass = 'alert-danger';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Invalid email format.";
+        $toastClass = 'alert-danger';
     } else {
-        // Bind parameters
-        $stmt->bind_param("sss", $username, $email, $password_hash);
+        // Check if email already exists
+        $check_stmt = $conn->prepare("SELECT user_id FROM Users WHERE email = ?");
 
-        // Execute the query
-        if ($stmt->execute()) {
-            $message = "Registration successful!";
-            $toastClass = 'green'; // Bootstrap green background for success
-        } else {
-            $message = "Error: " . $stmt->error;
-            $toastClass = 'red';
+        if (!$check_stmt) {
+            die("Prepare failed (Check email query): " . $conn->error);
         }
 
-        // Close the statement
-        $stmt->close();
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $check_stmt->store_result();
+
+        if ($check_stmt->num_rows > 0) {
+            $message = "Email already registered!";
+            $toastClass = 'alert-warning';
+        } else {
+            // Hash password
+            $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+            // Insert user into database
+            $stmt = $conn->prepare("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)");
+
+            if (!$stmt) {
+                die("Prepare failed (Insert query): " . $conn->error);
+            }
+
+            $stmt->bind_param("sss", $username, $email, $password_hash);
+
+            if ($stmt->execute()) {
+                $message = "Registration successful!";
+                $toastClass = 'alert-success';
+            } else {
+                $message = "Error: " . $stmt->error;
+                $toastClass = 'alert-danger';
+            }
+            $stmt->close();
+        }
+        $check_stmt->close();
     }
 }
 
-// Close the connection
-$mysqli->close();
+// No need to close the connection, as it persists in `dbconnect.php`
 ?>
+
+
 
 
 <!DOCTYPE html>

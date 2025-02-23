@@ -63,16 +63,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-size: cover;
             font-family: 'Cormorant Garamond', serif;
             color: #4a3c31;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
         }
         .form-wrapper {
-            max-width: 450px;
-            margin: 50px auto;
-            padding: 30px;
-            background: rgba(255, 248, 235, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 2px solid #d4a373;
-        }
+    max-width: 450px;
+    margin: 80px auto 50px; /* Adjusted margin */
+    padding: 40px;
+    padding-left: 90px;
+    padding-right: 90px;
+    background: rgba(255, 248, 235, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid #d4a373;
+}
+
+
         .form-wrapper h2 {
             text-align: center;
             font-weight: bold;
@@ -107,23 +116,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: scale(1.05);
         }
         .nav-bar {
-            display: flex;
-            justify-content: center;
-            background: rgba(210, 180, 140, 0.9);
-            padding: 15px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .nav-bar a {
-            color: #fff;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        .nav-bar a:hover {
-            color: #d4a373;
-        }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(210, 180, 140, 0.9);
+    padding: 15px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1000;
+}
+
+.nav-bar a {
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-bar a:hover {
+    color: #d4a373;
+}
+
         .toast {
             position: absolute;
             top: 20px;
@@ -134,7 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: auto; /* Pushes footer to the bottom */
+            padding-bottom: 20px;
             color: #5a4231;
             font-size: 0.9rem;
         }

@@ -79,14 +79,17 @@ $conn->close();
             color: #8b4513;
             text-align: center;
         }
-        .content {
-            font-size: 1.2rem;
+        .chapter-content {
             text-align: justify;
             line-height: 1.8;
-            margin-top: 20px;
+            font-family: 'Georgia', serif;
+            white-space: pre-wrap;
             max-width: 90%;
-            margin-left: auto;
-            margin-right: auto;
+            margin: auto;
+        }
+
+        .dark-mode .chapter-content {
+            text-align: justify;
         }
 
         .nav-buttons {
@@ -108,6 +111,11 @@ $conn->close();
             background: #d4c0a1;
             cursor: not-allowed;
         }
+        .disabled-link {
+        pointer-events: none;
+        opacity: 0.5;
+        }
+
         /* Table of Contents */
         .toc {
             background: #fdf8f2;
@@ -176,21 +184,35 @@ $conn->close();
         </select>
     </div>
 
-    <div class="chapter-title">
-        Chapter <?php echo $chapter['chapter_number']; ?>: <?php echo htmlspecialchars($chapter['title']); ?>
-    </div>
+        <?php if ($chapter): ?>
+        <div class="chapter-title">
+            Chapter <?php echo $chapter['chapter_number']; ?>: <?php echo htmlspecialchars($chapter['title']); ?>
+        </div>
 
-    <div class="content">
-        <p><?php echo nl2br(htmlspecialchars($chapter['content'])); ?></p>
-    </div>
+        <div class="chapter-content">
+            <?php echo nl2br(htmlspecialchars($chapter['content'])); ?>
+        </div>
+
+        <div class="nav-buttons">
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number - 1; ?>" 
+        class="btn <?php echo ($chapter_number <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
+
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number + 1; ?>" 
+        class="btn <?php echo ($chapter_number >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
+
+        </div>
+    <?php else: ?>
+        <p style="text-align: center; color: red;">Chapter not found.</p>
+    <?php endif; ?>
 
 
     <div class="nav-buttons">
-        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number - 1; ?>"
-           class="btn" <?php echo ($chapter_number <= 1) ? 'disabled' : ''; ?>>← Previous</a>
+    <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number - 1; ?>" 
+    class="btn <?php echo ($chapter_number <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
 
-        <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number + 1; ?>"
-           class="btn" <?php echo ($chapter_number >= $totalChapters) ? 'disabled' : ''; ?>>Next →</a>
+    <a href="?novel_id=<?php echo $novel_id; ?>&chapter=<?php echo $chapter_number + 1; ?>" 
+    class="btn <?php echo ($chapter_number >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
+
     </div>
 </div>
 
