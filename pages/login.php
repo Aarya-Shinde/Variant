@@ -48,114 +48,150 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-    <style>
-        body {
-            background-size: cover;
-            font-family: 'Cormorant Garamond', serif;
-            color: #4a3c31;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            justify-content: center;
-        }
-        .form-wrapper {
-    max-width: 450px;
-    margin: 80px auto 50px; /* Adjusted margin */
-    padding: 40px;
-    padding-left: 90px;
-    padding-right: 90px;
-    background: rgba(255, 248, 235, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border: 2px solid #d4a373;
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<style>
+    /* Body Styling */
+    body {
+        background-size: cover;
+        background-position: center;
+        font-family: 'Cormorant Garamond', serif;
+        color: #4a3c31;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        justify-content: center;
+        padding: 20px;
+    }
 
+    /* Form Container */
+    .form-wrapper {
+        max-width: 420px;
+        width: 100%;
+        margin: 80px 30px;
+        background: rgba(255, 248, 235, 0.95);
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 2px solid #d4a373;
+        text-align: center;
+    }
 
-        .form-wrapper h2 {
-            text-align: center;
-            font-weight: bold;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #5a4231;
-            border-bottom: 2px solid #d4a373;
-            padding-bottom: 10px;
-        }
-        .form-wrapper label {
-            font-weight: bold;
-        }
-        .form-wrapper input {
-            background: #faf3eb;
-            border: 1px solid #d4a373;
-            border-radius: 5px;
-        }
-        .form-wrapper input:focus {
-            border-color: #bf8450;
-            box-shadow: 0 0 5px #bf8450;
-            background: #f8f1e9;
-        }
-        .form-wrapper .btn {
-            background-color: #d4a373;
-            color: #fff;
-            border: none;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-        .form-wrapper .btn:hover {
-            background-color: #bf8450;
-            transform: scale(1.05);
-        }
-        .nav-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(210, 180, 140, 0.9);
-    padding: 15px 0;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    z-index: 1000;
-}
+    /* Form Heading */
+    .form-wrapper h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #5a4231;
+        border-bottom: 2px solid #d4a373;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
 
-.nav-bar a {
-    color: #fff;
-    margin: 0 15px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: color 0.3s;
-}
+    /* Form Fields */
+    .form-wrapper label {
+        font-weight: bold;
+        font-size: 1.1rem;
+        display: block;
+        text-align: left;
+        margin-bottom: 5px;
+    }
 
-.nav-bar a:hover {
-    color: #d4a373;
-}
+    /* Input Fields */
+    .form-wrapper input {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        background: #faf3eb;
+        border: 1px solid #d4a373;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
 
-        .toast {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 235, 205, 0.9);
-            color: #4a3c31;
-            border: 1px solid #d4a373;
-        }
-        footer {
-            text-align: center;
-            margin-top: auto; /* Pushes footer to the bottom */
-            padding-bottom: 20px;
-            color: #5a4231;
-            font-size: 0.9rem;
-        }
-    </style>
+    /* Input Focus Effect */
+    .form-wrapper input:focus {
+        border-color: #5a4231;
+        box-shadow: 0 0 5px #bf8450;
+        background: #f8f1e9;
+        outline: none;
+    }
+
+    /* Login Button */
+    .form-wrapper .btn {
+        background-color: #5a4231;
+        color: #fff;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 15px;
+        border-radius: 6px;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Button Hover */
+    .form-wrapper .btn:hover {
+        background-color: #4b3f3f;
+        transform: scale(1.05);
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #4b3f3f;
+        padding: 15px 0;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        z-index: 1000;
+    }
+
+    .nav-bar a {
+        color: #fff;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .nav-bar a:hover {
+        color: #d4a373;
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 235, 205, 0.9);
+        color: #4a3c31;
+        border: 1px solid #d4a373;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        margin-top: auto; /*Pushes footer to the bottom */
+        padding-bottom: 20px;
+        color: #5a4231;
+        font-size: 0.9rem;
+    }
+
+</style>
 </head>
 <body>
     <!-- Navbar -->
@@ -192,10 +228,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <div class="text-center mt-3">
             <div class="mt-3">
-                <a href="forgotpassword.php" style="color: #007bff; text-decoration: none;">Forgot Password?</a>
+                <a href="forgotpassword.php" style="color: #5a4231; text-decoration: none;">Forgot Password?</a>
                 or 
                 <br>Don't have an account? 
-                <a href="./register.php" style="color: #d4a373; text-decoration: none;">Register</a>
+                <a href="./register.php" style="color: #5a4231; text-decoration: none;">Register</a>
             </div>
         </div>
     </div>

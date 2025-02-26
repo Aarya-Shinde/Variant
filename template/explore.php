@@ -35,174 +35,174 @@
 
 <style>
 
-* {
-    box-sizing: border-box;
-}
-
-    .header {
-        text-align: center;
-        font-size: 1rem;
-        font-weight: bold;
-        padding: 0;
-        background-color: #343a40;
-        color: white;
+    * {
+        box-sizing: border-box;
     }
 
-    .navbar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0px; 
-        padding: 1rem;
-        background-color: #DCAE96;
-        color: white;
-        position: fixed; /* Keep navbar always at the top */
-        top: 0;
-        left: 0;
-        width: 100%; /* Ensure navbar takes full width */
-        height: fit-content;
+        .header {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0;
+            background-color: #343a40;
+            color: white;
+        }
 
-        /* z-index: 1000; Ensure the navbar stays on top */
-    }
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0px; 
+            padding: 1rem;
+            background-color: #DCAE96;
+            color: white;
+            position: fixed; /* Keep navbar always at the top */
+            top: 0;
+            left: 0;
+            width: 100%; /* Ensure navbar takes full width */
+            height: fit-content;
 
-    .logo img {
-        max-height: 40px;
-    }
+            /* z-index: 1000; Ensure the navbar stays on top */
+        }
 
-    .search-container {
-        display: flex;
-        align-items: center;
-    }
+        .logo img {
+            max-height: 40px;
+        }
 
-    .search-input {
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
 
-    .search-btn {
-        background-color: #9fceff;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-left: 0.5rem;
-    }
+        .search-input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-    .search-btn i {
-        font-size: 1rem;
-    }
+        .search-btn {
+            background-color: #9fceff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 0.5rem;
+        }
 
-    .nav ul {
-        list-style-type: none;
-        display: flex;
-        gap: 2rem;
-    }
+        .search-btn i {
+            font-size: 1rem;
+        }
 
-    .nav ul li {
-        display: inline;
-    }
+        .nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 2rem;
+        }
 
-    .nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-size: 1rem;
-    }
+        .nav ul li {
+            display: inline;
+        }
 
-    .nav ul li a:hover {
-        text-decoration: underline;
-        color: brown;
-    }
+        .nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
 
-    .container {
-        margin-top: 10rem; /* Adjusted to ensure content doesn't overlap with navbar */
-        padding: 0rem;
-        max-width: 100%; /* Ensure container takes full width */
-    }
+        .nav ul li a:hover {
+            text-decoration: underline;
+            color: brown;
+        }
 
-    .search-filter {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-    }
+        .container {
+            margin-top: 10rem; /* Adjusted to ensure content doesn't overlap with navbar */
+            padding: 0rem;
+            max-width: 100%; /* Ensure container takes full width */
+        }
 
-    .search-filter input, .search-filter select {
-        padding: 0.5rem;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
 
-    .book-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.2rem;
-        width: 100%; /* Ensure grid takes full width */
-        background-color: #ca7f68;
-        padding: 10px;
-    }
+        .search-filter input, .search-filter select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-    .book-card {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        overflow: hidden;
-        background-color: #F5F5DC;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
-    }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+            width: 100%; /* Ensure grid takes full width */
+            background-color: #ca7f68;
+            padding: 10px;
+        }
 
-    .book-card:hover {
-        transform: scale(1.05);
-    }
+        .book-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #F5F5DC;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
 
-    .book-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
 
-    .content {
-        padding: 1rem;
-    }
+        .book-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
 
-    .content .title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: #000;
-    }
+        .content {
+            padding: 1rem;
+        }
 
-    .content .author {
-        font-size: 1rem;
-        color: #555;
-        margin-bottom: 0.5rem;
-    }
+        .content .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #000;
+        }
 
-    .content .description {
-        font-size: 0.9rem;
-        color: rgba(8, 8, 8, 0.966);
-        margin-bottom: 1rem;
-    }
+        .content .author {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
 
-    .content button {
-        background-color: #DCAE96;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        .content .description {
+            font-size: 0.9rem;
+            color: rgba(8, 8, 8, 0.966);
+            margin-bottom: 1rem;
+        }
 
-    .content button:hover {
-        background-color: #A37C70;
-    }
+        .content button {
+            background-color: #DCAE96;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content button:hover {
+            background-color: #A37C70;
+        }
 
 
-</style>
-</head>
+    </style>
+    </head>
 
     <!-- ------------------linking css js files------------------- -->
     <link rel="stylesheet" href="/indexstyle.css"> 
@@ -234,8 +234,8 @@
 
 <body>
     <?php
-    // PHP section to fetch books from the database
-    include './db/dbconnect.php';
+    // PHP section to fetch all books from the database
+    include '../db/dbconnect.php';
 
     $sql = "SELECT 
                 novel_id, 

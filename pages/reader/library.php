@@ -104,7 +104,7 @@ $result = $stmt->get_result();
         max-width: 100%;
     }
 
-/* Bookshelf Title */
+    /* Bookshelf Title */
     .bookshelf-title {
         display: flex;  /* Aligns title and button in one row */
         align-items: center;
@@ -245,6 +245,7 @@ $result = $stmt->get_result();
     }
 
 </style>
+
 </head>
 <body>
     <!-- Navigation Bar -->
