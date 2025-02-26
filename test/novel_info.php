@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novel</title>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="book.css">
+    <link rel="stylesheet" href="novel.css">
 </head>
 <body>
 
@@ -51,7 +51,6 @@
       <p class="author">Written by <strong id="bookAuthor"></strong></p>
     </section>
 
-</div>
 
 <script>
   let chapters = [];
@@ -60,16 +59,17 @@
 
   // Fetch novel details from PHP
   fetch("fetch_novel.php")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+  .then(response => response.text()) // First, get raw response
+  .then(text => {
+    try {
+      return JSON.parse(text); // Try parsing JSON
+    } catch (error) {
+      throw new Error("Invalid JSON: " + text); // Show actual response in console
     }
-    return response.json();
   })
   .then(data => {
-    if (!data.novel) {
-      throw new Error("Novel data not found");
-    }
+    console.log("Fetched data:", data);
+    if (!data.novel) throw new Error("Novel data missing");
 
     document.getElementById("bookTitle").textContent = data.novel.title || "Unknown Title";
     document.getElementById("bookCover").src = data.novel.cover_image_url || "placeholder.jpg";
@@ -77,7 +77,6 @@
     document.getElementById("publishDate").textContent = data.novel.publication_date || "Unknown Date";
     document.getElementById("bookAuthor").textContent = data.novel.author_name || "Unknown Author";
 
-    // Load tags
     let tagsContainer = document.getElementById("tagsContainer");
     tagsContainer.innerHTML = "";
     if (data.tags && data.tags.length > 0) {
@@ -91,7 +90,6 @@
       tagsContainer.textContent = "No tags available.";
     }
 
-    // Load chapters
     chapters = data.chapters || [];
     displayChapters();
   })
@@ -165,46 +163,74 @@
   </section>
   
   <script>
-    function addReview() {
-      // Retrieve review text from the textarea
-      var reviewText = document.getElementById("reviewText").value;
-      if (reviewText.trim() === "") {
-        alert("Please share your literary musings before submitting.");
-        return;
-      }
-  
-      // Retrieve the selected star rating
-      var ratingInput = document.querySelector('input[name="rating"]:checked');
-      if (!ratingInput) {
-        alert("Please select a star rating to express your thoughts.");
-        return;
-      }
-      var rating = parseInt(ratingInput.value);
-  
-      // Generate star display HTML based on the rating
-      var starsHtml = "";
-      for (var i = 1; i <= 5; i++) {
-        starsHtml += i <= rating ? "&#9733;" : "&#9734;";
-      }
-  
-      // Create a new review element
-      var newReview = document.createElement("div");
-      newReview.className = "review";
-      newReview.innerHTML = `<strong>Anonymous:</strong> "${reviewText}"<br><div class="stars">${starsHtml}</div>`;
-      
-      // Append the new review to the reviews section
-      document.getElementById("reviews").appendChild(newReview);
-  
-      // Clear the textarea and reset the star rating inputs
-      document.getElementById("reviewText").value = "";
-      var ratingInputs = document.getElementsByName("rating");
-      for (var i = 0; i < ratingInputs.length; i++) {
-        ratingInputs[i].checked = false;
-      }
+    // Fetch reviews from PHP and display them
+        document.addEventListener("DOMContentLoaded", fetchReviews); // Ensure reviews load when page loads
+
+    function fetchReviews() {
+      fetch("fetch_reviews.php")
+        .then(response => response.json())
+        .then(data => {
+          const reviewsContainer = document.getElementById("reviews");
+          reviewsContainer.innerHTML = ""; // Clear old reviews before adding new ones
+
+          data.reviews.forEach(review => {
+            let reviewDiv = document.createElement("div");
+            reviewDiv.className = "review";
+
+            let starsHtml = "";
+            for (let i = 1; i <= 5; i++) {
+              starsHtml += i <= review.rating ? "&#9733;" : "&#9734;";
+            }
+
+            reviewDiv.innerHTML = `<strong>${review.reviewer_name}:</strong> "${review.review_text}"
+                                  <div class="stars">${starsHtml}</div>
+                                  <small>Reviewed on ${new Date(review.created_at).toLocaleDateString()}</small>`;
+            reviewsContainer.appendChild(reviewDiv);
+          });
+        })
+        .catch(error => console.error("Error fetching reviews:", error));
     }
+
+    function addReview() {
+      var reviewText = document.getElementById("reviewText").value;
+      var ratingInput = document.querySelector('input[name="rating"]:checked');
+
+      if (!reviewText.trim()) {
+        alert("Please share your thoughts before submitting.");
+        return;
+      }
+      if (!ratingInput) {
+        alert("Please select a star rating.");
+        return;
+      }
+
+      var rating = parseInt(ratingInput.value);
+      var formData = new URLSearchParams();
+      formData.append("review_text", reviewText);
+      formData.append("rating", rating);
+
+      fetch("submit_review.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("Review submitted successfully!");
+            document.getElementById("reviewText").value = "";
+            document.querySelectorAll('input[name="rating"]').forEach(input => (input.checked = false));
+            fetchReviews(); // Reload reviews dynamically after submission
+          } else {
+            alert("Failed to submit review.");
+          }
+        })
+        .catch(error => console.error("Error submitting review:", error));
+    }
+
   </script>
      
-    <!-- Comment Section -->
+    <!-- Comment Section ---------------->
 
  <!-- Bookish Comment Section -->
  <section class="comments">
