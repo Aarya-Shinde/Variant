@@ -171,6 +171,12 @@
     
       /* Review Submission Form Styling */
       .review-form {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      
+      .review-form {
         margin-top: 20px;
         padding-top: 20px;
         border-top: 2px dashed #ccb88f;  /* Dashed line divider */
