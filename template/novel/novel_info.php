@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novel</title>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="novel.css">
-    <script src="novel_info.js"></script>
+    <link rel="stylesheet" href="css/novel.css">
+    <script src="js/novel_info.js"></script>
 </head>
 <body>
 

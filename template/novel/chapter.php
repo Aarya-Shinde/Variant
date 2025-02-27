@@ -1,5 +1,5 @@
 <?php
-include '../db/dbconnect.php';
+include '../../db/dbconnect.php';
 
 // Get novel ID and chapter number from URL (defaults to first chapter)
 $novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 14;
