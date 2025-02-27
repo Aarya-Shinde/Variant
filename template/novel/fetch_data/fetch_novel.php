@@ -1,10 +1,16 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+header('Content-Type: application/json');
 
-include '../db/dbconnect.php'; 
+include("../../../db/dbconnect.php");
 
-$novel_id = $_GET['novel_id'] ?? 14; // Change dynamically if needed
+if (!$conn) {
+    echo json_encode(["error" => "Database connection failed"]);
+    exit;
+}
+
+$novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 14;
 
 // Fetch novel details
 $novel_sql = "SELECT * FROM Novels WHERE novel_id = ?";
@@ -13,6 +19,11 @@ $stmt->bind_param("i", $novel_id);
 $stmt->execute();
 $novel_result = $stmt->get_result();
 $novel = $novel_result->fetch_assoc();
+
+if (!$novel) {
+    echo json_encode(["error" => "Novel not found"]);
+    exit;
+}
 
 // Fetch tags
 $tags_sql = "SELECT tag FROM Tags WHERE novel_id = ?";
@@ -42,17 +53,16 @@ $stmt = $conn->prepare($reviews_sql);
 $stmt->bind_param("i", $novel_id);
 $stmt->execute();
 $reviews_result = $stmt->get_result();
-
 $reviews = [];
 while ($row = $reviews_result->fetch_assoc()) {
     $reviews[] = $row;
 }
 
+// Close connections
 $stmt->close();
 $conn->close();
 
-// Ensure correct JSON output
-header('Content-Type: application/json');
+// Output JSON response
 echo json_encode([
     "novel" => $novel,
     "tags" => $tags,
@@ -60,4 +70,5 @@ echo json_encode([
     "reviews" => $reviews
 ], JSON_PRETTY_PRINT);
 
+exit;
 ?>

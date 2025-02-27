@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novel</title>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/novel.css">
-    <script src="js/novel_info.js"></script>
+
 </head>
 <body>
 
@@ -15,10 +14,10 @@
     <!-- Website Logo -->
     <div class="logo"><a href="#">Variant</a> </div>
     <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#novels">Novels</a>
+      <a href="../../index.html">Home</a>
+      <a href="../explore.php">Novels</a>
       <a href="#reviews">Reviews</a>
-      <a href="#contact">Contact</a>
+      <a href="../../pages/reader_dashboard.php">User</a>
     </div>
     <button onclick="toggleDarkMode()">🌙</button>
   </nav>
@@ -44,8 +43,8 @@
 
       <!-- Chapter Navigation Buttons -->
       <div class="chapter-nav">
-        <button onclick="prevChapters()">⬅ Previous</button>
-        <button onclick="nextChapters()">Next ➡</button>
+        <button onclick="prevChapters()"> Previous</button>
+        <button onclick="nextChapters()">Next </button>
       </div>
 
       <p class="author">Written by <strong id="bookAuthor"></strong></p>
@@ -120,8 +119,7 @@
     }
 </script>
 
-<script src="novel_info.js" defer></script>
+<script src="js/novel_info.js" defer></script>
 
 
 </body>
-</html>

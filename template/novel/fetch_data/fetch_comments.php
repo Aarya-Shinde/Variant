@@ -1,5 +1,6 @@
 <?php
-require "../db/dbconnect.php"; // Ensure this file is correct
+require "../../../db/dbconnect.php";
+// Ensure this file is correct
 
 header("Content-Type: application/json"); // Always return JSON
 error_reporting(E_ALL);

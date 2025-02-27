@@ -3,7 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
-include '../db/dbconnect.php'; 
+include("../../../db/dbconnect.php");
+
 
 if (!$conn) {
     die(json_encode(["error" => "Database connection failed"]));
