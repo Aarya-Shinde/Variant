@@ -168,3 +168,90 @@ function fetchReviews() {
         alert("An error occurred while submitting your review.");
       });
   }
+
+
+
+//   Fetching Comments fuctions***************************************
+
+document.addEventListener("DOMContentLoaded", () => fetchComments(0));
+
+let offset = 0;  // To track loaded comments
+const limit = 5; // Number of comments per load
+
+function fetchComments(start) {
+    fetch(`fetch_comments.php?offset=${start}&limit=${limit}`)
+        .then(response => response.json())
+        .then(data => {
+            const commentSection = document.getElementById("commentSection");
+
+            if (start === 0) commentSection.innerHTML = ""; // Clear only for first fetch
+
+            if (!data.comments || data.comments.length === 0) {
+                if (start === 0) commentSection.innerHTML = "<p>No reflections yet. Be the first to share your thoughts!</p>";
+                return;
+            }
+
+            data.comments.forEach(comment => {
+                let commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.innerHTML = `<strong>${comment.commenter_name || "Anonymous"}:</strong>
+                                        <p>${comment.comment_text}</p>
+                                        <small>Posted on ${new Date(comment.created_at).toLocaleDateString()}</small>`;
+                commentSection.appendChild(commentDiv);
+            });
+
+            // Show "Load More" if more comments exist
+            if (data.has_more) {
+                let loadMoreBtn = document.getElementById("loadMoreBtn");
+                if (!loadMoreBtn) {
+                    loadMoreBtn = document.createElement("button");
+                    loadMoreBtn.id = "loadMoreBtn";
+                    loadMoreBtn.textContent = "Load More Comments";
+                    loadMoreBtn.classList.add("load-more");
+                    loadMoreBtn.onclick = () => {
+                        offset += limit;
+                        fetchComments(offset);
+                    };
+                    commentSection.appendChild(loadMoreBtn);
+                }
+            } else {
+                let loadMoreBtn = document.getElementById("loadMoreBtn");
+                if (loadMoreBtn) loadMoreBtn.remove();
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching comments:", error);
+            document.getElementById("commentSection").innerHTML = "<p>Error loading comments.</p>";
+        });
+}
+
+function addComment() {
+    const commentText = document.getElementById("commentText").value.trim();
+    if (!commentText) {
+        alert("Please pen down your thoughts before submitting.");
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("comment_text", commentText);
+
+    fetch("submit_comment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Comment submitted successfully!");
+            document.getElementById("commentText").value = "";
+            fetchComments(0); // Reload comments
+        } else {
+            alert("Failed to submit comment.");
+        }
+    })
+    .catch(error => {
+        console.error("Error submitting comment:", error);
+        alert("An error occurred while submitting your comment.");
+    });
+}

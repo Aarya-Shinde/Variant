@@ -72,6 +72,30 @@ realise just how much he is truly capable of – particularly when he stumbles u
 '9780261103344', 4.6, 'English');
 
 
+
+
+-- Dummy data for reviews and comments 
+INSERT INTO Reviews (novel_id, user_id, reviewer_name, review_text, rating, created_at, updated_at) VALUES
+(1, 101, 'Aarav Mehta', 'A breathtaking story with deep characters and an engaging plot.', 5, '2025-02-20 10:30:00', '2025-02-20 10:30:00'),
+(2, 102, 'Neha Kapoor', 'A slow start but picked up really well in the second half.', 4, '2025-02-21 12:15:00', '2025-02-21 12:15:00'),
+(3, 103, 'Rajesh Iyer', 'Loved the suspense! Kept me hooked till the last page.', 5, '2025-02-22 15:45:00', '2025-02-22 15:45:00'),
+(4, 104, 'Priya Sharma', 'The protagonist was a bit unlikable, but the world-building was fantastic.', 3, '2025-02-23 09:00:00', '2025-02-23 09:00:00'),
+(5, 105, 'Vikram Joshi', 'A masterpiece! The writing style is so immersive.', 5, '2025-02-24 11:20:00', '2025-02-24 11:20:00'),
+(6, 106, 'Sanya Verma', 'Interesting take on fantasy, but some parts were too predictable.', 4, '2025-02-25 18:00:00', '2025-02-25 18:00:00'),
+(7, 107, 'Amit Rathore', 'The best novel I have read this year! Highly recommended.', 5, '2025-02-26 20:30:00', '2025-02-26 20:30:00');
+
+INSERT INTO Comments (novel_id, chapter_id, user_id, commenter_name, comment_text, parent_id, created_at) VALUES
+(1, NULL, 201, 'Rohit Singh', 'Absolutely agree! This novel deserves all the praise.', NULL, '2025-02-21 11:00:00'),
+(2, NULL, 202, 'Ananya Patel', 'I felt the same! The pacing was slow at first but got better.', NULL, '2025-02-22 14:00:00'),
+(3, 12, 203, 'Kiran Das', 'Chapter 12 had such an unexpected twist! Loved it.', NULL, '2025-02-23 17:45:00'),
+(4, NULL, 204, 'Anonymous', 'I think the protagonist’s flaws made the story more realistic.', 2, '2025-02-24 09:30:00'),
+(5, 3, 205, 'Meenal Gupta', 'Chapter 3’s descriptions were so vivid! Felt like I was there.', NULL, '2025-02-25 13:15:00'),
+(6, NULL, 206, 'Suresh Kumar', 'Did anyone else think the ending was a bit rushed?', NULL, '2025-02-26 18:50:00'),
+(7, 5, 207, 'Deepak Rana', 'The action in Chapter 5 was insane! One of the best scenes.', NULL, '2025-02-27 21:00:00');
+
+
+
+
 UPDATE Novels
 SET cover_image_url = 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1598823299i/42844155.jpg'
 WHERE novel_id = 11;

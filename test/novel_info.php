@@ -96,35 +96,13 @@
 
  
     <!-- Bookish Comment Section -->
- <section class="comments">
+
+<section class="comments">
     <h2>Comments</h2>
     <textarea id="commentText" placeholder="Share your thoughts on the tale..."></textarea>
     <button class="read-more" onclick="addComment()">Submit Reflection</button>
     <div id="commentSection"></div>
-  </section>
-
-<script>
-    // Optional: Toggle additional novel information using a bookish reveal
-    function toggleReadMore() {
-      var moreInfo = document.getElementById('moreInfo');
-      moreInfo.style.display = (moreInfo.style.display === 'none' || moreInfo.style.display === '') ? 'block' : 'none';
-    }
-
-    // Add Comment Functionality with a literary twist
-    function addComment() {
-      var commentText = document.getElementById("commentText").value;
-      if (commentText.trim() === "") {
-        alert("Please pen down your thoughts before submitting.");
-        return;
-      }
-      var commentSection = document.getElementById("commentSection");
-      var newComment = document.createElement("div");
-      newComment.className = "comment";
-      newComment.innerHTML = `<strong>Anonymous:</strong><br><p>${commentText}</p>`;
-      commentSection.appendChild(newComment);
-      document.getElementById("commentText").value = "";
-    }
-</script>
+</section>
 
 
 <!-- Comment section ends here -->
@@ -141,7 +119,7 @@
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
     }
-  </script>
+</script>
 
 <script src="novel_info.js" defer></script>
 
