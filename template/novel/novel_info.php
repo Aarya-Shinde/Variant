@@ -54,34 +54,28 @@
     <!-- Reviews Section------------- -->
 
  <!-- Reviews Section -->
- <section class="reviews-section" id="reviews">
-    <h2>Reviews</h2>
-    <!-- Predefined Reviews -->
-
-
-    
-    <!-- Review Submission Form -->
-  <div class="review-form">
-    <input type="hidden" id="novelId" value="1"> <!-- Ensure this ID exists -->
-    <input type="hidden" id="userId" value="2"> <!-- Ensure this ID exists -->
-
-    <textarea id="reviewText" placeholder="Share your thoughts on the narrative..."></textarea>
-    <div class="star-rating">
-        <input type="radio" id="star5" name="rating" value="5">
-        <label for="star5" title="5 stars">&#9733;</label>
-        <input type="radio" id="star4" name="rating" value="4">
-        <label for="star4" title="4 stars">&#9733;</label>
-        <input type="radio" id="star3" name="rating" value="3">
-        <label for="star3" title="3 stars">&#9733;</label>
-        <input type="radio" id="star2" name="rating" value="2">
-        <label for="star2" title="2 stars">&#9733;</label>
-        <input type="radio" id="star1" name="rating" value="1">
-        <label for="star1" title="1 star">&#9733;</label>
+ <div class="review-form">
+        <h2>Leave a Review</h2>
+        <input type="hidden" id="novelId" value="1">
+        <textarea id="reviewText" placeholder="Share your thoughts on the narrative..."></textarea>
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1">&#9733;</label>
+        </div>
+        <button onclick="addReview()">Submit Review</button>
     </div>
-    <br>
-    <button class="submit-review" onclick="addReview()">Submit Review</button>
-  </div>
-</section>
+
+    <div id="reviews"></div>
+
+
   
  
 
@@ -92,12 +86,12 @@
  
     <!-- Bookish Comment Section -->
 
-<section class="comments">
-    <h2>Comments</h2>
-    <textarea id="commentText" placeholder="Share your thoughts on the tale..."></textarea>
-    <button class="read-more" onclick="addComment()">Submit Reflection</button>
-    <div id="commentSection"></div>
-</section>
+    <section class="comments">
+        <h2>Comments</h2>
+        <textarea id="commentText" placeholder="Share your thoughts on the tale..."></textarea>
+        <button onclick="addComment()">Submit Reflection</button>
+        <div id="commentSection"></div>
+    </section>
 
 
 <!-- Comment section ends here -->

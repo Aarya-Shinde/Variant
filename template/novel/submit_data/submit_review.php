@@ -1,50 +1,47 @@
 <?php
-
-session_start();  // Start session to access logged-in user
-
 header("Content-Type: application/json");
-require_once "../../../db/dbconnect.php";
+require_once "../../../db/dbconnect.php"; // Ensure correct database connection
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(["success" => false, "error" => "Invalid request method"]);
     exit;
 }
 
-// Get `user_id` from session
+// Check if the user is logged in
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["success" => false, "error" => "User not logged in"]);
     exit;
 }
 
-$user_id = $_SESSION["user_id"];  // Automatically assigned from session
-
-// Get other form data
+$user_id = $_SESSION["user_id"];
 $novel_id = isset($_POST["novel_id"]) ? (int) $_POST["novel_id"] : null;
 $review_text = isset($_POST["review_text"]) ? trim($_POST["review_text"]) : null;
 $rating = isset($_POST["rating"]) ? (int) $_POST["rating"] : null;
 
-if (!$novel_id || !$review_text || !isset($rating)) {
-    echo json_encode(["success" => false, "error" => "Missing required fields"]);
+// Validate input
+if (!$novel_id || !$review_text || !isset($rating) || $rating < 1 || $rating > 5) {
+    echo json_encode(["success" => false, "error" => "Invalid input data"]);
     exit;
 }
 
-// Check if user exists
-$user_check_sql = "SELECT username FROM Users WHERE user_id = ?";
-$user_stmt = $conn->prepare($user_check_sql);
-$user_stmt->bind_param("i", $user_id);
-$user_stmt->execute();
-$user_stmt->store_result();
+// Get the username of the reviewer
+$query = "SELECT username FROM Users WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->store_result();
 
-if ($user_stmt->num_rows === 0) {
+if ($stmt->num_rows === 0) {
     echo json_encode(["success" => false, "error" => "User does not exist"]);
     exit;
 }
 
-$user_stmt->bind_result($username);
-$user_stmt->fetch();
-$user_stmt->close();
+$stmt->bind_result($username);
+$stmt->fetch();
+$stmt->close();
 
-// Insert into Reviews table
+// Insert the review into the database
 $sql = "INSERT INTO Reviews (novel_id, user_id, reviewer_name, review_text, rating) 
         VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
@@ -58,6 +55,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-
-
 ?>

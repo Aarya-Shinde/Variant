@@ -116,55 +116,45 @@
 // Sends a POST request to submit_review.php.
 // Reloads reviews after successful submission.
 
+// ✅ Move fetchReviews and fetchComments to the global scope
 function fetchReviews() {
-    fetch("/template/novel/fetch_data/fetch_reviews.php")
+    const novelId = document.getElementById("novelId")?.value;
+    fetch(`/Variant/template/novel/fetch_data/fetch_reviews.php?novel_id=${novelId}`)
     .then(response => response.json())
     .then(data => {
+        console.log("Reviews API Response:", data);
         const reviewsContainer = document.getElementById("reviews");
-        const reviewForm = document.querySelector(".review-form");
-        reviewsContainer.innerHTML = "<h2>Reviews</h2>";
-        reviewsContainer.appendChild(reviewForm);
-
-        if (!data.reviews || !Array.isArray(data.reviews) || data.reviews.length === 0) {
-            let noReviewsMsg = document.createElement("p");
-            noReviewsMsg.textContent = "No reviews yet. Be the first to review!";
-            reviewsContainer.insertBefore(noReviewsMsg, reviewForm);
-            return;
-        }
-
-        data.reviews.forEach(review => {
-            let reviewDiv = document.createElement("div");
-            reviewDiv.className = "review";
-
-            let stars = document.createElement("div");
-            stars.className = "stars";
-            stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
-
-            reviewDiv.innerHTML = `<strong>${review.reviewer_name}:</strong> "${review.review_text}"
-                                  <small>Reviewed on ${new Date(review.created_at).toLocaleDateString()}</small>`;
-            reviewDiv.appendChild(stars);
-            reviewsContainer.insertBefore(reviewDiv, reviewForm);
-        });
+        reviewsContainer.innerHTML = data.reviews.length
+            ? data.reviews.map(r => `<p><strong>${r.reviewer_name}</strong>: ${r.review_text} (${r.rating}★)</p>`).join("")
+            : "<p>No reviews yet.</p>";
     })
-    .catch(error => {
-        console.error("Error fetching reviews:", error);
-        document.getElementById("reviews").innerHTML += "<p>Error loading reviews.</p>";
-    });
+    .catch(error => console.error("Error fetching reviews:", error));
 }
 
-//adding review to the website
+function fetchComments() {
+    const novelId = document.getElementById("novelId")?.value;
+    fetch(`/Variant/template/novel/fetch_data/fetch_comments.php?novel_id=${novelId}&limit=5`)
+    .then(response => response.json())
+    .then(data => {
+        console.log("Comments API Response:", data);
+        const commentSection = document.getElementById("commentSection");
+        commentSection.innerHTML = data.comments.length
+            ? data.comments.map(c => `<p><strong>${c.commenter_name}</strong>: ${c.comment_text}</p>`).join("")
+            : "<p>No reflections yet.</p>";
+    })
+    .catch(error => console.error("Error fetching comments:", error));
+}
 
+// ✅ Move these functions to global scope to be accessible by onclick
 function addReview() {
+    const novelId = document.getElementById("novelId")?.value;
     const reviewText = document.getElementById("reviewText")?.value.trim();
     const ratingInput = document.querySelector('input[name="rating"]:checked');
-    const novelId = document.getElementById("novelId")?.value;
 
-    if (!reviewText || !ratingInput || !novelId) {
+    if (!reviewText || !ratingInput) {
         alert("All fields are required.");
         return;
     }
-
-    console.log("Review Data:", { novel_id: novelId, review_text: reviewText, rating: ratingInput.value });
 
     const formData = new URLSearchParams();
     formData.append("novel_id", novelId);
@@ -180,7 +170,8 @@ function addReview() {
     .then(data => {
         if (data.success) {
             alert("Review submitted successfully!");
-            fetchReviews();
+            document.getElementById("reviewText").value = "";
+            fetchReviews();  // ✅ Now this will work
         } else {
             alert("Failed to submit review: " + (data.error || "Unknown error"));
         }
@@ -188,53 +179,8 @@ function addReview() {
     .catch(error => console.error("Error submitting review:", error));
 }
 
-
-
-///Comments fetching and review
-
-function fetchComments(start = 0) {
-    fetch(`/template/novel/fetch_data/fetch_comments.php?offset=${start}&limit=5`)
-    .then(response => response.json())
-    .then(data => {
-        const commentSection = document.getElementById("commentSection");
-
-        if (start === 0) commentSection.innerHTML = "";
-
-        if (!data.comments || data.comments.length === 0) {
-            if (start === 0) commentSection.innerHTML = "<p>No reflections yet. Be the first to share your thoughts!</p>";
-            return;
-        }
-
-        data.comments.forEach(comment => {
-            let commentDiv = document.createElement("div");
-            commentDiv.className = "comment";
-            commentDiv.innerHTML = `<strong>${comment.commenter_name || "Anonymous"}:</strong>
-                                    <p>${comment.comment_text}</p>
-                                    <small>Posted on ${new Date(comment.created_at).toLocaleDateString()}</small>`;
-            commentSection.appendChild(commentDiv);
-        });
-
-        if (data.has_more) {
-            let loadMoreBtn = document.getElementById("loadMoreBtn");
-            if (!loadMoreBtn) {
-                loadMoreBtn = document.createElement("button");
-                loadMoreBtn.id = "loadMoreBtn";
-                loadMoreBtn.textContent = "Load More Comments";
-                loadMoreBtn.classList.add("load-more");
-                loadMoreBtn.onclick = () => fetchComments(start + 5);
-                commentSection.appendChild(loadMoreBtn);
-            }
-        } else {
-            document.getElementById("loadMoreBtn")?.remove();
-        }
-    })
-    .catch(error => {
-        console.error("Error fetching comments:", error);
-        document.getElementById("commentSection").innerHTML = "<p>Error loading comments.</p>";
-    });
-}
-
 function addComment() {
+    const novelId = document.getElementById("novelId")?.value;
     const commentText = document.getElementById("commentText")?.value.trim();
     if (!commentText) {
         alert("Please write your thoughts before submitting.");
@@ -242,8 +188,8 @@ function addComment() {
     }
 
     const formData = new URLSearchParams();
-    formData.append("novel_id", document.getElementById("novelId")?.value || "");
-    formData.append("comment_text", commentText); // No need to send user_id manually
+    formData.append("novel_id", novelId);
+    formData.append("comment_text", commentText);
 
     fetch("/Variant/template/novel/submit_data/submit_comment.php", {
         method: "POST",
@@ -255,11 +201,16 @@ function addComment() {
         if (data.success) {
             alert("Comment added successfully!");
             document.getElementById("commentText").value = "";
-            fetchComments();
+            fetchComments();  // ✅ Now this will work
         } else {
             alert("Failed to submit comment: " + (data.error || "Unknown error"));
         }
     })
-    .catch(error => console.error("Fetch Error:", error));
+    .catch(error => console.error("Error submitting comment:", error));
 }
 
+// ✅ Keep DOMContentLoaded only for initial fetching
+document.addEventListener("DOMContentLoaded", function () {
+    fetchReviews();
+    fetchComments();
+});
