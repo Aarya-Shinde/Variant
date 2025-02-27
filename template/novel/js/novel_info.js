@@ -1,5 +1,23 @@
 // <!-- Book Details Section -->
 
+// Book Details Section
+// Global Variables
+
+// chapters: Stores the fetched chapter data.
+// startIndex: Tracks the current position for pagination.
+// chaptersPerPage: Defines how many chapters are displayed per page.
+// Fetching Novel Data
+
+// Uses fetch("template/novel/fetch_data/fetch_novel.php") to retrieve book details.
+// Updates elements like title, cover, summary, author, and publication date.
+// Displays tags if available.
+// Displaying Chapters with Pagination
+
+// displayChapters(): Clears and renders a paginated list of chapters.
+// nextChapters(): Moves to the next set of chapters if available.
+// prevChapters(): Moves back to the previous set.
+
+
 (function () {
     var chapters = []; // Global variable
     var startIndex = 0;
@@ -86,145 +104,163 @@
 })();
 
 // Review Fetching Section
+// Review Fetching Section
+// Fetching and Displaying Reviews
 
-document.addEventListener("DOMContentLoaded", fetchReviews);
+// Calls fetchReviews() when the page loads.
+// Fetches reviews from fetch_reviews.php and updates the UI.
+// Handles empty reviews by showing a placeholder message.
+// Adding a Review
+
+// Reads review text and selected rating.
+// Sends a POST request to submit_review.php.
+// Reloads reviews after successful submission.
 
 function fetchReviews() {
-    fetch("/Variant/template/novel/fetch_data/fetch_reviews.php")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const reviewsContainer = document.getElementById("reviews");
-            const reviewForm = document.querySelector(".review-form");
+    fetch("/template/novel/fetch_data/fetch_reviews.php")
+    .then(response => response.json())
+    .then(data => {
+        const reviewsContainer = document.getElementById("reviews");
+        const reviewForm = document.querySelector(".review-form");
+        reviewsContainer.innerHTML = "<h2>Reviews</h2>";
+        reviewsContainer.appendChild(reviewForm);
 
-            reviewsContainer.innerHTML = "<h2>Reviews</h2>";
-            reviewsContainer.appendChild(reviewForm);
+        if (!data.reviews || !Array.isArray(data.reviews) || data.reviews.length === 0) {
+            let noReviewsMsg = document.createElement("p");
+            noReviewsMsg.textContent = "No reviews yet. Be the first to review!";
+            reviewsContainer.insertBefore(noReviewsMsg, reviewForm);
+            return;
+        }
 
-            if (!data.reviews || !Array.isArray(data.reviews) || data.reviews.length === 0) {
-                let noReviewsMsg = document.createElement("p");
-                noReviewsMsg.textContent = "No reviews yet. Be the first to review!";
-                reviewsContainer.insertBefore(noReviewsMsg, reviewForm);
-                return;
-            }
+        data.reviews.forEach(review => {
+            let reviewDiv = document.createElement("div");
+            reviewDiv.className = "review";
 
-            data.reviews.forEach(review => {
-                let reviewDiv = document.createElement("div");
-                reviewDiv.className = "review";
+            let stars = document.createElement("div");
+            stars.className = "stars";
+            stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
 
-                let stars = document.createElement("div");
-                stars.className = "stars";
-                stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
-
-                reviewDiv.innerHTML = `<strong>${review.reviewer_name}:</strong> "${review.review_text}"
-                                       <small>Reviewed on ${new Date(review.created_at).toLocaleDateString()}</small>`;
-                reviewDiv.appendChild(stars);
-                reviewsContainer.insertBefore(reviewDiv, reviewForm);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching reviews:", error);
-            document.getElementById("reviews").innerHTML += "<p>Error loading reviews.</p>";
+            reviewDiv.innerHTML = `<strong>${review.reviewer_name}:</strong> "${review.review_text}"
+                                  <small>Reviewed on ${new Date(review.created_at).toLocaleDateString()}</small>`;
+            reviewDiv.appendChild(stars);
+            reviewsContainer.insertBefore(reviewDiv, reviewForm);
         });
+    })
+    .catch(error => {
+        console.error("Error fetching reviews:", error);
+        document.getElementById("reviews").innerHTML += "<p>Error loading reviews.</p>";
+    });
 }
 
-// Add Review Function
+//adding review to the website
+
 function addReview() {
-    const reviewText = document.getElementById("reviewText").value.trim();
+    const reviewText = document.getElementById("reviewText")?.value.trim();
     const ratingInput = document.querySelector('input[name="rating"]:checked');
+    const novelId = document.getElementById("novelId")?.value;
+    const userId = document.getElementById("userId")?.value;  // Make sure this is set!
 
-    if (!reviewText) {
-        alert("Please share your thoughts before submitting.");
-        return;
-    }
-    if (!ratingInput) {
-        alert("Please select a star rating.");
+    if (!reviewText || !ratingInput || !novelId || !userId) {
+        alert("All fields are required.");
         return;
     }
 
-    const rating = parseInt(ratingInput.value);
+    console.log("Review Data:", { novel_id: novelId, user_id: userId, review_text: reviewText, rating: ratingInput.value });
+
     const formData = new URLSearchParams();
+    formData.append("novel_id", novelId);
+    formData.append("user_id", userId);
     formData.append("review_text", reviewText);
-    formData.append("rating", rating);
+    formData.append("rating", parseInt(ratingInput.value, 10));
 
-    fetch("/Variant/template/novel/fetch_data/submit_review.php", {
+    fetch("/Variant/template/novel/submit_data/submit_review.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData.toString()
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("Review submitted successfully!");
-                document.getElementById("reviewText").value = "";
-                document.querySelectorAll('input[name="rating"]').forEach(input => (input.checked = false));
-                fetchReviews();
-            } else {
-                alert("Failed to submit review.");
-            }
-        })
-        .catch(error => {
-            console.error("Error submitting review:", error);
-            alert("An error occurred while submitting your review.");
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Review submitted successfully!");
+            fetchReviews();
+        } else {
+            alert("Failed to submit review: " + (data.error || "Unknown error"));
+        }
+    })
+    .catch(error => console.error("Error submitting review:", error));
 }
 
-// Fetching Comments Section
-document.addEventListener("DOMContentLoaded", () => fetchComments(0));
 
-let offset = 0;
-const limit = 5;
+///Comments fetching and review
 
-function fetchComments(start) {
-    fetch(`/Variant/template/novel/fetch_data/fetch_comments.php?offset=${start}&limit=${limit}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const commentSection = document.getElementById("commentSection");
+function fetchComments(start = 0) {
+    fetch(`/template/novel/fetch_data/fetch_comments.php?offset=${start}&limit=5`)
+    .then(response => response.json())
+    .then(data => {
+        const commentSection = document.getElementById("commentSection");
 
-            if (start === 0) commentSection.innerHTML = "";
+        if (start === 0) commentSection.innerHTML = "";
 
-            if (!data.comments || data.comments.length === 0) {
-                if (start === 0) commentSection.innerHTML = "<p>No reflections yet. Be the first to share your thoughts!</p>";
-                return;
-            }
+        if (!data.comments || data.comments.length === 0) {
+            if (start === 0) commentSection.innerHTML = "<p>No reflections yet. Be the first to share your thoughts!</p>";
+            return;
+        }
 
-            data.comments.forEach(comment => {
-                let commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.innerHTML = `<strong>${comment.commenter_name || "Anonymous"}:</strong>
-                                        <p>${comment.comment_text}</p>
-                                        <small>Posted on ${new Date(comment.created_at).toLocaleDateString()}</small>`;
-                commentSection.appendChild(commentDiv);
-            });
-
-            if (data.has_more) {
-                let loadMoreBtn = document.getElementById("loadMoreBtn");
-                if (!loadMoreBtn) {
-                    loadMoreBtn = document.createElement("button");
-                    loadMoreBtn.id = "loadMoreBtn";
-                    loadMoreBtn.textContent = "Load More Comments";
-                    loadMoreBtn.classList.add("load-more");
-                    loadMoreBtn.onclick = () => {
-                        offset += limit;
-                        fetchComments(offset);
-                    };
-                    commentSection.appendChild(loadMoreBtn);
-                }
-            } else {
-                let loadMoreBtn = document.getElementById("loadMoreBtn");
-                if (loadMoreBtn) loadMoreBtn.remove();
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching comments:", error);
-            document.getElementById("commentSection").innerHTML = "<p>Error loading comments.</p>";
+        data.comments.forEach(comment => {
+            let commentDiv = document.createElement("div");
+            commentDiv.className = "comment";
+            commentDiv.innerHTML = `<strong>${comment.commenter_name || "Anonymous"}:</strong>
+                                    <p>${comment.comment_text}</p>
+                                    <small>Posted on ${new Date(comment.created_at).toLocaleDateString()}</small>`;
+            commentSection.appendChild(commentDiv);
         });
+
+        if (data.has_more) {
+            let loadMoreBtn = document.getElementById("loadMoreBtn");
+            if (!loadMoreBtn) {
+                loadMoreBtn = document.createElement("button");
+                loadMoreBtn.id = "loadMoreBtn";
+                loadMoreBtn.textContent = "Load More Comments";
+                loadMoreBtn.classList.add("load-more");
+                loadMoreBtn.onclick = () => fetchComments(start + 5);
+                commentSection.appendChild(loadMoreBtn);
+            }
+        } else {
+            document.getElementById("loadMoreBtn")?.remove();
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching comments:", error);
+        document.getElementById("commentSection").innerHTML = "<p>Error loading comments.</p>";
+    });
+}
+
+function addComment() {
+    const commentText = document.getElementById("commentText")?.value.trim();
+    if (!commentText) {
+        alert("Please write your thoughts before submitting.");
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("novel_id", document.getElementById("novelId")?.value || "");
+    formData.append("user_id", document.getElementById("userId")?.value || "");
+    formData.append("comment_text", commentText);
+
+    fetch("/Variant//template/novel/submit_data/submit_comment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Comment added successfully!");
+            document.getElementById("commentText").value = "";
+            fetchComments();
+        } else {
+            alert("Failed to submit comment: " + (data.error || "Unknown error"));
+        }
+    })
+    .catch(error => console.error("Fetch Error:", error));
 }
