@@ -1,29 +1,34 @@
 <?php
 header("Content-Type: application/json");
 require_once "../../../db/dbconnect.php"; // Ensure correct path
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(["success" => false, "error" => "Invalid request method"]);
     exit;
 }
 
-// Get POST data
+// Get the logged-in user's ID
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "error" => "User not logged in"]);
+    exit;
+}
+
+$user_id = $_SESSION["user_id"]; // Automatically fetch user ID from session
 $novel_id = isset($_POST["novel_id"]) ? (int) $_POST["novel_id"] : null;
-$user_id = isset($_POST["user_id"]) ? (int) $_POST["user_id"] : null;
-$review_text = isset($_POST["review_text"]) ? trim($_POST["review_text"]) : null;
-$rating = isset($_POST["rating"]) ? (int) $_POST["rating"] : null;
+$comment_text = isset($_POST["comment_text"]) ? trim($_POST["comment_text"]) : null;
 
 // Validate input
-if (!$novel_id || !$user_id || !$review_text || $rating < 1 || $rating > 5) {
+if (!$novel_id || !$comment_text) {
     echo json_encode(["success" => false, "error" => "Invalid input data"]);
     exit;
 }
 
 // Insert into database
-$sql = "INSERT INTO Reviews (novel_id, user_id, reviewer_name, review_text, rating) 
-        VALUES (?, ?, (SELECT username FROM Users WHERE user_id = ?), ?, ?)";
+$sql = "INSERT INTO Comments (novel_id, user_id, commenter_name, comment_text) 
+        VALUES (?, ?, (SELECT username FROM Users WHERE user_id = ?), ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iissi", $novel_id, $user_id, $user_id, $review_text, $rating);
+$stmt->bind_param("iiss", $novel_id, $user_id, $user_id, $comment_text);
 
 if ($stmt->execute()) {
     echo json_encode(["success" => true]);

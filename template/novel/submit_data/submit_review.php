@@ -1,27 +1,34 @@
 <?php
 
-header("Content-Type: application/json");
+session_start();  // Start session to access logged-in user
 
-require_once "../../../db/dbconnect.php"; // Ensure correct path
+header("Content-Type: application/json");
+require_once "../../../db/dbconnect.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(["success" => false, "error" => "Invalid request method"]);
     exit;
 }
 
-// Get POST data
+// Get `user_id` from session
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "error" => "User not logged in"]);
+    exit;
+}
+
+$user_id = $_SESSION["user_id"];  // Automatically assigned from session
+
+// Get other form data
 $novel_id = isset($_POST["novel_id"]) ? (int) $_POST["novel_id"] : null;
-$user_id = isset($_POST["user_id"]) ? (int) $_POST["user_id"] : null;
 $review_text = isset($_POST["review_text"]) ? trim($_POST["review_text"]) : null;
 $rating = isset($_POST["rating"]) ? (int) $_POST["rating"] : null;
 
-// Validate input
-if (!$novel_id || !$user_id || !$review_text || !isset($rating)) {
+if (!$novel_id || !$review_text || !isset($rating)) {
     echo json_encode(["success" => false, "error" => "Missing required fields"]);
     exit;
 }
 
-// Check if user_id exists in Users table
+// Check if user exists
 $user_check_sql = "SELECT username FROM Users WHERE user_id = ?";
 $user_stmt = $conn->prepare($user_check_sql);
 $user_stmt->bind_param("i", $user_id);
@@ -37,7 +44,7 @@ $user_stmt->bind_result($username);
 $user_stmt->fetch();
 $user_stmt->close();
 
-// Insert into database
+// Insert into Reviews table
 $sql = "INSERT INTO Reviews (novel_id, user_id, reviewer_name, review_text, rating) 
         VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
@@ -51,5 +58,6 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+
 
 ?>

@@ -57,14 +57,8 @@
  <section class="reviews-section" id="reviews">
     <h2>Reviews</h2>
     <!-- Predefined Reviews -->
-    <div class="review">
-      <strong>Jane Doe:</strong> "Absolutely magical! A must-read for fantasy lovers."
-      <div class="stars">★★★★★</div>
-    </div>
-    <div class="review">
-      <strong>John Smith:</strong> "Loved the depth of the characters and the immersive storytelling."
-      <div class="stars">★★★★☆</div>
-    </div>
+
+
     
     <!-- Review Submission Form -->
   <div class="review-form">

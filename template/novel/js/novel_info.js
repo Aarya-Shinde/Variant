@@ -158,18 +158,16 @@ function addReview() {
     const reviewText = document.getElementById("reviewText")?.value.trim();
     const ratingInput = document.querySelector('input[name="rating"]:checked');
     const novelId = document.getElementById("novelId")?.value;
-    const userId = document.getElementById("userId")?.value;  // Make sure this is set!
 
-    if (!reviewText || !ratingInput || !novelId || !userId) {
+    if (!reviewText || !ratingInput || !novelId) {
         alert("All fields are required.");
         return;
     }
 
-    console.log("Review Data:", { novel_id: novelId, user_id: userId, review_text: reviewText, rating: ratingInput.value });
+    console.log("Review Data:", { novel_id: novelId, review_text: reviewText, rating: ratingInput.value });
 
     const formData = new URLSearchParams();
     formData.append("novel_id", novelId);
-    formData.append("user_id", userId);
     formData.append("review_text", reviewText);
     formData.append("rating", parseInt(ratingInput.value, 10));
 
@@ -189,6 +187,7 @@ function addReview() {
     })
     .catch(error => console.error("Error submitting review:", error));
 }
+
 
 
 ///Comments fetching and review
@@ -244,10 +243,9 @@ function addComment() {
 
     const formData = new URLSearchParams();
     formData.append("novel_id", document.getElementById("novelId")?.value || "");
-    formData.append("user_id", document.getElementById("userId")?.value || "");
-    formData.append("comment_text", commentText);
+    formData.append("comment_text", commentText); // No need to send user_id manually
 
-    fetch("/Variant//template/novel/submit_data/submit_comment.php", {
+    fetch("/Variant/template/novel/submit_data/submit_comment.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData.toString()
@@ -264,3 +262,4 @@ function addComment() {
     })
     .catch(error => console.error("Fetch Error:", error));
 }
+
