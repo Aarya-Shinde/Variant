@@ -1,17 +1,24 @@
 <?php
 require "../../../db/dbconnect.php";
+session_start();
+
 header("Content-Type: application/json");
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$novel_id = $_GET['novel_id'] ?? 0;
-if (!$novel_id) {
+if (!isset($_GET['novel_id'])) {
     echo json_encode(["success" => false, "error" => "Missing novel_id"]);
     exit;
 }
 
-$sql = "SELECT reviewer_name, review_text, rating, created_at FROM Reviews WHERE novel_id = ? ORDER BY review_id DESC";
+$novel_id = intval($_GET['novel_id']);
+if ($novel_id <= 0) {
+    echo json_encode(["success" => false, "error" => "Invalid novel_id"]);
+    exit;
+}
+
+$sql = "SELECT * FROM Reviews WHERE novel_id = ?";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     echo json_encode(["success" => false, "error" => "SQL error: " . $conn->error]);
@@ -27,8 +34,13 @@ while ($row = $result->fetch_assoc()) {
     $reviews[] = $row;
 }
 
+echo json_encode([
+    "success" => true,
+    "reviews" => $reviews,
+    "query_debug" => $sql, // Debugging purpose
+    "novel_id_received" => $novel_id // Debugging purpose
+], JSON_PRETTY_PRINT);
+
 $stmt->close();
 $conn->close();
-
-echo json_encode(["success" => true, "reviews" => $reviews], JSON_PRETTY_PRINT);
 ?>
