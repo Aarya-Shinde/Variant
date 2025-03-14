@@ -1,216 +1,151 @@
-// <!-- Book Details Section -->
-
-// Book Details Section
-// Global Variables
-
-// chapters: Stores the fetched chapter data.
-// startIndex: Tracks the current position for pagination.
-// chaptersPerPage: Defines how many chapters are displayed per page.
-// Fetching Novel Data
-
-// Uses fetch("template/novel/fetch_data/fetch_novel.php") to retrieve book details.
-// Updates elements like title, cover, summary, author, and publication date.
-// Displays tags if available.
-// Displaying Chapters with Pagination
-
-// displayChapters(): Clears and renders a paginated list of chapters.
-// nextChapters(): Moves to the next set of chapters if available.
-// prevChapters(): Moves back to the previous set.
+document.addEventListener("DOMContentLoaded", function () {
+    const novelId = new URLSearchParams(window.location.search).get("novel_id");
 
 
-(function () {
-    var chapters = []; // Global variable
-    var startIndex = 0;
-    const chaptersPerPage = 15;
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const chapterList = document.getElementById("chapterList");
-        if (!chapterList) {
-            console.error("Error: Element with ID 'chapterList' not found.");
-            return;
-        }
-
-        fetch("/Variant/template/novel/fetch_data/fetch_novel.php")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.novel) throw new Error("Novel data missing");
-
-                document.getElementById("bookTitle").textContent = data.novel.title || "Unknown Title";
-                document.getElementById("bookCover").src = data.novel.cover_image_url || "placeholder.jpg";
-                document.getElementById("bookSummary").textContent = data.novel.description || "No description available.";
-                document.getElementById("publishDate").textContent = data.novel.publication_date || "Unknown Date";
-                document.getElementById("bookAuthor").textContent = data.novel.author_name || "Unknown Author";
-
-                let tagsContainer = document.getElementById("tagsContainer");
-                if (tagsContainer) {
-                    tagsContainer.innerHTML = "";
-                    if (data.tags && Array.isArray(data.tags) && data.tags.length > 0) {
-                        data.tags.forEach(tag => {
-                            let span = document.createElement("span");
-                            span.className = "tag";
-                            span.textContent = tag;
-                            tagsContainer.appendChild(span);
-                        });
-                    } else {
-                        tagsContainer.textContent = "No tags available.";
-                    }
-                }
-
-                chapters = Array.isArray(data.chapters) ? data.chapters : [];
-                displayChapters();
-            })
-            .catch(error => console.error("Error loading novel:", error));
-    });
-
-    function displayChapters() {
-        const chapterList = document.getElementById("chapterList");
-        if (!chapterList) {
-            console.error("Error: Element with ID 'chapterList' not found.");
-            return;
-        }
-
-        chapterList.innerHTML = "";
-
-        if (chapters.length === 0) {
-            chapterList.innerHTML = "<li>No chapters available.</li>";
-            return;
-        }
-
-        for (let i = startIndex; i < startIndex + chaptersPerPage && i < chapters.length; i++) {
-            const li = document.createElement("li");
-            li.textContent = `Chapter ${chapters[i].chapter_number}: ${chapters[i].title}`;
-            chapterList.appendChild(li);
-        }
-    }
-
-    window.nextChapters = function () {
-        if (startIndex + chaptersPerPage < chapters.length) {
-            startIndex += chaptersPerPage;
-            displayChapters();
-        }
-    };
-
-    window.prevChapters = function () {
-        if (startIndex - chaptersPerPage >= 0) {
-            startIndex -= chaptersPerPage;
-            displayChapters();
-        }
-    };
-})();
-
-// Review Fetching Section
-// Review Fetching Section
-// Fetching and Displaying Reviews
-
-// Calls fetchReviews() when the page loads.
-// Fetches reviews from fetch_reviews.php and updates the UI.
-// Handles empty reviews by showing a placeholder message.
-// Adding a Review
-
-// Reads review text and selected rating.
-// Sends a POST request to submit_review.php.
-// Reloads reviews after successful submission.
-
-// ✅ Move fetchReviews and fetchComments to the global scope
-function fetchReviews() {
-    const novelId = document.getElementById("novelId")?.value;
-    fetch(`/Variant/template/novel/fetch_data/fetch_reviews.php?novel_id=${novelId}`)
-    .then(response => response.json())
-    .then(data => {
-        console.log("Reviews API Response:", data);
-        const reviewsContainer = document.getElementById("reviews");
-        reviewsContainer.innerHTML = data.reviews.length
-            ? data.reviews.map(r => `<p><strong>${r.reviewer_name}</strong>: ${r.review_text} (${r.rating}★)</p>`).join("")
-            : "<p>No reviews yet.</p>";
-    })
-    .catch(error => console.error("Error fetching reviews:", error));
-}
-
-function fetchComments() {
-    const novelId = document.getElementById("novelId")?.value;
-    fetch(`/Variant/template/novel/fetch_data/fetch_comments.php?novel_id=${novelId}&limit=5`)
-    .then(response => response.json())
-    .then(data => {
-        console.log("Comments API Response:", data);
-        const commentSection = document.getElementById("commentSection");
-        commentSection.innerHTML = data.comments.length
-            ? data.comments.map(c => `<p><strong>${c.commenter_name}</strong>: ${c.comment_text}</p>`).join("")
-            : "<p>No reflections yet.</p>";
-    })
-    .catch(error => console.error("Error fetching comments:", error));
-}
-
-// ✅ Move these functions to global scope to be accessible by onclick
-function addReview() {
-    const novelId = document.getElementById("novelId")?.value;
-    const reviewText = document.getElementById("reviewText")?.value.trim();
-    const ratingInput = document.querySelector('input[name="rating"]:checked');
-
-    if (!reviewText || !ratingInput) {
-        alert("All fields are required.");
+    if (!novelId) {
+        console.error("No novel ID found in URL.");
+        alert("Error: No novel ID found!");
+        window.location.href = "../../explore.php"; // Redirect if no novel ID
         return;
     }
 
-    const formData = new URLSearchParams();
-    formData.append("novel_id", novelId);
-    formData.append("review_text", reviewText);
-    formData.append("rating", parseInt(ratingInput.value, 10));
+    const API_BASE_URL = "/variant/template/novel/fetch_data/";
 
-    fetch("/Variant/template/novel/submit_data/submit_review.php", {
+    fetch(`${API_BASE_URL}fetch_novel.php?novel_id=${novelId}`)
+    .then(response => response.json())
+    .then((data) => {
+        console.log("Novel Data:", data); // Debugging log
+        if (!data || typeof data !== "object") {
+            throw new Error("Invalid novel data received");
+        }
+        displayNovel(data);  // Ensure data is defined before calling displayNovel()
+    })
+    .catch((error) => {
+        console.error("Error fetching novel details:", error);
+        alert("Failed to load novel details.");
+    });
+
+
+    fetch(`${API_BASE_URL}fetch_reviews.php?novel_id=${novelId}`)
+    .then(response => response.text()) // Read response as text first
+    .then(text => {
+        try {
+            return JSON.parse(text); // Attempt to parse JSON
+        } catch (error) {
+            throw new Error("Invalid JSON response: " + text);
+        }
+    })
+    .then(data => {
+        console.log("Fetched reviews data:", data); // Debugging
+        displayReviews(data);
+    })
+    .catch(error => console.error("Error fetching reviews:", error));
+
+
+    fetch(`${API_BASE_URL}fetch_comments.php?novel_id=${novelId}`)
+        .then(response => response.json())
+        .then(data => displayComments(data))
+        .catch(error => console.error("Error fetching comments:", error));
+});
+
+// Display Novel Details
+function displayNovel(data) {
+    if (!data || !data.novel) {
+        console.error("Invalid novel data:", data);
+        alert("Error fetching novel details.");
+        return;
+    }
+
+    const novel = data.novel; // Access the nested novel object
+    document.getElementById("bookTitle").innerText = novel.title || "Untitled";
+    document.getElementById("bookCover").src = novel.cover_image_url;
+    document.getElementById("bookCover").alt = novel.title + " Cover";
+    document.getElementById("bookSummary").innerText = novel.description || "No description available.";
+    document.getElementById("publishDate").innerText = novel.publication_date || "Unknown";
+    document.getElementById("bookAuthor").innerText = novel.author_name || "Unknown";
+}
+
+// Display Reviews
+function displayReviews(data) {
+    if (!data || !data.success) {
+        console.error("Error:", data?.error || "Invalid response");
+        return;
+    }
+
+    const reviewContainer = document.getElementById("reviews-list");
+    if (!reviewContainer) {
+        console.error("Review container not found.");
+        return;
+    }
+
+    if (!data.reviews || data.reviews.length === 0) {
+        reviewContainer.innerHTML = "<p>No reviews yet.</p>";
+        return;
+    }
+
+    reviewContainer.innerHTML = "<h2>Reviews</h2>";
+    data.reviews.forEach(review => {
+        reviewContainer.innerHTML += `
+            <div class="review">
+                <p><strong>${review.reviewer_name}</strong> - <small>${review.created_at}</small></p>
+                <p><strong>Rating:</strong> ${review.rating} ⭐</p>
+                <p>${review.review_text}</p>
+                <hr>
+            </div>
+        `;
+    });
+}
+
+// Display Comments
+function displayComments(data) {
+    if (!data || !data.success) {
+        console.error("Error:", data?.error || "Invalid response");
+        return;
+    }
+
+    const commentSection = document.getElementById("commentSection");
+    if (!commentSection) {
+        console.error("Comment section not found.");
+        return;
+    }
+
+    if (!data.comments || data.comments.length === 0) {
+        commentSection.innerHTML = "<p>No comments yet.</p>";
+        return;
+    }
+
+    commentSection.innerHTML = "<h2>Comments</h2>";
+    data.comments.forEach(comment => {
+        commentSection.innerHTML += `
+            <div class="comment">
+                <p><strong>${comment.commenter_name}</strong> - <small>${comment.created_at}</small></p>
+                <p>${comment.comment_text}</p>
+                <hr>
+            </div>
+        `;
+    });
+}
+
+// Add a small delay before refetching reviews
+
+
+function submitReview(novelId, reviewText, rating) {
+    const reviewData = { novel_id: novelId, review_text: reviewText, rating: rating };
+
+    fetch("/variant/template/novel/fetch_data/submit_review.php", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString()
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewData),
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Review submission response:", data);
         if (data.success) {
             alert("Review submitted successfully!");
-            document.getElementById("reviewText").value = "";
-            fetchReviews();  // ✅ Now this will work
+            fetchReviews(novelId); // Refresh reviews immediately
         } else {
-            alert("Failed to submit review: " + (data.error || "Unknown error"));
+            alert("Error submitting review.");
         }
     })
     .catch(error => console.error("Error submitting review:", error));
 }
-
-function addComment() {
-    const novelId = document.getElementById("novelId")?.value;
-    const commentText = document.getElementById("commentText")?.value.trim();
-    if (!commentText) {
-        alert("Please write your thoughts before submitting.");
-        return;
-    }
-
-    const formData = new URLSearchParams();
-    formData.append("novel_id", novelId);
-    formData.append("comment_text", commentText);
-
-    fetch("/Variant/template/novel/submit_data/submit_comment.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Comment added successfully!");
-            document.getElementById("commentText").value = "";
-            fetchComments();  // ✅ Now this will work
-        } else {
-            alert("Failed to submit comment: " + (data.error || "Unknown error"));
-        }
-    })
-    .catch(error => console.error("Error submitting comment:", error));
-}
-
-// ✅ Keep DOMContentLoaded only for initial fetching
-document.addEventListener("DOMContentLoaded", function () {
-    fetchReviews();
-    fetchComments();
-});
