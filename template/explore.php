@@ -1,3 +1,33 @@
+    <!-- // PHP section to fetch all books from the database -->
+    <?php
+// header("Content-Type: application/json");
+include '../db/dbconnect.php';
+
+$sql = "SELECT 
+            novel_id, 
+            title, 
+            author_name, 
+            genre, 
+            cover_image_url, 
+            description 
+        FROM Novels 
+        ORDER BY created_at DESC";
+
+$result = $conn->query($sql);
+$books = [];
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $books[] = $row;
+    }
+}
+
+// echo json_encode($books); // Corrected variable name
+$conn->close();
+?>
+
+    
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +40,7 @@
     <header>
         <div class="navbar">
                 <!-- variant logo image here -->
-            <div class="logo"> <a href="../index.html"><img src="/images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
+            <div class="logo"> <a href="../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
             
             <!-- Search Bar -->
             <div class="search-container"> 
@@ -205,8 +235,8 @@
     </head>
 
     <!-- ------------------linking css js files------------------- -->
-    <link rel="stylesheet" href="/indexstyle.css"> 
-    <script src="/js/scripts.js" defer></script>
+    <!-- <link rel="stylesheet" href="../indexstyle.css"> 
+    <script src="../js/scripts.js" defer></script> -->
 
 
     <!--=============== BOXICONS ===============-->
@@ -233,33 +263,9 @@
 
 
 <body>
-    <?php
-    // PHP section to fetch all books from the database
-    include '../db/dbconnect.php';
-
-    $sql = "SELECT 
-                novel_id, 
-                title, 
-                author_name, 
-                genre, 
-                cover_image_url, 
-                description 
-            FROM Novels 
-            ORDER BY created_at DESC";
-
-    $result = $conn->query($sql);
-    $books = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $books[] = $row;
-        }
-    }
-    $conn->close();
-    ?>
    
 
-    <div class="container">
+<div class="container">
         <div class="search-filter">
             <input id="searchInput" type="text" placeholder="Search for books, authors, genres, or categories...">
             <div class="filter">
@@ -275,66 +281,68 @@
             </div>
         </div>
 
-        <div class="book-grid" id="bookGrid">
-            <!-- Books will be dynamically rendered here -->
-        </div>
+        <!-- Books will be dynamically rendered here -->
+    <div class="book-grid" id="bookGrid">
+
     </div>
 
-    <script>
-        const books = <?php echo json_encode($books); ?>;
-        const bookGrid = document.getElementById('bookGrid');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const searchInput = document.getElementById('searchInput');
+<script>
 
-        function displayBooks(filteredBooks) {
-        bookGrid.innerHTML = '';
+document.addEventListener("DOMContentLoaded", function () {
+    const books = <?php echo json_encode($books); ?>;
+    const bookGrid = document.getElementById("bookGrid");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const searchInput = document.getElementById("searchInput");
 
-        if (filteredBooks.length === 0) {
-            bookGrid.innerHTML = '<p>No books found</p>';
-            return;
-        }
+    function renderBooks(filteredBooks = books) {
+        bookGrid.innerHTML = ""; // Clear existing books
 
         filteredBooks.forEach(book => {
-            const truncatedDescription = book.description.length > 100 
-                ? book.description.substring(0, 100) + '...' 
-                : book.description;
+            const bookCard = document.createElement("div");
+            bookCard.classList.add("book-card");
 
-            const bookCard = document.createElement('div');
-            bookCard.classList.add('book-card');
             bookCard.innerHTML = `
                 <img src="${book.cover_image_url}" alt="${book.title}">
                 <div class="content">
                     <div class="title">${book.title}</div>
-                    <div class="author">${book.author_name}</div>
-                    <div class="description">${truncatedDescription}</div>
-                    <button>View Details</button>
+                    <div class="author">By ${book.author_name}</div>
+                    <div class="description">${book.description.substring(0, 100)}...</div>
+                    <button class="view-btn" data-id="${book.novel_id}">View More</button>
                 </div>
             `;
+
+            bookCard.querySelector(".view-btn").addEventListener("click", function () {
+                window.location.href = `novel/novel_info.php?novel_id=${book.novel_id}`;
+            });
+
             bookGrid.appendChild(bookCard);
         });
     }
 
+    function filterBooks() {
+        const category = categoryFilter.value.toLowerCase();
+        const searchTerm = searchInput.value.toLowerCase();
 
-        function filterBooks() {
-            const category = categoryFilter.value.toLowerCase();
-            const searchTerm = searchInput.value.toLowerCase();
+        const filteredBooks = books.filter(book => {
+            return (
+                (category === 'all' || book.genre.toLowerCase() === category) &&
+                (book.title.toLowerCase().includes(searchTerm) ||
+                 book.author_name.toLowerCase().includes(searchTerm))
+            );
+        });
 
-            const filteredBooks = books.filter(book => {
-                return (
-                    (category === 'all' || book.genre.toLowerCase() === category) &&
-                    (book.title.toLowerCase().includes(searchTerm) ||
-                     book.author_name.toLowerCase().includes(searchTerm))
-                );
-            });
+        renderBooks(filteredBooks);
+    }
 
-            displayBooks(filteredBooks);
-        }
+    categoryFilter.addEventListener('change', filterBooks);
+    searchInput.addEventListener('input', filterBooks);
 
-        categoryFilter.addEventListener('change', filterBooks);
-        searchInput.addEventListener('input', filterBooks);
-
-        // Initialize with all books displayed
-        displayBooks(books);
-    </script>
+    // Initialize with all books displayed
+    renderBooks();
+});
+        
+        
+        // displayBooks(books);
+</script>
 </body>
 </html>
