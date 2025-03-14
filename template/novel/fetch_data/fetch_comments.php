@@ -1,23 +1,31 @@
 <?php
 require "../../../db/dbconnect.php";
+session_start();
+
 header("Content-Type: application/json");
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-$novel_id = $_GET['novel_id'] ?? 0;
-$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
-
-if (!$novel_id) {
+if (!isset($_GET['novel_id'])) {
+    http_response_code(400);
     echo json_encode(["success" => false, "error" => "Missing novel_id"]);
+    exit;
+}
+
+$novel_id = (int) $_GET['novel_id'];
+$offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
+$limit = isset($_GET['limit']) ? min(max(1, (int)$_GET['limit']), 50) : 5; // Limit max to 50
+
+if ($novel_id <= 0) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "error" => "Invalid novel_id"]);
     exit;
 }
 
 $sql = "SELECT commenter_name, comment_text, created_at FROM Comments WHERE novel_id = ? ORDER BY created_at DESC LIMIT ?, ?";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
-    echo json_encode(["success" => false, "error" => "SQL error: " . $conn->error]);
+    error_log("SQL Error: " . $conn->error);
+    http_response_code(500);
+    echo json_encode(["success" => false, "error" => "Server error"]);
     exit;
 }
 
@@ -33,5 +41,9 @@ while ($row = $result->fetch_assoc()) {
 $stmt->close();
 $conn->close();
 
-echo json_encode(["success" => true, "comments" => $comments, "has_more" => count($comments) === $limit], JSON_PRETTY_PRINT);
+echo json_encode([
+    "success" => true,
+    "comments" => $comments,
+    "has_more" => count($comments) === $limit
+], JSON_PRETTY_PRINT);
 ?>
