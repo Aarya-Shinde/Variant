@@ -134,6 +134,49 @@
     color: #5a3212;
     }
 
+/* Buttons */
+button {
+  background: #8b5e34; /* Warm brown reminiscent of antique book covers */
+  color: #fff8dc; /* Light parchment-like color for text */
+  font-family: 'Merriweather', serif;
+  font-size: 1.1em;
+  padding: 10px 15px;
+  border: 2px solid #6b2d1a; /* A subtle dark brown border */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background: #5a3212; /* Deeper brown for hover effect */
+  transform: scale(1.1); /* Gentle enlarging effect */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* A soft glow effect */
+}
+
+button:active {
+  transform: scale(0.95); /* Slightly "pressed" feel */
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+}
+
+/* New Animation */
+@keyframes antique-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px); /* Slide in slightly from above */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End at the original position */
+  }
+}
+
+button {
+  animation: antique-fade-in 0.5s ease-out; /* Apply the animation to buttons */
+}
+
+
+
+
 /* Reviews section styling *************************************************/
 
     /* Reviews Section Styling */
@@ -170,66 +213,55 @@
       }
     
       /* Review Submission Form Styling */
-      .review-form {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-      }
-      
-      .review-form {
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 2px dashed #ccb88f;  /* Dashed line divider */
-      }
-      .review-form textarea {
-        width: 100%;
-        padding: 12px;
-        font-size: 1em;
-        border: 1px solid #ccb88f;
-        border-radius: 4px;
-        background: #fff;
-        font-family: 'Georgia', serif;
-        margin-bottom: 10px;
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-        resize: vertical;
-      }
-      .submit-review {
-        background: #5a4e3c;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1em;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      .submit-review:hover {
-        background: #7a6b5c;
-      }
+    /* Form Styling */
+textarea, input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  border: 2px solid #a0522d;
+  border-radius: 6px;
+  background: #fff8dc;
+  font-family: 'Georgia', serif;
+  margin-bottom: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+textarea:focus, input:focus {
+  outline: none;
+  border-color: #7c522b;
+  background: #fff4c1;
+  transition: all 0.3s ease;
+}
     
       /* Star Rating Widget */
-      .star-rating {
-        unicode-bidi: bidi-override;
-        direction: rtl;
-        font-size: 25px;
-        display: inline-block;
-        margin-bottom: 10px;
-        position: relative;
-      }
-      .star-rating input {
-        position: absolute;
-        left: -9999px;
-      }
-      .star-rating label {
-        color: #a0522d;
-        cursor: pointer;
-        display: inline-block;
-      }
-      .star-rating label:hover,
-      .star-rating label:hover ~ label,
-      .star-rating input:checked ~ label {
-        color: #FFD700;
-      }
+  /* Star Rating Styling */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 1.5em;
+  color: #ccb88f;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+
+.star-rating input:checked + label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #4b1800; /* Highlights the selected and hovered stars */
+  text-shadow: 0 0 10px rgba(75, 24, 0, 0.5);
+}
+
+
     
       /* Responsive Behavior */
       @media (max-width: 600px) {
@@ -240,6 +272,7 @@
           font-size: 1.6em;
         }
       }
+      
 /* Comment section styleing **************************************************/
     .comments {
     margin-top: 40px;
@@ -297,31 +330,88 @@
     }
     }
 
-    /* Footer */
-    footer {
-    text-align: center;
-    padding: 20px;
-    background: #5a3212;
-    color: #f4e7d1;
-    font-size: 0.9rem;
-    }
+   /* Footer *******************************************************/
+footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+  background: #5a3212;
+  color: #fff8dc;
+  font-size: 1em;
+  font-family: 'Merriweather', serif;
+}
 
-    /* Dark Mode Toggle */
-    .dark-mode {
-    background: #222;
-    color: #fff;
-    }
 
-    .dark-mode .container {
-    background: #333;
-    color: #ddd;
-    }
+    /* Dark Mode Toggle ****************************************************************************/
+   /* General Dark Mode Styles */
+.dark-mode {
+  background: #222; /* Dark background for the overall page */
+  color: #fff; /* Bright text for readability */
+  transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for mode switching */
+}
 
-    .dark-mode .navbar {
-    background: #000;
-    }
+/* Dark Mode Container */
+.dark-mode .container {
+  background: #333; /* Slightly lighter container background */
+  color: #ddd; /* Softer text color for contrast */
+}
 
-    .dark-mode .reviews-section {
-    background: rgba(50, 50, 50, 0.9);
-    }
+/* Dark Mode Navbar */
+.dark-mode .navbar {
+  background: #000; /* Bold black navbar */
+  transition: background 0.3s ease; /* Smooth transition */
+}
+
+/* Reviews Section Background */
+.dark-mode .reviews-section {
+  background: rgba(50, 50, 50, 0.9); /* Semi-transparent for depth */
+}
+
+/* Button Styling in Dark Mode */
+.dark-mode button {
+  background: #444; /* Medium-dark button color */
+  color: #fff; /* Bright text for contrast */
+  border: 1px solid #666; /* Subtle border for theme consistency */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.dark-mode button:hover {
+  background: #555; /* Slightly brighter button on hover */
+  transform: scale(1.05); /* Subtle enlarging effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for a lifted look */
+}
+
+/* Dark Mode Links */
+.dark-mode a {
+  color: #4a90e2; /* Soft blue links */
+}
+.dark-mode a:hover {
+  color: #82caff; /* Brighter blue on hover */
+}
+
+/* Form Inputs in Dark Mode */
+.dark-mode textarea,
+.dark-mode input[type="text"], 
+.dark-mode input[type="email"], 
+.dark-mode input[type="password"] {
+  background: #444; /* Darker input background */
+  color: #fff; /* Bright text for inputs */
+  border: 1px solid #666; /* Subtle border */
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.dark-mode textarea:focus,
+.dark-mode input:focus {
+  background: #555; /* Brighter background on focus */
+  border-color: #888; /* Enhanced focus outline */
+}
+
+/* Comments Section Borders */
+.dark-mode .comments {
+  border-top: 2px dashed #888; /* Subtle dashed border for section division */
+}
+
+/* Smooth Page Transitions */
+body {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
 
