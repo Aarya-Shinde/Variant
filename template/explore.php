@@ -1,6 +1,6 @@
     <!-- // PHP section to fetch all books from the database -->
     <?php
-// header("Content-Type: application/json");
+
 include '../db/dbconnect.php';
 
 $sql = "SELECT 
@@ -53,10 +53,10 @@ $conn->close();
             <div class="nav">
                 <ul>
                     <li><a href="explore.php">Explore</a></li>
-                    <li><a href="reader.html">Reader</a></li>
-                    <li><a href="writer.html">Writer</a></li>
-                    <li><a href="library.html">Library</a></li>
-                    <li><a href="pages/login.php">Login</a></li>
+                    <li><a href="../pages/reader_dashboard.php">Reader</a></li>
+                    <li><a href="../pages/writer_dashboard.php">Writer</a></li>
+                    <li><a href="../pages/reader/library.php">Library</a></li>
+                    <li><a href="../pages/reader_dashboard.php">User</a></li>
                 </ul>        
             </div>
             </div>
@@ -288,61 +288,59 @@ $conn->close();
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
-    const books = <?php echo json_encode($books); ?>;
-    const bookGrid = document.getElementById("bookGrid");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const searchInput = document.getElementById("searchInput");
+    document.addEventListener("DOMContentLoaded", function () {
+        const books = <?php echo json_encode($books); ?>;
+        const bookGrid = document.getElementById("bookGrid");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const searchInput = document.getElementById("searchInput");
 
-    function renderBooks(filteredBooks = books) {
-        bookGrid.innerHTML = ""; // Clear existing books
+        function renderBooks(filteredBooks = books) {
+            bookGrid.innerHTML = ""; // Clear existing books
 
-        filteredBooks.forEach(book => {
-            const bookCard = document.createElement("div");
-            bookCard.classList.add("book-card");
+            filteredBooks.forEach(book => {
+                const bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
 
-            bookCard.innerHTML = `
-                <img src="${book.cover_image_url}" alt="${book.title}">
-                <div class="content">
-                    <div class="title">${book.title}</div>
-                    <div class="author">By ${book.author_name}</div>
-                    <div class="description">${book.description.substring(0, 100)}...</div>
-                    <button class="view-btn" data-id="${book.novel_id}">View More</button>
-                </div>
-            `;
+                bookCard.innerHTML = `
+                    <img src="${book.cover_image_url}" alt="${book.title}">
+                    <div class="content">
+                        <div class="title">${book.title}</div>
+                        <div class="author">By ${book.author_name}</div>
+                        <div class="description">${book.description.substring(0, 100)}...</div>
+                        <button class="view-btn" data-id="${book.novel_id}">View More</button>
+                    </div>
+                `;
 
-            bookCard.querySelector(".view-btn").addEventListener("click", function () {
-                window.location.href = `novel/novel_info.php?novel_id=${book.novel_id}`;
+                bookCard.querySelector(".view-btn").addEventListener("click", function () {
+                    window.location.href = `novel/novel_info.php?novel_id=${book.novel_id}`;
+                });
+
+                bookGrid.appendChild(bookCard);
+            });
+        }
+
+        function filterBooks() {
+            const category = categoryFilter.value.toLowerCase();
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const filteredBooks = books.filter(book => {
+                return (
+                    (category === 'all' || book.genre.toLowerCase() === category) &&
+                    (book.title.toLowerCase().includes(searchTerm) ||
+                    book.author_name.toLowerCase().includes(searchTerm))
+                );
             });
 
-            bookGrid.appendChild(bookCard);
-        });
-    }
+            renderBooks(filteredBooks);
+        }
 
-    function filterBooks() {
-        const category = categoryFilter.value.toLowerCase();
-        const searchTerm = searchInput.value.toLowerCase();
+        categoryFilter.addEventListener('change', filterBooks);
+        searchInput.addEventListener('input', filterBooks);
 
-        const filteredBooks = books.filter(book => {
-            return (
-                (category === 'all' || book.genre.toLowerCase() === category) &&
-                (book.title.toLowerCase().includes(searchTerm) ||
-                 book.author_name.toLowerCase().includes(searchTerm))
-            );
-        });
-
-        renderBooks(filteredBooks);
-    }
-
-    categoryFilter.addEventListener('change', filterBooks);
-    searchInput.addEventListener('input', filterBooks);
-
-    // Initialize with all books displayed
-    renderBooks();
-});
+        // Initialize with all books displayed
+        renderBooks();
+    });
         
-        
-        // displayBooks(books);
 </script>
 </body>
 </html>

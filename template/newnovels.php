@@ -1,5 +1,5 @@
 <?php
-include './db/dbconnect.php';
+include '../db/dbconnect.php';
 
 // Fetch novels data
 $sql = "SELECT 
@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     <title>New Novels</title>
 </head>
         <!-- ------------------linking css js files------------------- -->
-        <link rel="stylesheet" href="indexstyle.css"> 
+        <link rel="stylesheet" href="../indexstyle.css"> 
         <script src="/js/scripts.js" defer></script>
     
     
@@ -59,7 +59,7 @@ $result = $conn->query($sql);
           <header>
             <div class="navbar">
                  <!-- variant logo image here -->
-                <div class="logo"> <a href="index.html"><img src="/images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
+                <div class="logo"> <a href="../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;"></a> </div>
                 
               <!-- Search Bar -->
               <div class="search-container"> 
@@ -71,12 +71,12 @@ $result = $conn->query($sql);
                   
                 <div class="nav">
                     <ul>
-                      <li><a href="explore.php">Explore</a></li>
-                        <li><a href="reader.html">Reader</a></li>
-                        <li><a href="writer.html">Writer</a></li>
-                        <li><a href="library.html">Library</a></li>
-                        <li><a href="pages/login.php">Login</a></li>
-                    </ul>        
+                        <li><a href="explore.php">Explore</a></li>
+                        <li><a href="../pages/reader_dashboard.php">Reader</a></li>
+                        <li><a href="../pages/writer_dashboard.php">Writer</a></li>
+                        <li><a href="../pages/reader/library.php">Library</a></li>
+                        <li><a href="../pages/reader_dashboard.php">User</a></li>
+                    </ul>      
                 </div>
                 </div>
             </div>
@@ -108,6 +108,7 @@ $result = $conn->query($sql);
                             <p><strong>Language:</strong> {$row['language']}</p>
                             <!-- <p><strong>Description:</strong> {$row['description']}</p> -->
                             <p><strong>Published:</strong> {$row['publication_date']}</p>
+                            
                         </div>
                         ";
                     }
@@ -122,43 +123,44 @@ $result = $conn->query($sql);
     </main>
     <style>
 
-.novels-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin: 20px;
-}
+        .novels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px;
+        }
 
-.novel-card {
-    background: rgb(252, 229, 229);
-    border: 1px solid #ffe2e2;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        .novel-card {
+            background: rgb(252, 229, 229);
+            border: 1px solid #ffe2e2;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-.novel-cover {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
+        .novel-cover {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
 
-h2 {
-    text-align: center;
-    margin-top: 20px;
-}
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-.novel-card h3 {
-    margin: 10px 0 5px;
-    font-size: 18px;
-}
+        .novel-card h3 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
 
-.novel-card p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: #555;
-}  
+        .novel-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }  
 </style>
+
 </body>
 </html>
