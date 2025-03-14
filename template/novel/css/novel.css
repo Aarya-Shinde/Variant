@@ -344,74 +344,52 @@ footer {
 
     /* Dark Mode Toggle ****************************************************************************/
    /* General Dark Mode Styles */
-.dark-mode {
-  background: #222; /* Dark background for the overall page */
-  color: #fff; /* Bright text for readability */
-  transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for mode switching */
-}
-
-/* Dark Mode Container */
-.dark-mode .container {
-  background: #333; /* Slightly lighter container background */
-  color: #ddd; /* Softer text color for contrast */
-}
-
-/* Dark Mode Navbar */
-.dark-mode .navbar {
-  background: #000; /* Bold black navbar */
-  transition: background 0.3s ease; /* Smooth transition */
-}
-
-/* Reviews Section Background */
-.dark-mode .reviews-section {
-  background: rgba(50, 50, 50, 0.9); /* Semi-transparent for depth */
-}
-
-/* Button Styling in Dark Mode */
-.dark-mode button {
-  background: #444; /* Medium-dark button color */
-  color: #fff; /* Bright text for contrast */
-  border: 1px solid #666; /* Subtle border for theme consistency */
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-.dark-mode button:hover {
-  background: #555; /* Slightly brighter button on hover */
-  transform: scale(1.05); /* Subtle enlarging effect */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for a lifted look */
-}
-
-/* Dark Mode Links */
-.dark-mode a {
-  color: #4a90e2; /* Soft blue links */
-}
-.dark-mode a:hover {
-  color: #82caff; /* Brighter blue on hover */
-}
-
-/* Form Inputs in Dark Mode */
-.dark-mode textarea,
-.dark-mode input[type="text"], 
-.dark-mode input[type="email"], 
-.dark-mode input[type="password"] {
-  background: #444; /* Darker input background */
-  color: #fff; /* Bright text for inputs */
-  border: 1px solid #666; /* Subtle border */
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-.dark-mode textarea:focus,
-.dark-mode input:focus {
-  background: #555; /* Brighter background on focus */
-  border-color: #888; /* Enhanced focus outline */
-}
-
-/* Comments Section Borders */
-.dark-mode .comments {
-  border-top: 2px dashed #888; /* Subtle dashed border for section division */
-}
-
-/* Smooth Page Transitions */
-body {
-  transition: background 0.3s ease, color 0.3s ease;
-}
+   .dark-mode-btn {
+    background: #070707; /* Dark background for button */
+    color: #fff; /* Light text/icon for contrast */
+    font-size: 1.5em; /* Larger icon size */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%; /* Makes the button circular */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; 
+    height: 50px;
+  }
+  
+  .dark-mode-btn i {
+    font-size: 1.2em; /* Proper size for FontAwesome icon */
+  }
+  
+  .dark-mode-btn:hover {
+    background: #8da5c9;
+    transform: scale(1.1);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dark-mode-btn:active {
+    transform: scale(0.9);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Dark Mode Styles */
+  .dark-mode {
+    background: #121212; /* Dark mode background */
+    color: #ffffff; /* Light text */
+  }
+  
+  .dark-mode .dark-mode-btn {
+    background: #fff;
+    color: #121212;
+  }
+  
+  .dark-mode .dark-mode-btn:hover {
+    background: #ddd;
+  }
+  
 
 
