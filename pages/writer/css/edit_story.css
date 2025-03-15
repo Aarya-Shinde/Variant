@@ -1,0 +1,148 @@
+/* Global Styles */
+body {
+    font-family: 'Georgia', serif;
+    background-color: #f4f1e9;
+    color: #4b3621;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png'); /* Subtle texture */
+}
+
+/* Header */
+h2 {
+    font-size: 24px;
+    border-bottom: 3px solid #7a5230;
+    padding-bottom: 5px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* Story Outline Container */
+#storyOutline {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 250, 240, 0.9);
+    padding: 20px;
+    border: 2px solid #7a5230;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* Buttons */
+button {
+    background-color: #7a5230;
+    color: #fff;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #5a3b21;
+    transform: scale(1.05);
+}
+
+/* Chapter List */
+#chapterList {
+    list-style: none;
+    padding: 0;
+}
+
+#chapterList li {
+    background: #f9f5ec;
+    border: 1px solid #7a5230;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Chapter Inputs */
+.chapter-title {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    width: 100%;
+    border: 1px solid #7a5230;
+    padding: 5px;
+    background: #fff8e1;
+}
+
+.chapter-content {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    width: 100%;
+    height: 100px;
+    border: 1px solid #7a5230;
+    padding: 5px;
+    background: #fff8e1;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #2d1e12;
+    color: #e4d6c0;
+}
+
+.dark-mode #storyOutline {
+    background: #3b2b1a;
+    border-color: #d9b38c;
+}
+
+.dark-mode button {
+    background-color: #c4a484;
+    color: #2d1e12;
+}
+
+.dark-mode button:hover {
+    background-color: #a37c5e;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #storyOutline {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+
+
+/* Basic Styles */
+.writing-modal {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.hidden { display: none; }
+
+#chapterContentInput {
+    width: 100%;
+    height: 60vh;
+    font-size: 16px;
+}
+
+.toolbar button {
+    margin: 5px;
+    padding: 5px;
+    font-weight: bold;
+}
