@@ -106,53 +106,53 @@ $result = $stmt->get_result();
     .dark-mode {
     background-color: #212529 !important; /* Dark mode background */
     color: #e0e0e0 !important; /* Light text */
-}
+    }
 
-    .dark-mode .table {
+        .dark-mode .table {
+            background-color: #343a40; /* Dark table background */
+            color: #e0e0e0; /* Light text */
+        }
+
+        .dark-mode .sidebar {
+            background-color: #343a40;
+            border-right: 5px solid #555;
+        }
+
+        .dark-mode .sidebar a {
+            color: #e0e0e0;
+        }
+
+        .dark-mode .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .dark-mode .content {
+            background-color: #212529;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .card {
+            background-color: #343a40;
+            color: #e0e0e0;
+        }
+        .dark-mode .card-header {
+            background-color: #495057;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .table tbody {
         background-color: #343a40; /* Dark table background */
-        color: #e0e0e0; /* Light text */
-    }
+        color: #e0e0e0 !important; /* Light text */
+        }
 
-    .dark-mode .sidebar {
-        background-color: #343a40;
-        border-right: 5px solid #555;
-    }
+        .dark-mode .table td {
+            border-color: #555; /* Ensure visible borders */
+        }
 
-    .dark-mode .sidebar a {
-        color: #e0e0e0;
-    }
-
-    .dark-mode .sidebar a:hover {
-        background-color: #495057;
-    }
-
-    .dark-mode .content {
-        background-color: #212529;
-        color: #e0e0e0;
-    }
-
-    .dark-mode .card {
-        background-color: #343a40;
-        color: #e0e0e0;
-    }
-    .dark-mode .card-header {
-        background-color: #495057;
-        color: #e0e0e0;
-    }
-
-    .dark-mode .table tbody {
-    background-color: #343a40; /* Dark table background */
-    color: #e0e0e0 !important; /* Light text */
-    }
-
-    .dark-mode .table td {
-        border-color: #555; /* Ensure visible borders */
-    }
-
-    .dark-mode .table thead {
-        background-color: #495057; /* Slightly lighter for contrast */
-        color: #e0e0e0;
-    }
+        .dark-mode .table thead {
+            background-color: #495057; /* Slightly lighter for contrast */
+            color: #e0e0e0;
+        }
 
 
 

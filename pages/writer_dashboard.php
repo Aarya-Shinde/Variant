@@ -1,5 +1,47 @@
+<?php
+session_start();
+require '../db/dbconnect.php'; // Include database connection
 
-<!-- ************php connection ends here********************* -->
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Check if the user is a writer
+$sql = "SELECT is_writer, username FROM Users WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$is_writer = $user['is_writer'];
+$username = $user['username'];
+
+// Fetch user's novels if they are a writer
+$novels = [];
+if ($is_writer) {
+    $sql = "SELECT * FROM Novels WHERE author_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $novels = $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Handle becoming a writer
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$is_writer) {
+    $sql = "UPDATE Users SET is_writer = 1 WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    if ($stmt->execute()) {
+        header("Location: writer_dashboard.php"); // Reload page
+        exit();
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,78 +49,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Writer Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./writer/writer_dashboard.css">
 </head>
 <body>
-
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">📖 Bookish Writer</div>
+                <!-- variant logo image here -->
+            <div class="logo"> 
+                <a href="../../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+            </a> </div>
+
             <ul>
-                <li class="menu-item active" data-section="dashboard">📂 Dashboard</li>
-                <li class="menu-item" data-section="stories">📜 My Stories</li>
-                <li class="menu-item" data-section="income">💰 Income</li>
-                <li class="menu-item" data-section="inbox">📩 Inbox</li>
+                <li class="menu-item active" data-section="dashboard"> Dashboard</li>
+                <li class="menu-item" data-section="stories"> My Stories</li>
+                <li class="menu-item" data-section="income"> Income</li>
+                <li class="menu-item" data-section="inbox">Inbox</li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            
-            <!-- Dashboard Section -->
             <section id="dashboard" class="section active">
-                <h2>📂 Welcome to Your Dashboard</h2>
+                <h2>📂 Welcome, <?= htmlspecialchars($username) ?></h2>
                 <p>Overview of your writing journey.</p>
             </section>
 
-            <!-- My Stories Section -->
             <section id="stories" class="section">
                 <div class="top-bar">
                     <h2>📖 My Stories</h2>
                     <button id="createStoryBtn">+ Create a Story</button>
                 </div>
 
-                <div class="story-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Cover</th>
-                                <th>Stories</th>
-                                <th>Status</th>
-                                <th>Views</th>
-                                <th>Operations</th>
-                            </tr>
-                        </thead>
-                        <tbody id="storyList">
-                            <tr>
-                                <td><img src="../images/book (2).jpeg" alt="Book Cover"></td>
-                                <td>The Lost Chronicles</td>
-                                <td>Published</td>
-                                <td>2.5K</td>
-                                <td><button class="explore-btn">Explore</button></td>
-                            </tr>
-                            <tr>
-                                <td><img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1721069346i/61374793.jpg" alt="Book Cover"></td>
-                                <td>Midnight Whispers</td>
-                                <td>Draft</td>
-                                <td>785</td>
-                                <td><button class="explore-btn">Explore</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <?php if ($is_writer): ?>
+                    <ul>
+                        <?php foreach ($novels as $novel): ?>
+                            <li>
+                                <img src="<?= htmlspecialchars($novel['cover_image_url']) ?>" alt="Cover" width="50">
+                                <strong><?= htmlspecialchars($novel['title']) ?></strong> (<?= htmlspecialchars($novel['genre']) ?>) - Published on <?= htmlspecialchars($novel['publication_date']) ?>
+                                <a href="writer/edit_story.html?novel_id=<?= $novel['novel_id'] ?>" class="edit-btn"> Edit</a>
+
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+
+                <?php else: ?>
+                    <h2>🚀 Become a Writer</h2>
+                    <form method="post">
+                        <button type="submit" name="become_writer">Become a Writer</button>
+                    </form>
+                <?php endif; ?>
             </section>
 
-            <!-- Income Section -->
             <section id="income" class="section">
                 <h2>💰 Income</h2>
                 <p>Your earnings from published stories.</p>
             </section>
 
-            <!-- Inbox Section -->
             <section id="inbox" class="section">
                 <h2>📩 Inbox</h2>
                 <p>Messages from readers and publishers.</p>
@@ -86,138 +115,6 @@
         </main>
     </div>
 
-<style>
-    body {
-        margin: 0;
-        font-family: 'Libre Baskerville', serif;
-        background-color: #f5f1e8;
-        color: #5a4234;
-    }
-
-    .dashboard-container {
-        display: flex;
-        height: 100vh;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        width: 250px;
-        background-color: #4d2c1a;
-        color: white;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .sidebar .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #7a5640;
-    }
-
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .sidebar ul li {
-        padding: 10px 15px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background 0.3s ease-in-out;
-    }
-
-    .sidebar ul li:hover,
-    .sidebar ul .active {
-        background-color: #7a5640;
-    }
-
-    /* Main Content */
-    .main-content {
-        flex: 1;
-        padding: 20px;
-    }
-
-    /* Hide sections by default */
-    .section {
-        display: none;
-    }
-
-    .section.active {
-        display: block;
-    }
-
-    /* Top Bar */
-    .top-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #c0a080;
-        padding: 15px;
-        border-radius: 10px;
-    }
-
-    #createStoryBtn {
-        background-color: #5a4234;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    #createStoryBtn:hover {
-        background-color: #3a291f;
-    }
-
-    /* Story Table */
-    .story-table {
-        margin-top: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    th, td {
-        padding: 15px;
-        border-bottom: 1px solid #ccc;
-    }
-
-    th {
-        background-color: #c0a080;
-        color: white;
-        text-align: left;
-    }
-
-    /* Story Cover Image */
-    td img {
-        width: auto;
-        height: 100px;
-        border-radius: 5px;
-    }
-
-    .explore-btn {
-        background-color: #5a4234;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .explore-btn:hover {
-        background-color: #3a291f;
-    }
-
-</style>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
