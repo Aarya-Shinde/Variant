@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Story</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="css/edit_story.css">
+</head>
+<body>
+    <h2>Editing: <span id="novelTitle">Loading...</span></h2>
+
+    <div id="storyOutline">
+        <button id="addChapter">+ Add Chapter</button>
+        <button id="exportPdf">📄 Export to PDF</button>
+        <button id="toggleDarkMode">🌙 Toggle Dark Mode</button>
+        <button id="bulkDelete">🗑️ Bulk Delete</button>
+        
+        <ul id="chapterList"></ul>
+    </div>
+
+    <div id="writingInterface" class="writing-modal hidden">
+        <input type="text" id="chapterTitleInput" placeholder="Enter Chapter Title">
+        <div id="chapterContentInput" contenteditable="true" class="rich-text-editor" placeholder="Start writing your chapter..."></div>
+        
+        <div class="toolbar">
+            <button onclick="formatText('bold')">B</button>
+            <button onclick="formatText('italic')">I</button>
+            <button onclick="formatText('underline')">U</button>
+        </div>
+        
+        <button id="saveChapterButton">💾 Save Chapter</button>
+        <button onclick="closeWritingInterface()">❌ Close</button>
+    </div>
+
+    <script src="js/edit_story.js"></script>
+</body>
+</html>
