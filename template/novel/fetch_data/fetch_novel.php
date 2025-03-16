@@ -10,8 +10,9 @@ if (!$conn) {
     exit;
 }
 
-if (!isset($_GET['novel_id'])) {
-    echo json_encode(["error" => "Missing novel_id"]);
+// Validate and sanitize novel_id
+if (!isset($_GET['novel_id']) || !ctype_digit($_GET['novel_id'])) {
+    echo json_encode(["error" => "Missing or invalid novel_id"]);
     exit;
 }
 
@@ -21,21 +22,30 @@ if ($novel_id <= 0) {
     exit;
 }
 
-$response = [];
+$response = [
+    "novel" => null,
+    "tags" => [],
+    "reviews" => []
+];
 
 // Fetch novel details
 $novel_sql = "SELECT * FROM Novels WHERE novel_id = ?";
 if ($stmt = $conn->prepare($novel_sql)) {
     $stmt->bind_param("i", $novel_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $response['novel'] = $result->fetch_assoc();
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $response['novel'] = $result->fetch_assoc();
+    } else {
+        echo json_encode(["error" => "SQL execution error: " . $stmt->error]);
+        exit;
+    }
     $stmt->close();
 } else {
-    echo json_encode(["error" => "SQL error: " . $conn->error]);
+    echo json_encode(["error" => "SQL prepare error: " . $conn->error]);
     exit;
 }
 
+// If novel not found, return an error
 if (!$response['novel']) {
     echo json_encode(["error" => "Novel not found"]);
     exit;
@@ -45,24 +55,14 @@ if (!$response['novel']) {
 $tags_sql = "SELECT tag FROM Tags WHERE novel_id = ?";
 if ($stmt = $conn->prepare($tags_sql)) {
     $stmt->bind_param("i", $novel_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $response['tags'] = [];
-    while ($row = $result->fetch_assoc()) {
-        $response['tags'][] = $row['tag'];
-    }
-    $stmt->close();
-}
-
-// Fetch chapters
-$chapters_sql = "SELECT chapter_number, title FROM Chapters WHERE novel_id = ? ORDER BY chapter_number ASC";
-if ($stmt = $conn->prepare($chapters_sql)) {
-    $stmt->bind_param("i", $novel_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $response['chapters'] = [];
-    while ($row = $result->fetch_assoc()) {
-        $response['chapters'][] = $row;
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $response['tags'][] = $row['tag'];
+        }
+    } else {
+        echo json_encode(["error" => "SQL execution error: " . $stmt->error]);
+        exit;
     }
     $stmt->close();
 }
@@ -71,11 +71,14 @@ if ($stmt = $conn->prepare($chapters_sql)) {
 $reviews_sql = "SELECT reviewer_name, review_text, rating, created_at FROM Reviews WHERE novel_id = ? ORDER BY review_id DESC";
 if ($stmt = $conn->prepare($reviews_sql)) {
     $stmt->bind_param("i", $novel_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $response['reviews'] = [];
-    while ($row = $result->fetch_assoc()) {
-        $response['reviews'][] = $row;
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $response['reviews'][] = $row;
+        }
+    } else {
+        echo json_encode(["error" => "SQL execution error: " . $stmt->error]);
+        exit;
     }
     $stmt->close();
 }

@@ -18,8 +18,11 @@
  
     <!-- variant logo image here -->
     <div class="logo"> 
-        <a href="../../index.html"><img src="../../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
-    </a> </div>
+    <a href="../../index.html">
+    <img src="../../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+    </a>
+
+</div>
 
     <div class="nav-links">
       <a href="../../index.html">Home</a>
@@ -47,12 +50,11 @@
       <div class="tags" id="tagsContainer"></div>
 
       <h2>Chapters</h2>
-      <ul class="chapters" id="chapterList"></ul>
+      <ul class="chapters" id="chapterList">
+          <!-- Chapters will be dynamically inserted here -->
+      </ul>
 
-      <div class="chapter-nav">
-        <button onclick="prevChapters()">Previous</button>
-        <button onclick="nextChapters()">Next</button>
-      </div>
+     <div id="pagination"></div>
 
       <p class="author">Written by <strong id="bookAuthor"></strong></p>
     </section>
@@ -131,19 +133,96 @@ function toggleDarkMode() {
         fetchComments(novelId);
     });
 
-    // Fetch Novel Details
     function fetchNovelDetails(novelId) {
         fetch(`/variant/template/novel/fetch_data/fetch_novel.php?novel_id=${novelId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.novel) {
+                console.error("Invalid novel data received.");
+                return;
+            }
+            displayNovelDetails(data.novel);
+            console.log("Fetching chapters now...");
+            fetchChapters(novelId); // Call here
+        })
+        .catch(error => console.error("Error fetching novel details:", error));
+
+    }
+
+// Fetch and display chapter list
+    function fetchChapters(novelId) {
+        fetch(`/variant/template/novel/fetch_data/fetch_chapters.php?novel_id=${novelId}`)
             .then(response => response.json())
             .then(data => {
-                if (!data.novel) {
-                    console.error("Invalid novel data received.");
+                let chapterList = document.getElementById("chapterList");
+                if (!chapterList) {
+                    console.error("Error: #chapterList element not found!");
                     return;
                 }
-                displayNovelDetails(data.novel);
+
+                chapterList.innerHTML = ""; // Clear previous list
+
+                if (data.success && data.chapters.length > 0) {
+                    data.chapters.forEach((chapter) => {
+                        let li = document.createElement("li");
+                        li.innerHTML = `<a href="chapter.php?novel_id=${novelId}&chapter_id=${chapter.chapter_id}">${chapter.title}</a>`;
+                        chapterList.appendChild(li);
+                    });
+                } else {
+                    chapterList.innerHTML = "<p>No chapters available.</p>";
+                }
             })
-            .catch(error => console.error("Error fetching novel details:", error));
+            .catch(error => console.error("Error fetching chapters:", error));
     }
+
+    function loadChapters(novel_id, page = 1) {
+        fetch(`/variant/template/novel/fetch_data/fetch_chapters.php?novel_id=${novel_id}&page=${page}`)
+        .then(response => response.json())
+        .then(data => {
+            let chapterList = document.getElementById("chapterList"); // FIXED ID
+            if (!chapterList) {
+                console.error("Error: #chapterList element not found!");
+                return;
+            }
+
+            chapterList.innerHTML = ""; // Clear previous list
+
+            if (!data.chapters || data.chapters.length === 0) { // FIXED EMPTY CHECK
+                chapterList.innerHTML = "<p>No chapters available.</p>";
+                return;
+            }
+
+            data.chapters.forEach(chapter => {
+                let li = document.createElement("li");
+                li.innerHTML = `<a href="chapter.php?novel_id=${novel_id}&chapter_id=${chapter.chapter_id}">${chapter.title}</a>`;
+                chapterList.appendChild(li);
+            });
+
+            // Pagination controls
+            let pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+
+            if (data.total_pages > 1) {
+                // Previous button
+                if (page > 1) {
+                    pagination.innerHTML += `<button onclick="loadChapters(${novel_id}, ${page - 1})">Prev</button> `;
+                }
+
+                // Page numbers
+                for (let i = 1; i <= data.total_pages; i++) {
+                    pagination.innerHTML += `<button onclick="loadChapters(${novel_id}, ${i})" ${i === page ? 'style="font-weight:bold;"' : ''}>${i}</button> `;
+                }
+
+                // Next button
+                if (page < data.total_pages) {
+                    pagination.innerHTML += `<button onclick="loadChapters(${novel_id}, ${page + 1})">Next</button>`;
+                }
+            }
+        })
+        .catch(error => console.error("Error loading chapters:", error));
+    }
+
+
 
     function displayNovelDetails(novel) {
         document.getElementById("bookTitle").innerText = novel.title;
