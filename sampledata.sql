@@ -111,3 +111,39 @@ INSERT INTO Chapters (novel_id, chapter_number, title, content) VALUES
 (14, 2, 'The Train Ride', 'Katniss and Peeta board the train to the Capitol, leaving behind their families and everything they have ever known...'),
 (14, 3, 'The Capitol', 'The train arrives in the Capitol, a place of unimaginable luxury and excess. Katniss is overwhelmed by the opulence...');
 
+-- dummy data for comments- 
+
+INSERT INTO Comments (novel_id, chapter_id, user_id, commenter_name, comment_text, parent_id) VALUES
+(1, NULL, 1, 'Aarya', 'Loved the world-building in this novel!', NULL),
+(1, 5, 4, 'Kajal Mane', 'This chapter had an unexpected twist!', NULL),
+(2, NULL, 5, 'Orca', 'The character development was fantastic.', NULL),
+(2, 3, 6, 'Pokemon', 'I didn’t see that coming! Great storytelling.', NULL),
+(3, NULL, 7, 'Atharva Urkude', 'The pacing felt a bit slow, but still enjoyable.', NULL),
+(1, NULL, 6, 'Pokemon', 'Can’t wait for the next update!', NULL),
+(3, 7, 4, 'Kajal Mane', 'The protagonist is really growing on me.', NULL),
+(4, 2, 5, 'Orca', 'This chapter left me on edge! What a cliffhanger.', NULL),
+(2, NULL, 7, 'Atharva Urkude', 'Would love to see a sequel!', NULL),
+(3, NULL, 1, 'Aarya', 'Did anyone else catch the hidden reference in this chapter?', NULL),
+(1, NULL, 4, 'Kajal Mane', 'Replying to Aarya: Totally agree, the lore is deep.', 1),
+(2, 3, 5, 'Orca', 'Replying to Pokemon: Right?! I was shocked!', 4);
+
+-- Dummy chapters  
+
+INSERT INTO Chapters (novel_id, chapter_number, title, content)
+VALUES
+    (1, 1, 'I Accidentally Vaporize My Pre-Algebra Teacher', 'Content of Chapter 1 for The Lightning Thief...'),
+    (1, 2, 'Three Old Ladies Knit the Socks of Death', 'Content of Chapter 2 for The Lightning Thief...'),
+    (4, 1, 'My Best Friend Shops for a Wedding Dress', 'Content of Chapter 1 for The Sea of Monsters...'),
+    (9, 1, 'Prologue', 'Content of Chapter 1 for A Game of Thrones...'),
+    (11, 1, 'The Boy Who Lived', 'Content of Chapter 1 for Harry Potter and the Philosopher’s Stone...'),
+    (12, 1, 'An Unexpected Party', 'Content of Chapter 1 for The Hobbit...'),
+    (13, 1, 'When He Was Nearly Thirteen', 'Content of Chapter 1 for To Kill a Mockingbird...'),
+    (14, 1, 'The Tribute', 'Content of Chapter 1 for The Hunger Games...'),
+    (15, 1, 'The Spark', 'Content of Chapter 1 for Catching Fire...'),
+    (16, 1, 'The Ashes', 'Content of Chapter 1 for Mockingjay...'),
+    (17, 1, 'The Lift', 'Content of Chapter 1 for The Maze Runner...'),
+    (18, 1, 'The Scorch Begins', 'Content of Chapter 1 for The Scorch Trials...'),
+    (19, 1, 'The Endgame', 'Content of Chapter 1 for The Death Cure...'),
+    (21, 1, 'The Worst Birthday', 'Content of Chapter 1 for Harry Potter and the Chamber of Secrets...');
+
+-- Add more chapters as needed.

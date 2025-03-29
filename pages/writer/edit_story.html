@@ -12,11 +12,12 @@
     <h2>Editing: <span id="novelTitle">Loading...</span></h2>
 
     <div id="storyOutline">
-        <button id="addChapter">+ Add Chapter</button>
-        <button id="exportPdf">📄 Export to PDF</button>
-        <button id="toggleDarkMode">🌙 Toggle Dark Mode</button>
-        <button id="bulkDelete">🗑️ Bulk Delete</button>
-        
+        <div class="toolbar">
+            <button id="addChapter">Add Chapter</button>
+            <button id="exportPdf">Export to PDF</button>
+            <button id="toggleDarkMode">Toggle Dark Mode</button>
+            <button id="bulkDelete">Bulk Delete</button>
+        </div>
         <ul id="chapterList"></ul>
     </div>
 
@@ -30,8 +31,8 @@
             <button onclick="formatText('underline')">U</button>
         </div>
         
-        <button id="saveChapterButton">💾 Save Chapter</button>
-        <button onclick="closeWritingInterface()">❌ Close</button>
+        <button id="saveChapterButton">Save Chapter</button>
+        <button onclick="closeWritingInterface()">Close</button>
     </div>
 
     <script src="js/edit_story.js"></script>
