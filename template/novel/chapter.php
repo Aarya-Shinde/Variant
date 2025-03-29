@@ -68,37 +68,46 @@ $conn->close();
     </div>
 
     <?php if ($chapter): ?>
-        <div class="chapter-title"><?php echo htmlspecialchars($chapter['title']); ?></div>
+    <div class="chapter-title"><?php echo htmlspecialchars($chapter['title']); ?></div>
 
-        <div class="chapter-content">
-            <!-- chapters will be dynamically loaded here -->
+    <div class="chapter-content">
+        <?php
+        function cleanText($text) {
+            // Ensure paragraph breaks are properly formatted
+            $text = preg_replace('/<\/p>\s*<p>/', "</p>\n<p>", $text); // Ensure correct paragraph separation
+            $text = preg_replace('/<p>\s*<\/p>/', '', $text); // Remove empty <p> tags
 
-<?php
-function cleanText($text) {
-    // Remove excess whitespace and empty paragraphs
-    $text = trim(preg_replace('/\s*\n\s*/', ' ', $text)); // Replaces unnecessary newlines with spaces
-    $text = preg_replace('/<p>\s*<\/p>/', '', $text); // Removes empty <p> tags
+            // Wrap plain text in <p> tags if it's not already HTML
+            if (strip_tags($text) === $text) {
+                $paragraphs = explode("\n", trim($text)); // Split by line breaks
+                $text = "";
+                foreach ($paragraphs as $para) {
+                    if (!empty(trim($para))) {
+                        $text .= "<p>" . htmlspecialchars($para) . "</p>\n"; // Wrap each paragraph
+                    }
+                }
+            }
 
-    return $text;
-}
+            return $text;
+        }
 
-echo cleanText($chapter['content']);
-?>
+        echo cleanText($chapter['content']);
+        ?>
+    </div>
 
+    <div class="nav-buttons">
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id - 1; ?>" 
+            class="btn <?php echo ($chapter_id <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
 
-        </div>
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id + 1; ?>" 
+            class="btn <?php echo ($chapter_id >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
+    </div>
 
-        <div class="nav-buttons">
-            <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id - 1; ?>" 
-                class="btn <?php echo ($chapter_id <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
-
-            <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id + 1; ?>" 
-                class="btn <?php echo ($chapter_id >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
-        </div>
-    <?php else: ?>
-        <p style="text-align: center; color: red;">Chapter not found.</p>
-    <?php endif; ?>
+<?php else: ?>
+    <p style="text-align: center; color: red;">Chapter not found.</p>
+<?php endif; ?>
 </div>
+
 
 <script>
 

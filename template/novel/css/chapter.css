@@ -51,10 +51,11 @@ body {
     text-align: justify;
     line-height: 1.8;
     font-family: 'Georgia', serif;
-    white-space: pre-wrap;
     max-width: 90%;
     margin: auto;
+    display: block; /* Ensures it's a block element */
 }
+
 
 .nav-buttons {
     display: flex;
