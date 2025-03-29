@@ -6,6 +6,7 @@
     <title>Variant</title>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Merriweather&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/novel.css">
+    <link rel="stylesheet" href="css/darkmode.css">
 
     <!-- To load the dark toogle icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -30,9 +31,10 @@
       <a href="../../pages/writer_dashboard.php">Writer</a>
       <a href="../../pages/reader_dashboard.php">User</a>
     </div>
-    <button class="dark-mode-btn" onclick="toggleDarkMode()">
+    <button class="dark-mode-btn">
     <i class="fas fa-moon"></i> 
-    </button>
+</button>
+
 
   </nav>
 
@@ -101,19 +103,37 @@
 <script>
 // Dark Mode Toggle
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
+    document.addEventListener("DOMContentLoaded", function () {
+        const body = document.body;
+        const darkModeBtn = document.querySelector(".dark-mode-btn");
+        const icon = darkModeBtn.querySelector("i");
 
-    // Change button icon
-    const btn = document.querySelector(".dark-mode-btn");
-    const icon = btn.querySelector("i");
+        // Check local storage for dark mode preference
+        if (localStorage.getItem("dark-mode") === "enabled") {
+            body.classList.add("dark-mode");
+            icon.classList.replace("fa-moon", "fa-sun"); // Set correct icon
+        }
 
-    if (document.body.classList.contains("dark-mode")) {
-        icon.classList.replace("fa-moon", "fa-sun"); // Change to sun
-    } else {
-        icon.classList.replace("fa-sun", "fa-moon"); // Change back to moon
+        // Toggle Dark Mode
+        darkModeBtn.addEventListener("click", function () {
+            toggleDarkMode();
+        });
+    });
+
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+
+        const btn = document.querySelector(".dark-mode-btn");
+        const icon = btn.querySelector("i");
+
+        if (document.body.classList.contains("dark-mode")) {
+            icon.classList.replace("fa-moon", "fa-sun"); // Change to sun
+            localStorage.setItem("dark-mode", "enabled");
+        } else {
+            icon.classList.replace("fa-sun", "fa-moon"); // Change back to moon
+            localStorage.setItem("dark-mode", "disabled");
+        }
     }
-}
 
 
 </script>
@@ -366,8 +386,6 @@ function toggleDarkMode() {
         let novelId = new URLSearchParams(window.location.search).get("novel_id");
         if (novelId) fetchComments(novelId);
     });
-
-
 
 </script>
 
