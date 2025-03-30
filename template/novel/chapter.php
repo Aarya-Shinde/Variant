@@ -1,33 +1,34 @@
 <?php
-include '../../db/dbconnect.php';
 
-$novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 0;
-$chapter_id = isset($_GET['chapter_id']) ? intval($_GET['chapter_id']) : 0;
+    include '../../db/dbconnect.php';
 
-if ($novel_id === 0 || $chapter_id === 0) {
-    die("Invalid request.");
-}
+    $novel_id = isset($_GET['novel_id']) ? intval($_GET['novel_id']) : 0;
+    $chapter_number = isset($_GET['chapter_number']) ? intval($_GET['chapter_number']) : 0;
 
-// Fetch novel details
-$novelQuery = "SELECT title, author_name, cover_image_url FROM Novels WHERE novel_id = $novel_id";
-$novelResult = $conn->query($novelQuery);
-$novel = $novelResult->fetch_assoc();
+    if ($novel_id === 0 || $chapter_number === 0) {
+        die("Invalid request.");
+    }
 
-// Fetch selected chapter
-$chapterQuery = "SELECT * FROM Chapters WHERE novel_id = $novel_id AND chapter_id = $chapter_id";
-$chapterResult = $conn->query($chapterQuery);
-$chapter = $chapterResult->fetch_assoc();
+    // Fetch novel details
+    $novelQuery = "SELECT title, author_name, cover_image_url FROM Novels WHERE novel_id = $novel_id";
+    $novelResult = $conn->query($novelQuery);
+    $novel = $novelResult->fetch_assoc();
 
-// Fetch total chapters
-$totalChaptersQuery = "SELECT COUNT(*) as total FROM Chapters WHERE novel_id = $novel_id";
-$totalChaptersResult = $conn->query($totalChaptersQuery);
-$totalChapters = $totalChaptersResult->fetch_assoc()['total'];
+    // Fetch selected chapter
+    $chapterQuery = "SELECT * FROM Chapters WHERE novel_id = $novel_id AND chapter_number = $chapter_number";
+    $chapterResult = $conn->query($chapterQuery);
+    $chapter = $chapterResult->fetch_assoc();
 
-// Fetch all chapters for dropdown
-$chaptersQuery = "SELECT chapter_id, title FROM Chapters WHERE novel_id = $novel_id ORDER BY chapter_id ASC";
-$chaptersResult = $conn->query($chaptersQuery);
+    // Fetch total chapters
+    $totalChaptersQuery = "SELECT COUNT(*) as total FROM Chapters WHERE novel_id = $novel_id";
+    $totalChaptersResult = $conn->query($totalChaptersQuery);
+    $totalChapters = $totalChaptersResult->fetch_assoc()['total'];
 
-$conn->close();
+    // Fetch all chapters for dropdown
+    $chaptersQuery = "SELECT chapter_number, title FROM Chapters WHERE novel_id = $novel_id ORDER BY chapter_number ASC";
+    $chaptersResult = $conn->query($chaptersQuery);
+
+    $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -59,8 +60,8 @@ $conn->close();
         <h3>Jump to Chapter</h3>
         <select onchange="location = this.value;">
             <?php while ($row = $chaptersResult->fetch_assoc()) { ?>
-                <option value="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $row['chapter_id']; ?>"
-                    <?php echo ($row['chapter_id'] == $chapter_id) ? 'selected' : ''; ?>>
+                <option value="?novel_id=<?php echo $novel_id; ?>&chapter_number=<?php echo $row['chapter_number']; ?>"
+                    <?php echo ($row['chapter_number'] == $chapter_number) ? 'selected' : ''; ?>>
                     <?php echo htmlspecialchars($row['title']); ?>
                 </option>
             <?php } ?>
@@ -69,6 +70,15 @@ $conn->close();
 
     <?php if ($chapter): ?>
     <div class="chapter-title"><?php echo htmlspecialchars($chapter['title']); ?></div>
+
+    <!-- previous and next buttons at the start of the page -->
+    <div class="nav-buttons">
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_number=<?php echo $chapter_number - 1; ?>" 
+            class="btn <?php echo ($chapter_number <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
+
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_number=<?php echo $chapter_number + 1; ?>" 
+            class="btn <?php echo ($chapter_number >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
+    </div>
 
     <div class="chapter-content">
         <?php
@@ -95,12 +105,13 @@ $conn->close();
         ?>
     </div>
 
+    <!-- previous and next buttons at the end of the page -->
     <div class="nav-buttons">
-        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id - 1; ?>" 
-            class="btn <?php echo ($chapter_id <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_number=<?php echo $chapter_number - 1; ?>" 
+            class="btn <?php echo ($chapter_number <= 1) ? 'disabled-link' : ''; ?>">← Previous</a>
 
-        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_id=<?php echo $chapter_id + 1; ?>" 
-            class="btn <?php echo ($chapter_id >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
+        <a href="?novel_id=<?php echo $novel_id; ?>&chapter_number=<?php echo $chapter_number + 1; ?>" 
+            class="btn <?php echo ($chapter_number >= $totalChapters) ? 'disabled-link' : ''; ?>">Next →</a>
     </div>
 
 <?php else: ?>
