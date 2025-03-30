@@ -1,5 +1,12 @@
+import sys
+import os
+
+# Add the parent directory (Variant) to Python's module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from db.dbconnect import get_db_connection  # Now import should work
+
 import re
-import mysql.connector
 import ebooklib
 from ebooklib import epub
 from bs4 import BeautifulSoup
@@ -13,65 +20,63 @@ chapters = []
 novel_id = 11  # Update with the correct novel ID
 
 for item in book.get_items():
-    if item.get_type() == ebooklib.ITEM_DOCUMENT:  # Process HTML/XHTML content
+    if item.get_type() == ebooklib.ITEM_DOCUMENT:
         soup = BeautifulSoup(item.get_body_content(), "html.parser")
         
         # **Extract chapter title (H1, H2) if available**
         title = "Unknown Chapter"
-        heading = soup.find(["h1", "h2"])  # Get first chapter title
+        heading = soup.find(["h1", "h2"])
         if heading:
             title = heading.get_text(strip=True)
 
         # **Preserve Bold & Italic Formatting**
         for tag in soup.find_all(["b", "strong"]):
-            tag.replace_with(f"<b>{tag.get_text(strip=True)}</b>")  # Keep bold
+            tag.replace_with(f"<b>{tag.get_text(strip=True)}</b>")
         for tag in soup.find_all(["i", "em"]):
-            tag.replace_with(f"<i>{tag.get_text(strip=True)}</i>")  # Keep italics
+            tag.replace_with(f"<i>{tag.get_text(strip=True)}</i>")
 
         # **Convert remaining HTML structure into text with basic formatting**
-        chapter_html = str(soup)  # Convert processed HTML to string
+        chapter_html = str(soup)
 
         # **Remove Page Numbers**
-        chapter_html = re.sub(r"\b\d{1,4}\b", "", chapter_html)  # Remove isolated numbers (1-4 digits)
+        chapter_html = re.sub(r"\b\d{1,4}\b", "", chapter_html)
 
         # **Remove the first line if it matches the chapter title**
         chapter_lines = chapter_html.split("\n")
         if chapter_lines and BeautifulSoup(chapter_lines[0], "html.parser").get_text(strip=True) == title:
-            chapter_html = "\n".join(chapter_lines[1:])  # Remove title line
+            chapter_html = "\n".join(chapter_lines[1:])
         
         # **Format content to preserve paragraphs**
         paragraphs = [f"<p>{p.strip()}</p>" for p in chapter_html.split("\n") if p.strip()]
-        formatted_content = "\n".join(paragraphs)  # Convert to HTML-style paragraphs
+        formatted_content = "\n".join(paragraphs)
 
-        # **Assign a chapter number (fallback to auto-increment)**
+        # **Assign a chapter number**
         chapter_number = len(chapters) + 1  
 
         # **Store extracted chapter**
         chapters.append((novel_id, chapter_number, title, formatted_content))
 
-# **Connect to MySQL**
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="@pokemon1",
-    database="Variant"
-)
-cursor = conn.cursor()
+# **Connect to MySQL using dbconnect.py**
+conn = get_db_connection()
+if conn:
+    cursor = conn.cursor()
 
-# **Insert chapters into MySQL**
-query = """
-INSERT INTO Chapters (novel_id, chapter_number, title, content)
-VALUES (%s, %s, %s, %s)
-ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content);
-"""
+    # **Insert chapters into MySQL**
+    query = """
+    INSERT INTO Chapters (novel_id, chapter_number, title, content)
+    VALUES (%s, %s, %s, %s)
+    ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content);
+    """
 
-cursor.executemany(query, chapters)
-conn.commit()
+    cursor.executemany(query, chapters)
+    conn.commit()
 
-cursor.close()
-conn.close()
+    cursor.close()
+    conn.close()
+    print(f"Uploaded {len(chapters)} chapters to MySQL from EPUB!")
+else:
+    print("Database connection failed.")
 
-print(f"Uploaded {len(chapters)} chapters to MySQL from EPUB!")
 
 # ebooklib → Read EPUB files
 # 📌 Why?

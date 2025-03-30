@@ -1,5 +1,12 @@
+import sys
+import os
+
+# Add the parent directory (Variant) to Python's module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from db.dbconnect import get_db_connection  # Use centralized DB connection
+
 import fitz  # PyMuPDF for PDF extraction
-import mysql.connector
 import re
 
 # Function to extract text while minimizing excessive <p> tags
@@ -37,11 +44,10 @@ def extract_text_with_formatting(pdf_path):
     formatted_text = formatted_text.replace("\n", "</p><p>")  # Wrap paragraphs properly
     formatted_text = f"<p>{formatted_text}</p>"
 
-
     return formatted_text
 
 # Load PDF and extract formatted text
-pdf_path = r"D:\Xammp\htdocs\Variant\text_extractor\The Hobbit.pdf"
+pdf_path = r"D:\Xammp\htdocs\Variant\text_extractor\Manacled.pdf"
 formatted_text = extract_text_with_formatting(pdf_path)
 
 # Split into chapters, filtering out 'Table of Contents'
@@ -55,30 +61,29 @@ for i in range(0, len(raw_chapters), 2):
     if "Table of Contents" in chapter_content:
         continue  
 
-    chapters.append((12, chapter_number, f"Chapter {chapter_number}", chapter_content))
+    chapters.append((27, chapter_number, f"Chapter {chapter_number}", chapter_content)) # (novel_id, num, title, content)
 
-# Connect to MySQL and insert chapters efficiently
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="@pokemon1",
-    database="Variant"
-)
-cursor = conn.cursor()
+# **Connect to MySQL using dbconnect.py**
+conn = get_db_connection()
+if conn:
+    cursor = conn.cursor()
 
-query = """
-INSERT INTO Chapters (novel_id, chapter_number, title, content)
-VALUES (%s, %s, %s, %s)
-ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content);
-"""
+    # **Insert chapters into MySQL**
+    query = """
+    INSERT INTO Chapters (novel_id, chapter_number, title, content)
+    VALUES (%s, %s, %s, %s)
+    ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content);
+    """
 
-try:
-    cursor.executemany(query, chapters)  # Efficient batch insert
-    conn.commit()
-    print(f"Uploaded {len(chapters)} chapters to MySQL with optimized text formatting!")
-except mysql.connector.Error as e:
-    conn.rollback()
-    print("Error:", e)
-finally:
-    cursor.close()
-    conn.close()
+    try:
+        cursor.executemany(query, chapters)  # Efficient batch insert
+        conn.commit()
+        print(f"Uploaded {len(chapters)} chapters to MySQL with optimized text formatting!")
+    except Exception as e:
+        conn.rollback()
+        print("Error:", e)
+    finally:
+        cursor.close()
+        conn.close()
+else:
+    print("Database connection failed.")
