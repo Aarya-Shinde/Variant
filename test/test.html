@@ -1,117 +1,15 @@
-<?php 
+You can create a separate `navbar.php` file and include it in all your pages using PHP's `include` function. Here's how:  
 
-//Conecting to the database
-$conn = mysqli_connect('localhost', 'root', '' , 'practice');
+### 1️⃣ **Create `navbar.php`**  
+```php
+<!-- navbar.php -->
 
-//Checking the database connection
-if(!$conn) {
-    echo 'Connection error :' .mysqli_connect_error();
-}
+```
 
-//SQL query to get title and suthor name
-$sql = 'select title, author_name from books;'
+### 2️⃣ **Include It in Other Files**  
+In your main pages (`index.php`, `chapter.php`, etc.), add:  
+```php
+<?php include 'navbar.php'; ?>
+```
 
-// inatializing var result to make query and get result
-$result = mysqli_query($conn, $sql);
-
-//fetching  the resulting row as array
-$novels = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-// result from memory
-mysqli_free_result($result);
-
-//Closing database connection
-mysqli_close($conn);
-
-print_r($novels)
-
-?>
-
-
-
-
-
-
-<?php
-// Fetch novels from the database
-$query = "SELECT title, cover_image_url FROM Novels";
-$result = $conn->query($query);
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<div class="novel-container">
-    <?php while ($novel = $result->fetch_assoc()): ?>
-        <div class="novel-card">
-            <img src="<?php echo htmlspecialchars($novel['cover_image_url']); ?>" alt="Book Cover">
-            <h3><?php echo htmlspecialchars($novel['title']); ?></h3>
-        </div>
-    <?php endwhile; ?>
-</div>
-</body>
-</html>
-
-
-<style>
-    .novel-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-    }
-    .novel-card {
-        background: #f9fafb;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        width: 200px;
-        text-align: center;
-    }
-    .novel-card img {
-        width: 100%;
-        height: auto;
-        border-radius: 5px;
-    }
-</style>
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-2. Add a Book to the User’s Library (Start Reading)
-When a user starts reading a book, insert an entry:
-
-
-function addBookToLibrary($conn, $user_id, $novel_id) {
-    $query = "INSERT INTO User_Books (user_id, novel_id) VALUES (?, ?)";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) { die("Query Error: " . $conn->error); }
-    $stmt->bind_param("ii", $user_id, $novel_id);
-    return $stmt->execute();
-}
-Call this function when a user clicks "Start Reading" on a book.
-
-3. Mark a Book as Completed
-When a user finishes reading, update their status:
-
-
-function markBookAsCompleted($conn, $user_id, $novel_id) {
-    $query = "UPDATE User_Books SET read_status = 'completed', finished_at = NOW() WHERE user_id = ? AND novel_id = ?";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) { die("Query Error: " . $conn->error); }
-    $stmt->bind_param("ii", $user_id, $novel_id);
-    return $stmt->execute();
-}
-Call this function when the user finishes a book. -->
+This way, you can edit `navbar.php` once, and it updates everywhere. 🚀
