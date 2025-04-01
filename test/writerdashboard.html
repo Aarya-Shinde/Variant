@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3DAC9, #D2B48C);
+            text-align: center;
+            padding: 40px;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .box {
+            background: #FAF3E0;
+            padding: 20px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        h2 {
+            font-size: 28px;
+            color: #8B5E3C;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #5D4037;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 8px 0;
+        }
+        .chart-container {
+            width: 100%;
+            margin-top: 20px;
+            background: #FAF3E0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h2>Writer Dashboard</h2>
+    <p>Overview of your writing progress and reader engagement</p>
+    
+    <div class="dashboard">
+        <div class="box">
+            <h3>Word Count Tracker</h3>
+            <p><strong>Total Words Written:</strong> 85,000</p>
+            <p><strong>Words This Month:</strong> 4,500</p>
+            <p><strong>Daily Average:</strong> 150 Words</p>
+        </div>
+
+        <div class="box">
+            <h3>Library</h3>
+            <p><strong>Books Published:</strong> 5</p>
+            <p><strong>Books in Progress:</strong> 2</p>
+            <p><strong>Chapters Written:</strong> 35</p>
+        </div>
+
+        <div class="box">
+            <h3>Reader Engagement</h3>
+            <p><strong>Total Readers:</strong> 12,340</p>
+            <p><strong>Comments Received:</strong> 3,215</p>
+            <p><strong>Most Active Readers:</strong> 560</p>
+        </div>
+
+        <div class="box">
+            <h3>Reading History</h3>
+            <ul>
+                <li><strong>The Enchanted Forest</strong> - 500 Reads</li>
+                <li><strong>Deep Space Chronicles</strong> - 750 Reads</li>
+                <li><strong>Historical Echoes</strong> - 620 Reads</li>
+                <li><strong>Futuristic Saga</strong> - 900 Reads</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <h3>Writing Streak</h3>
+            <p><strong>Consecutive Writing Days:</strong> 15</p>
+            <p><strong>Longest Streak:</strong> 30 Days</p>
+            <p><strong>Missed Days:</strong> 5</p>
+        </div>
+
+        <div class="box">
+            <h3>Top Performing Book</h3>
+            <p><strong>Title:</strong> Deep Space Chronicles</p>
+            <p><strong>Downloads:</strong> 12,000</p>
+            <p><strong>Ratings:</strong> 4.8/5</p>
+        </div>
+
+        <div class="box">
+            <h3>Average Session Duration</h3>
+            <p><strong>Last Month:</strong> 12 min</p>
+            <p><strong>This Month:</strong> 14 min</p>
+        </div>
+
+        <div class="box">
+            <h3>New Subscribers</h3>
+            <p><strong>Last Month:</strong> 520</p>
+            <p><strong>This Month:</strong> 630</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h3>Word Count Progress</h3>
+        <canvas id="wordChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h3>Reader Engagement Over Time</h3>
+        <canvas id="readerChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('wordChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Words Written',
+                    data: [5000, 7000, 8000, 10000, 4500],
+                    backgroundColor: 'rgba(139, 94, 60, 0.8)',
+                    borderColor: 'rgba(139, 94, 60, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 12000
+                    }
+                }
+            }
+        });
+
+        const readerCtx = document.getElementById('readerChart').getContext('2d');
+        new Chart(readerCtx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Active Readers',
+                    data: [1200, 1400, 1600, 1800, 2000],
+                    borderColor: 'rgba(93, 64, 55, 1)',
+                    backgroundColor: 'rgba(93, 64, 55, 0.2)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 2500
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Export Tools</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3DAC9, #D2B48C);
+            text-align: center;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #FAF3E0;
+            padding: 30px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        .tools {
+            margin-top: 20px;
+        }
+        .tool-btn {
+            padding: 12px 18px;
+            margin: 10px;
+            background: #C2A477;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .tool-btn:hover {
+            background: #9E8256;
+            transform: scale(1.05);
+        }
+        .search-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-bar, .paste-bar {
+            padding: 10px;
+            width: 60%;
+            font-size: 16px;
+            border: 2px solid #C2A477;
+            border-radius: 8px;
+            outline: none;
+            text-align: center;
+        }
+        .search-btn {
+            padding: 10px 15px;
+            font-size: 16px;
+            background: #C2A477;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-btn:hover {
+            background: #9E8256;
+        }
+        .book-list {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .book {
+            background: #FFF8E7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 6px solid #C2A477;
+            font-size: 16px;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Book Export Tools</h2>
+        <p>Select an option to export your book:</p>
+        <div class="tools">
+            <button class="tool-btn" onclick="exportBook('pdf')">Download as PDF</button>
+            <button class="tool-btn" onclick="exportBook('epub')">Download as EPUB</button>
+            <button class="tool-btn" onclick="exportBook('mobi')">Download as MOBI</button>
+            <button class="tool-btn" onclick="exportBook('txt')">Download as TXT</button>
+            <button class="tool-btn" onclick="exportBook('docx')">Download as DOCX</button>
+        </div>
+
+        <h3>Available Books</h3>
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search for a book...">
+            <button class="search-btn" onclick="searchBooks()">Search</button>
+        </div>
+        <div class="search-container">
+            <input type="text" class="paste-bar" id="pasteBar" placeholder="Paste book link here...">
+            <button class="search-btn">Paste</button>
+        </div>
+        <div class="book-list" id="book-list"></div>
+    </div>
+
+    <script>
+        const books = [
+            { name: "The Enchanted Forest", description: "A magical journey through a mysterious forest.", link: "#" },
+            { name: "Deep Space Chronicles", description: "An interstellar adventure beyond imagination.", link: "#" },
+            { name: "Historical Echoes", description: "A deep dive into historical events that shaped the world.", link: "#" },
+            { name: "Mystic River Tales", description: "A collection of folklore and mythical stories.", link: "#" },
+            { name: "The Mind's Abyss", description: "A psychological thriller with unexpected twists.", link: "#" }
+        ];
+
+        function displayBooks() {
+            let bookListDiv = document.getElementById("book-list");
+            bookListDiv.innerHTML = "";
+            books.forEach(book => {
+                let div = document.createElement("div");
+                div.classList.add("book");
+                div.innerHTML = `<h4>${book.name}</h4><p>${book.description}</p><a href="${book.link}">Download</a>`;
+                bookListDiv.appendChild(div);
+            });
+        }
+
+        function searchBooks() {
+            let input = document.getElementById("searchBar").value.toLowerCase();
+            let bookListDiv = document.getElementById("book-list");
+            bookListDiv.innerHTML = "";
+            books.filter(book => book.name.toLowerCase().includes(input)).forEach(book => {
+                let div = document.createElement("div");
+                div.classList.add("book");
+                div.innerHTML = `<h4>${book.name}</h4><p>${book.description}</p><a href="${book.link}">Download</a>`;
+                bookListDiv.appendChild(div);
+            });
+        }
+
+        function exportBook(format) {
+            let bookContent = "Your Book Content Here\n\nThis is a sample book content that the user can export in different formats.";
+            let blob = new Blob([bookContent], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `book.${format}`;
+            link.click();
+        }
+
+        document.addEventListener("DOMContentLoaded", displayBooks);
+    </script>
+</body>
+</html>
