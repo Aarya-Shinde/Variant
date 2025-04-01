@@ -1,15 +1,64 @@
-<?php
+<?php 
 session_start();
 include '../../db/dbconnect.php';
 
-// ✅ Check if session contains user_id or if there is a cookie containing the ID
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+
+
+// Check if session contains user_id or if there is a cookie containing the ID
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['user_id'])) {
     $_SESSION['user_id'] = $_COOKIE['user_id'];
 }
 
-$user_id = $_SESSION['user_id']; // ✅ Use the stored session variable
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+    die("User session not found! Please log in.");
+}
 
-$query = "SELECT Novels.novel_id, Novels.title, Novels.author_name, Novels.genre, Library.read_status 
+$user_id = $_SESSION['user_id'];
+
+
+
+// **Handle Adding Books to Library**
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['novel_id']) && !empty($_POST['title']) && !empty($_POST['author'])) {
+
+    $novel_id = $_POST['novel_id'];
+    $title = $_POST['title'];
+    $author = $_POST['author'];
+
+    // Check if book is already in the user's library
+    $check_query = $conn->prepare("SELECT * FROM Library WHERE novel_id = ? AND user_id = ?");
+    $check_query->bind_param("ii", $novel_id, $user_id);
+    $check_query->execute();
+    $result = $check_query->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "<script>alert('This book is already in your library!');  window.location.href = '/Variant/template/novel/novel_info.php?novel_id=$novel_id';</script>";
+    } else {
+        // Insert book into the library
+        $insert_query = $conn->prepare("INSERT INTO Library (user_id, novel_id, read_status) VALUES (?, ?, 'want to read')");
+
+        $insert_query->bind_param("ii", $user_id, $novel_id);
+        
+        if ($insert_query->execute()) { 
+            echo "<script>
+                alert('Book added successfully!'); 
+                window.location.href = '/Variant/template/novel/novel_info.php?novel_id=$novel_id';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Failed to add book: " . $insert_query->error . "'); 
+            </script>";
+        }
+        
+        
+    }
+}
+
+
+// **Fetch User’s Library**
+$query = "SELECT Novels.novel_id, Novels.title, Novels.author_name,  Library.read_status 
           FROM Novels 
           JOIN Library ON Novels.novel_id = Library.novel_id 
           WHERE Library.user_id = ?";
@@ -19,235 +68,17 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library</title>
-    
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f1de;
-        color: #4b2e2e;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    /************* Navigation Bar *************/
-    .nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #a0522d;
-        color: white;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 10px 0;
-        z-index: 1000;
-    }
-
-    .nav a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        padding: 10px 15px;
-        border-radius: 5px;
-    }
-
-    .nav a:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /******************* */ Library booksContent **************/
-    .content {
-        padding-top: 80px;
-    }
-
-    .bookshelf-container {
-        width: 75%;
-        border: 2px solid #8c6d45;
-        border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        padding: 50px;
-        background-color: #fff8dc;
-        position: relative;
-        margin: 60px auto;
-    }
-
-    h1 {
-        text-align: center;
-        font-family: 'Georgia', serif;
-        color: #a0522d;
-    }
-
-    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
-
-    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
-
-    .bookshelf {
-        background: #8b4513; /* Dark Brown (Wood Shelf) */
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: inset 0px -5px 0px #5a3212;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        max-width: 100%;
-    }
-
-    /* Bookshelf Title */
-    .bookshelf-title {
-        display: flex;  /* Aligns title and button in one row */
-        align-items: center;
-        justify-content: space-between; /* Title on left, button on right */
-        font-family: 'Merriweather', serif;
-        font-size: 2.2em;
-        color: #333;
-        background-color: #f4f4f4;
-        border-bottom: 5px solid #c49a6c;
-        border-top: 5px solid #c49a6c;
-        padding: 12px 20px;
-        width: 80%;
-        margin: 10px auto;
-        letter-spacing: 1px;
-    }
-
-    .bookshelf-title::before {
-        margin-right: 10px;
-    }
-
-    .bookshelf-title::after {
-        margin-left: 10px;
-    }
-
-    /*************Adding book in Library Styling***************** */
-
-  /* Add Book Button */
-    .add-book-btn {
-        font-family: 'EB Garamond', serif;
-        font-size: 1em;
-        color: #fff;
-        background-color: #a0522d; 
-        border: 2px solid #4b2e2e;
-        border-radius: 6px;
-        padding: 6px 12px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s;
-        font-size: 1em;
-    }
-
-    .add-book-btn:hover {
-        background-color: #4b2e2e;
-        transform: scale(1.05);
-    }
-
-    .add-book-btn:focus {
-        outline: none;
-        box-shadow: 0 0 8px #a0522d;
-    }
-
-
-
-
-    /* Shelf Rows - 10 Books Per Row */
-    .shelf-row {
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        gap: 5px;
-        flex-wrap: wrap;
-        width: 100%;
-        max-width: 1100px;
-        padding: 10px;
-        position: relative;
-    }
-
-    /* ✅ **Clear Divider Between Rows (Simulates Bookshelf)** */
-    .shelf-row:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        bottom: -12px;
-        width: 100%;
-        height: 16px;
-        background: linear-gradient(to bottom, #5a3212, #3e2310);
-        border-radius: 5px;
-        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.4); /* More Realistic */
-    }
-
-    /* ✅ **Book Styling - Text Wraps Properly** */
-    .book {
-        background: linear-gradient(to right, #a0522d 10%, #8b4513 40%, #6e3b15 90%);
-        color: white;
-        text-align: center;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.3);
-        font-size: 14px;
-        font-weight: bold;
-        font-family: 'EB Garamond', serif;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        
-        /* ✅ **Fixed Book Size** */
-        width: 65px;  /* ✅ Wider */
-        height: 220px; /* ✅ Shorter */
-        
-        /* ✅ **Text Wrapping** */
-        word-wrap: break-word;
-        white-space: normal;
-        overflow: hidden;
-        line-height: 1.2;
-        max-height: 90%;
-        
-        /* ✅ **Smooth Transition on Hover** */
-        transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    }
-
-    /* ✅ **Hover Effect - Darkens Slightly + 3D Lift** */
-    .book:hover {
-        transform: scale(1.05);
-        box-shadow: 8px 8px 14px rgba(0, 0, 0, 0.5);
-        background: linear-gradient(to right, #8b4513 10%, #6e3b15 40%, #4e240d 90%);
-    }
-
-
-
-    /* Ensures Only 10 Books Per Row */
-    .shelf-row:nth-child(n+2) {
-        margin-top: 15px;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1200px) {
-        .shelf-row {
-            max-width: 900px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .book {
-            width: 50px;
-            height: 220px;
-            font-size: 16px;
-        }
-    }
-
-</style>
-
+    <link rel="stylesheet" href="../style/library.css">
 </head>
 <body>
+
     <!-- Navigation Bar -->
     <div class="nav">
         <a href="../../index.html">Variant</a>
@@ -256,23 +87,23 @@ $result = $stmt->get_result();
         <a href="../reader_dashboard.php">User</a>
     </div>
 
-
-
     <!-- Library added books -->
     <div class="content">
-    <div class="bookshelf-container">
-        <div class="bookshelf-title">
-            <span> Owned Books </span>
-            <a href="add_API_novel.html">
-                <button class="add-book-btn">➕ Add Book</button>
-            </a>
-        </div>
+        <div class="bookshelf-container">
+            <div class="bookshelf-title">
+                <span> Owned Books </span>
+
+                <a href="add_API_novel.html"><button class="add-book-btn">Add Book</button></a>
+            </div>
+            
 
             <div class="bookshelf">
                 <div class="shelf-row">
                     <?php while ($row = $result->fetch_assoc()) { ?>
-                        <div class="book" onclick="viewBook('<?php echo htmlspecialchars($row['title']); ?>')">
-                            <?php echo htmlspecialchars($row['title']); ?>
+                        <div class="book">
+                            <a href="/Variant/template/novel/novel_info.php?novel_id=<?php echo $row['novel_id']; ?>">
+                                <?php echo htmlspecialchars($row['title']); ?>
+                            </a>
                         </div>
                     <?php } ?>
                 </div>
@@ -280,11 +111,5 @@ $result = $stmt->get_result();
         </div>
     </div>
 
-
-    <script>
-        function viewBook(bookName) {
-            alert('You clicked on ' + bookName);
-        }
-    </script>
 </body>
 </html>

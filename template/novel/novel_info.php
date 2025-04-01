@@ -51,6 +51,15 @@
 
       <div class="tags" id="tagsContainer"></div>
 
+    <form action="\Variant\pages\reader\library.php" method="POST">     
+        <input type="hidden" name="novel_id" value="<?php echo isset($_GET['novel_id']) ? $_GET['novel_id'] : ''; ?>">
+        <input type="hidden" name="title" value="<?php echo $book_title; ?>">
+        <input type="hidden" name="author" value="<?php echo $author; ?>">
+        <button type="submit" class="btn btn-primary">Add to Library</button>
+    </form>
+
+
+
       <h2>Chapters</h2>
       <ul class="chapters" id="chapterList">
           <!-- Chapters will be dynamically inserted here -->
@@ -185,7 +194,7 @@
                 if (data.success && data.chapters.length > 0) {
                     data.chapters.forEach((chapter) => {
                         let li = document.createElement("li");
-                        li.innerHTML = `<a href="chapter.php?novel_id=${novelId}&chapter_id=${chapter.chapter_id}">${chapter.title}</a>`;
+                        li.innerHTML = `<a href="chapter.php?novel_id=${novelId}&chapter_number=${chapter.chapter_number}">${chapter.title}</a>`;
                         chapterList.appendChild(li);
                     });
                 } else {
@@ -214,7 +223,7 @@
 
             data.chapters.forEach(chapter => {
                 let li = document.createElement("li");
-                li.innerHTML = `<a href="chapter.php?novel_id=${novel_id}&chapter_id=${chapter.chapter_id}">${chapter.title}</a>`;
+                li.innerHTML = `<a href="chapter.php?novel_id=${novel_id}&chapter_number=${chapter.chapter_number}">${chapter.title}</a>`;
                 chapterList.appendChild(li);
             });
 
