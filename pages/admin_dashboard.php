@@ -68,160 +68,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #a67c52, #8b6f4e);
-            color: #3e2723;
-        }
+<link rel="stylesheet" href="style/admin_dash.css">
 
-        .sidebar {
-            width: 250px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            position: fixed;
-            height: 100%;
-            padding: 1rem;
-            border-radius: 0px 0 0 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .sidebar .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #8b4513;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            margin: 1.5rem 0;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: white;
-            font-size: 1.2rem;
-            display: block;
-            padding: 0.7rem 1rem;
-            border-radius: 8px;
-            transition: 0.3s;
-            background-color: rgba(0, 0, 0, 0);
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #8b4513;
-            transform: scale(1.05);
-        }
-
-        .main-content {
-            margin-left: 270px;
-            padding: 2rem;
-        }
-
-        .header {
-            background: linear-gradient(to right, #DABAA5, #A37C70);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 2rem;
-            border-radius: 10px;
-            font-weight: bold;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            text-align: center;
-            color: white;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .novel-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .novel-card {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 1rem;
-            border-radius: 10px;
-            width: 200px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: 0.3s;
-        }
-
-        .novel-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-        }
-
-        .novel-card img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .btn-primary {
-            background: #8b4513;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: #a0522d;
-        }
-
-        .btn-danger {
-            background: #8b4513;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
-        .search-box {
-            margin-top: 2rem;
-            display: flex;
-            gap: 1rem;
-        }
-
-
-
-    </style>
 </head>
 <body>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo">Admin Panel</div>
+                <!-- variant logo image here -->
+                <div class="logo"> 
+                <a href="../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+                </a> </div>
+
         <ul>
             <li><a href="admin_dashboard.php"><i class="fa fa-home"></i> Dashboard</a></li>
             <li><a href="admin/manage_novels.php"><i class="fa fa-book"></i> Manage Novels</a></li>
-            <li><a href="categories.php"><i class="fa fa-list"></i> Categories</a></li>
-            <li><a href="users.php"><i class="fa fa-users"></i> Users</a></li>
+            <li><a href="admin/trending.php"><i class="fa fa-fire"></i> Trending</a></li>
+            <li><a href="admin/users.php"><i class="fa fa-users"></i> Users</a></li>
             <li><a href="reports.php"><i class="fa fa-flag"></i> Reports</a></li>
             <li><a href="logout.php" class="btn btn-light"><i class="fa fa-sign-out"></i> Logout</a></li>
         </ul>
@@ -252,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
                         <img src="<?php echo htmlspecialchars($novel['cover_image_url']); ?>" alt="Cover Image">
                         <h5><?php echo htmlspecialchars($novel['title']); ?></h5>
                         <p>By: <?php echo htmlspecialchars($novel['author_name']); ?></p>
-                        <a href="edit_novel.php?id=<?php echo $novel['novel_id']; ?>" class="btn btn-primary">Edit</a>
+                        <a href="admin/edit_novel.php?id=<?php echo $novel['novel_id']; ?>" class="btn btn-primary">Edit</a>
                     </div>
                 <?php endforeach; ?>
             </div>
