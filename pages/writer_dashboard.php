@@ -31,18 +31,19 @@ if ($is_writer) {
     $novels = $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Fetch analytics data
-// $sql = "SELECT SUM(views) as total_views, SUM(collections) as total_collections, COUNT(DISTINCT review_id) as total_reviews, COUNT(DISTINCT comment_id) as total_comments FROM Analytics WHERE author_id = ?";
-// $stmt = $conn->prepare($sql);
-// $stmt->bind_param("i", $user_id);
-// $stmt->execute();
-// $result = $stmt->get_result();
-// $analytics = $result->fetch_assoc();
-
-// $total_views = $analytics['total_views'] ?? 0;
-// $total_collections = $analytics['total_collections'] ?? 0;
-// $total_reviews = $analytics['total_reviews'] ?? 0;
-// $total_comments = $analytics['total_comments'] ?? 0;
+// // Fetch dashboard data
+// $query = "SELECT 
+//             (SELECT COUNT(*) FROM books WHERE status='published') AS published_books,
+//             (SELECT COUNT(*) FROM books WHERE status='in-progress') AS in_progress_books,
+//             (SELECT COUNT(*) FROM chapters) AS total_chapters,
+//             (SELECT COUNT(*) FROM subscriptions WHERE MONTH(created_at) = MONTH(CURRENT_DATE())) AS monthly_subscribers,
+//             (SELECT COUNT(*) FROM subscriptions) AS total_subscribers,
+//             (SELECT title, downloads, ratings FROM books ORDER BY downloads DESC LIMIT 1) AS top_book,
+//             (SELECT COUNT(*) FROM readers) AS total_readers,
+//             (SELECT COUNT(*) FROM comments) AS total_comments";
+// $stmt = $pdo->query($query);
+// $data = $stmt->fetch(PDO::FETCH_ASSOC);
+// 
 
 
 // Handle becoming a writer
@@ -58,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$
 
 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$
     <title>Writer Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./writer/writer_dashboard.css">
+    <link rel="stylesheet" href="style/writer_dashboard.css">
 </head>
 <body>
     <div class="dashboard-container">
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$
         <aside class="sidebar">
                 <!-- variant logo image here -->
             <div class="logo"> 
-                <a href="../../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+                <a href="../index.php"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 80px;">
             </a> </div>
 
             <ul>
@@ -96,7 +96,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$
         <section id="dashboard" class="section active">
                 <h2>Welcome, <?= htmlspecialchars($username) ?></h2>
                 <p>Overview of your writing journey.</p>
-            </section>
+                <div class="stats-container">
+        <div class="stat-card">
+            <h3>Library</h3>
+            <p>Published Books: <?= $data['published_books'] ?></p>
+            <p>Books in Progress: <?= $data['in_progress_books'] ?></p>
+            <p>Chapters Written: <?= $data['total_chapters'] ?></p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Subscriptions</h3>
+            <p>New This Month: <?= $data['monthly_subscribers'] ?></p>
+            <p>Total Subscribers: <?= $data['total_subscribers'] ?></p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Top Performing Book</h3>
+            <p>Title: <?= $data['top_book']['title'] ?? 'N/A' ?></p>
+            <p>Downloads: <?= $data['top_book']['downloads'] ?? 0 ?></p>
+            <p>Ratings: <?= $data['top_book']['ratings'] ?? 'N/A' ?></p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Reader Engagement</h3>
+            <p>Total Readers: <?= $data['total_readers'] ?></p>
+            <p>Comments Received: <?= $data['total_comments'] ?></p>
+        </div>
+    </div>
+        </section>
 
             <section id="analytics" class="section">
                 <h2>Story Analytics</h2>
@@ -111,43 +138,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['become_writer']) && !$
 
 
 
-            <section id="stories" class="section">
-    <div class="top-bar">
-        <h2>My Stories</h2>
-        <button id="createStoryBtn">+ Create a Story</button>
-    </div>
+    <section id="stories" class="section">
+        <div class="top-bar">
+            <h2>My Stories</h2>
+            <button id="createStoryBtn">+ Create a Story</button>
+        </div>
 
-    <?php if ($is_writer): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Cover</th>
-                    <th>Title</th>
-                    <th>Genre</th>
-                    <th>Publication Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($novels as $novel): ?>
+        <?php if ($is_writer): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><img src="<?= htmlspecialchars($novel['cover_image_url']) ?>" alt="Cover" width="50"></td>
-                        <td><?= htmlspecialchars($novel['title']) ?></td>
-                        <td><?= htmlspecialchars($novel['genre']) ?></td>
-                        <td><?= htmlspecialchars($novel['publication_date']) ?></td>
-                        <td>
-                            <a href="writer/edit_story.html?novel_id=<?= $novel['novel_id'] ?>" class="edit-btn">Edit</a>
-                        </td>
+                        <th>Cover</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Publication Date</th>
+                        <th>Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h2>Become a Writer</h2>
-        <form method="post">
-            <button type="submit" name="become_writer">Become a Writer</button>
-        </form>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($novels as $novel): ?>
+                        <tr>
+                            <td><img src="<?= htmlspecialchars($novel['cover_image_url']) ?>" alt="Cover" width="50"></td>
+                            <td><?= htmlspecialchars($novel['title']) ?></td>
+                            <td><?= htmlspecialchars($novel['genre']) ?></td>
+                            <td><?= htmlspecialchars($novel['publication_date']) ?></td>
+                            <td>
+                                <a href="writer/edit_story.html?novel_id=<?= $novel['novel_id'] ?>" class="edit-btn">Edit</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <h2>Become a Writer</h2>
+            <form method="post">
+                <button type="submit" name="become_writer">Become a Writer</button>
+            </form>
+        <?php endif; ?>
 </section>
 
 

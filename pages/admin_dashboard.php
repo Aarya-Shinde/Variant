@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     <div class="sidebar">
                 <!-- variant logo image here -->
                 <div class="logo"> 
-                <a href="../index.html"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+                <a href="../index.php"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
                 </a> </div>
 
         <ul>

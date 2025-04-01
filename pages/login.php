@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <!-- Navbar -->
     <div class="nav-bar">
-        <a href="../index.html">Home</a>
+        <a href="../index.php">Home</a>
         <a href="writer_dashboard.php">Writer</a>
         <a href="reader_dashboard.php">Reader</a>
         <a href="admin_dashboard.php">Admin</a>

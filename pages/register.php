@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Navbar -->
     <div class="nav-bar">
-        <a href="../index.html">Home</a>
+        <a href="../index.php">Home</a>
         <a href="../library.html">Library</a>
         <a href="../reader.html">Reader</a>
         <a href="../writer.html">Writer</a>
