@@ -1,3 +1,49 @@
+<?php
+session_start();
+include 'db/dbconnect.php';  // Database connection
+
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$user_id = $isLoggedIn ? $_SESSION['user_id'] : null;
+
+// Handle search functionality
+$search_query = "";
+if (isset($_GET['search'])) {
+    $search_query = trim($_GET['search']);
+    $stmt = $conn->prepare("SELECT * FROM Novels WHERE title LIKE ? OR author_name LIKE ? OR genre LIKE ?");
+    $like_search = "%$search_query%";
+    $stmt->bind_param("sss", $like_search, $like_search, $like_search);
+    $stmt->execute();
+    $novels = $stmt->get_result();
+} else {
+    $novels = $conn->query("SELECT * FROM Novels ORDER BY created_at DESC LIMIT 10");
+}
+
+// Fetch user's library books
+$user_library = null;
+$library_novels = [];
+
+if ($isLoggedIn) {
+    $stmt = $conn->prepare("SELECT n.novel_id, n.title, n.author_name, n.cover_image_url 
+                            FROM Novels n 
+                            JOIN Library l ON n.novel_id = l.novel_id 
+                            WHERE l.user_id = ? LIMIT 5");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $user_library = $stmt->get_result();
+
+    while ($row = $user_library->fetch_assoc()) {
+        $library_novels[] = $row['novel_id'];
+    }
+
+    // Reset the pointer so the HTML loop works
+    $user_library->data_seek(0);
+}
+
+// Fetch recommended books (Basic logic: Get highest-rated books)
+$recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIMIT 8");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +53,7 @@
 
     <!-- ------------------linking css js files------------------- -->
     <link rel="stylesheet" href="css/indexstyle.css"> 
+    <link rel="stylesheet" href="css/indexdm.css"> 
     <script src="/js/scripts.js" defer></script>
 
      <!--=============== BOXICONS ===============-->
@@ -20,13 +67,15 @@
      <!---font-family: "Edu AU VIC WA NT Pre", cursive;--->
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+        
+     <!-- sun and moon flip for dark mode -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-     
 
-<!-- Swiper CSS -->
+<!-- Swiper CSS & JS for slider-->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<!-- Swiper JS -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
 
 
 <!-- --------------------------------------------Adding favicon to website-------------- -->
@@ -35,125 +84,142 @@
 
 <!------------------------------------------- Nav Bar------------------------------>
     
-      <header>
-        <div class="navbar">
-             <!-- variant logo image here -->
-            <div class="logo"> <a href="index.php"><img src="images/logowrite.png" alt="Variant Logo" style="max-height: 50px;"></a> </div>
-            
-          <!-- Search Bar -->
-          <div class="search-container"> 
-            <input type="text" class="search-input" placeholder="Search . . ." required>
-            <button class="search-btn"> 
-                <i class="bx bx-search"></i> 
-            </button> 
-          </div>
-              
-            <div class="nav">
-                <ul>
-                  <li><a href="template/explore.php">Explore</a></li>
-                    <li><a href="pages/reader_dashboard.php">Reader</a></li>
-                    <li><a href="pages/writer_dashboard.php">Writer</a></li>
-                    <li><a href="library.html">Library</a></li>
-                    <li><a href="pages/login.php">Login</a></li>
-                </ul>        
-            </div>
-            </div>
+<header>
+  <div class="navbar">
+        <!-- variant logo image here -->
+        <div class="logo"> <a href="index.php"><img src="images/logowrite.png" alt="Variant Logo" style="max-height: 50px;"></a> </div>
+      
+    <div class="nav-section">
+
+    <!-- Search Bar -->
+        <div class="search-container"> 
+            <!-- Search Bar -->
+            <form method="GET" action="index.php">
+                <input type="text" name="search" placeholder="Search books, authors, genres..." value="<?= htmlspecialchars($search_query) ?>">
+                <button type="submit">Search</button>
+            </form> 
         </div>
-    </header>
+        
+        <div class="nav">
+            <nav>
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="template/explore.php">Explore</a></li>
+
+                <?php if ($isLoggedIn): ?>
+                    <li><a href="pages/reader_dashboard.php">Dashboard</a></li>
+                    <li><a href="pages/reader/library.php">Library</a></li>
+                    <li><a href="pages/logout.php">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="pages/login.php">Login</a></li>
+                    <li><a href="pages/register.php">Sign Up</a></li>
+                <?php endif; ?>
+            </ul>
+        </nav>    
+        </div>
+    
+    </div>
+      
+  </div>
+</header>
+
+
         
 <!-- Nav Bar Ends -->
 
 <body>
 
+<!-- <button onclick="toggleDarkMode()" class="dark-mode-btn" title="Toggle Dark Mode">🌓</button> -->
+<button class="dark-mode-btn" title="Toggle Theme">
+  <i class="fas fa-moon"></i>
+</button>
+
+
     <!-- Header Section with Background Image and Intro Text -->
-    <section class="header">
-      <div class="header-overlay"></div>
-      <div class="header-content">
-          <h1>Welcome to the Ancient Library</h1>
-          <p class="subtitle">Read what you want, Write what you love</p>
-          <button type="button" class="btn-read-more"> <a href="template/newnovels.php">Read More</a></button>
-      </div>
-    </section>
+<section class="header">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+        <h1>Welcome to the Antique Library</h1>
+        <p class="subtitle">Read what you like, Write what you love!!!</p>
+        <button type="button" class="btn-read-more"> <a href="template/newnovels.php">Read More</a></button>
+    </div>
+
+
+            <!-- To Display the Search Results -->
+            <?php if ($search_query): ?>
+        <h2>Search Results for "<?= htmlspecialchars($search_query) ?>"</h2>
+        <div class="novels">
+            <?php while ($row = $novels->fetch_assoc()): ?>
+                <div class="novel">
+                    <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
+                    <h3><?= htmlspecialchars($row['title']) ?></h3>
+                    <p>By <?= htmlspecialchars($row['author_name']) ?></p>
+                    <p><?= htmlspecialchars($row['genre']) ?></p>
+                    <a href="template/novel/novel_info.php?id=<?= $row['novel_id'] ?>">Read More</a>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    <?php endif; ?>
+
+</section>
+
 
     <!------- Slideshow of Popular featured Novels with Smooth Transition -->
   
 <section class="featured" id="featured">
+
     <h1 class="heading"><span>Featured Books</span></h1>
     <div class="swiper featured-slider">
-      <div class="swiper-wrapper">
-        <!-- Book 1 -->
+        <!-- Dynamically populated swiper-wrapper -->
+        
+        <div class="swiper-wrapper"> 
+    <?php
+    $genres_result = $conn->query("SELECT DISTINCT genre FROM Novels");
+    while ($genre_row = $genres_result->fetch_assoc()) {
+        $genre = $genre_row['genre'];
+        $stmt = $conn->prepare("SELECT * FROM Novels WHERE genre = ? ORDER BY rating DESC LIMIT 1");
+        $stmt->bind_param("s", $genre);
+        $stmt->execute();
+        $featured_result = $stmt->get_result();
+        if ($novels = $featured_result->fetch_assoc()):
+            $is_in_library = in_array($novels['novel_id'], $library_novels);
+    ?>
         <div class="swiper-slide box">
-          <div class="image">
-            <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1562726234i/13496.jpg" alt="Book 1" />
-          </div>
-          <div class="content">
-            <h3>The Hunger Games</h3>
-            <div class="price">Suzanne Collins</div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
+            <div class="image">
+                <img src="<?= htmlspecialchars($novels['cover_image_url']) ?>" alt="<?= htmlspecialchars($novels['title']) ?>" />
+            </div>
+            <div class="content">
+                <h3><?= htmlspecialchars($novels['title']) ?></h3>
+                <div class="price">By <?= htmlspecialchars($novels['author_name']) ?></div>
+
+                <form action="pages/reader/library.php" method="POST">
+                    <input type="hidden" name="novel_id" value="<?= $novels['novel_id'] ?>">
+                    <input type="hidden" name="title" value="<?= htmlspecialchars($novels['title']) ?>">
+                    <input type="hidden" name="author" value="<?= htmlspecialchars($novels['author_name']) ?>">
+
+                    <?php if ($is_in_library): ?>
+                        <input type="hidden" name="remove_novel_id" value="<?= $novels['novel_id']; ?>">
+                        <button type="submit" name="remove" class="remove-btn">Remove from Library</button>
+                    <?php else: ?>
+                        <button type="submit" name="add" class="btn">Add To Library</button>
+                    <?php endif; ?>
+                </form>
+
+            </div>
         </div>
-        <!-- Book 2 -->
-        <div class="swiper-slide box">
-          <div class="image">
-            <img src="images/book (1).jpg" alt="Book 2" />
-          </div>
-          <div class="content">
-            <h3>Featured Books</h3>
-            <div class="price">$12.99 </div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
-        </div>
-        <!-- Book 3 -->
-        <div class="swiper-slide box">
-          <div class="image">
-            <img src="images/book (1).png" alt="Book 3" />
-          </div>
-          <div class="content">
-            <h3>Featured Book</h3>
-            <div class="price">$9.99 </div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
-        </div>
-        <!-- Book 4 -->
-        <div class="swiper-slide box">
-          <div class="image">
-            <img src="images/book (2).jpeg" alt="Book 4" />
-          </div>
-          <div class="content">
-            <h3>Featured Book</h3>
-            <div class="price">$19.99 </div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
-        </div>
-        <!-- Book 5 -->
-        <div class="swiper-slide box">
-          <div class="image">
-            <img src="images/book (4).jpeg" alt="Book 5" />
-          </div>
-          <div class="content">
-            <h3>Featured Book</h3>
-            <div class="price">$22.99 </div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
-        </div>
-        <!-- Book 6 -->
-        <div class="swiper-slide box">
-          <div class="image">
-            <img src="images/book (1).jpg" alt="Book 6" />
-          </div>
-          <div class="content">
-            <h3>Featured Book</h3>
-            <div class="price">$18.99 </div>
-            <a href="#" class="btn">Add To Library</a>
-          </div>
-        </div>
-        <!-- Add more books here -->
-      </div>
-      <!-- Navigation buttons -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
+    <?php 
+        endif;
+    }
+    ?>
+</div>
+
+        
+        <!-- Swiper navigation buttons -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
-  </section>
+</section>
+
   
   
   <!-- *****************************Slideshow js scriscript********************* -->
@@ -191,41 +257,44 @@
   
 <!--------------------------------- Library or recently read books ----------------------------------->
   
+<section class= "library">
+          <!-- User Library Section -->
+          <?php if ($isLoggedIn && $user_library->num_rows > 0): ?>
+            <h2>Your Library</h2>
+            <div class="novels">
+                <?php while ($row = $user_library->fetch_assoc()): ?>
+                    <div class="novel">
+                        <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
+                        <h3><?= htmlspecialchars($row['title']) ?></h3>
+                        <p>By <?= htmlspecialchars($row['author_name']) ?></p>
+                        <a href="novel.php?id=<?= $row['novel_id'] ?>">Continue</a>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+        <?php endif; ?>
 
+</section>
 
     <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
     
 <div class="recommendations">
     <div class="rec-container">
-      <h1>Book Recommendations</h1>
-      <div class="genre-container">
-          <div class="genre-card" data-genre="fiction">
-              <p class="genre-name">Fiction</p>
-          </div>
-          <div class="genre-card" data-genre="non-fiction">
-              <p class="genre-name">Non-Fiction</p>
-          </div>
-          <div class="genre-card" data-genre="fantasy">
-              <p class="genre-name">Fantasy</p>
-          </div>
-          <div class="genre-card" data-genre="mystery">
-              <p class="genre-name">Mystery</p>
-          </div>
-          <div class="genre-card" data-genre="sci-fi">
-              <p class="genre-name">Sci-Fi</p>
-          </div>
-          <div class="genre-card" data-genre="romance">
-            <p class="genre-name">Romance</p>
+ <!-- Recommended Books Section -->
+        <h2>Recommended Books</h2>
+        <div class="novels">
+            <?php while ($row = $recommended_books->fetch_assoc()): ?>
+                <div class="novel">
+                    <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
+                    <h3><?= htmlspecialchars($row['title']) ?></h3>
+                    <p>By <?= htmlspecialchars($row['author_name']) ?></p>
+                    <p>⭐ <?= number_format($row['rating'], 1) ?></p>
+                    <a href="novel.php?id=<?= $row['novel_id'] ?>">Read More</a>
+                </div>
+            <?php endwhile; ?>
         </div>
-        <div class="genre-card" data-genre="thriller">
-          <p class="genre-name">Thriller</p>
       </div>
-      </div>
-      <div id="book-list">
-          <!-- Book recommendations will be displayed here -->
-      </div>
-  </div>
 </div>
+
 
 
   <script>
@@ -273,44 +342,12 @@ function displayBooks(books) {
     <!------------ About Us Section with Enhanced Book Animation ------------>
 
 
-    <section class="about-us">
-      <h1>About Us</h1>
-    <div class="book"> 
-      <div class="back">  
-          <div class="content">
-             
-        
-          </div>
-      </div>
-      <div class="page6"> 
-          <div class="content">
-              <h2>Contact Us</h2>
-              <p>Email: Aarya@library.com</p>
-              <p>Phone: (123) 456-7890</p>
-          </div>
-      </div>
-      <div class="page5">
-          <div class="content"></div>
-      </div>
-      <div class="page4">
-          <div class="content"></div>
-      </div>
-      <div class="page3">
-          <div class="content"></div>
-      </div>
-      <div class="page2">
-          <div class="content"> </div>
-      </div>
-      <div class="page1">
-          <div class="content"></div>
-      </div>
-      <div class="front"> 
-          <div class="content">
-              <h2> Creator-</h2>
-              <p>Aarya Shinde</p>
-          </div>
-      </div>
-  </div>
+<section class="about-us" >
+
+  <h2>About Us</h2>
+  <p>Welcome to the <b>Unified System for Author and Audience </b>, where readers and writers connect.
+    Writers can publish their novels, and readers can explore, review, and add books to their libraries. 
+    Our goal is to create a seamless reading and writing experience.</p>
 
 </section>
 
@@ -320,33 +357,8 @@ function displayBooks(books) {
 
 <footer class="footer">
     <div class="footer__container">
-      <div class="footer__content col">
-        <h3 class="footer__title">Our Services</h3>
-        <ul class="footer__links">
-          <li><a href="#" class="footer__link">Support</a></li>
-          <li><a href="#" class="footer__link">Report a bug</a></li>
-          <li><a href="#" class="footer__link">Terms of Service</a></li>
-        </ul>
-      </div>
   
-      <div class="footer__content col">
-        <h3 class="footer__title">Our Company</h3>
-        <ul class="footer__links">
-          <li><a href="#" class="footer__link">Blog</a></li>
-          <li><a href="#" class="footer__link">My mission</a></li>
-          <li><a href="#" class="footer__link">Get in touch</a></li>
-        </ul>
-      </div>
-  
-      <div class="footer__content col">
-        <h3 class="footer__title">Community</h3>
-        <ul class="footer__links">
-          <li><a href="#" class="footer__link">Support</a></li>
-          <li><a href="#" class="footer__link">Questions</a></li>
-          <li><a href="#" class="footer__link">Reviews</a></li>
-        </ul>
-      </div>
-  
+
       <div class="footer__social col">
         <a href="#" class="footer__social-link"><i class="bx bxl-facebook-circle"></i></a>
         <a href="https://github.com/Aarya-Shinde/Variant/" class="footer__social-link"><i class="bx bxl-github"></i></a>
@@ -355,8 +367,34 @@ function displayBooks(books) {
     </div>
   
     <p class="footer__copy">&#169; Aarya Shinde. All rights reserved</p>
+     <p>&copy; <?= date("Y") ?> Unified System for Author & Audience. All rights reserved.</p>
+        <p><a href="template/about.html">Contact Us</a> | <a href="privacy.php">Privacy Policy</a></p>
+
   </footer>
   <!-- Footer Section ends here -->
   
+  <!-- Js for darkmode flip and localstorage -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const darkModeBtn = document.querySelector(".dark-mode-btn");
+    const icon = darkModeBtn.querySelector("i");
+
+    // Load saved preference
+    const isDarkMode = localStorage.getItem("theme") === "dark";
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    icon.classList.replace(isDarkMode ? "fa-moon" : "fa-sun", isDarkMode ? "fa-sun" : "fa-moon");
+
+    // Toggle on click
+    darkModeBtn.addEventListener("click", () => {
+      const isDark = document.body.classList.toggle("dark-mode");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      icon.classList.replace(isDark ? "fa-moon" : "fa-sun", isDark ? "fa-sun" : "fa-moon");
+    });
+  });
+</script>
+
+
+
+
 </body>
 </html>
