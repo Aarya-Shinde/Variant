@@ -3,7 +3,8 @@ show tables;
 
 select * from Users;
 select * from novels;
-select * from chapters;
+select * from writernovels;
+
 
 -- sample novel Data to input in 
 
