@@ -1,0 +1,160 @@
+/* 
+#e5c07b Softer gold for dark mode 
+#3b2f2f 
+#cbb892; More muted faded ink 
+*/
+
+/* ========== DARK MODE STYLING ========== */
+body.dark-mode {
+    background: #1e1a16;
+    color: #d4c5a1;
+    font-family: 'Georgia', serif;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+  
+  /* ========== Navbar ========== */
+  .dark-mode .navbar {
+    background: #3b2f2f;
+    border-bottom: 5px solid #8c6849;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: background 0.5s ease;
+    animation: fadeInDown 0.8s ease-in-out;
+  }
+  
+ 
+  .dark-mode .navbar::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background-color: #e5c07b; /* Softer gold for dark mode */
+    margin-top: 8px;
+    border-radius: 2px;
+  }
+  
+   
+  .dark-mode .navbar .logo a,
+  .dark-mode .nav-links a {
+    color: #e5c07b;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .dark-mode .nav-links a:hover {
+    text-shadow: 0 0 6px #e5c07b;
+  }
+  
+  /* ========== Sections ========== */
+  .dark-mode .header-intro,
+  .dark-mode .featured,
+  .dark-mode .library,
+  .dark-mode .recommendations ,
+  .dark-mode .about-us {
+    background: rgba(35, 30, 25, 0.95); /* Darker parchment */
+    color: #cbb892; /* More muted faded ink */
+    border: 2px solid #6b4e34;
+    border-radius: 12px;
+    margin: 1.5em;
+    padding: 2em;
+    animation: fadeInUp 0.8s ease both;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25); /* Softer glow */
+  }
+  
+  
+  /* ========== Headings ========== */
+  .dark-mode h1, .dark-mode h2, .dark-mode h3 {
+    color: #e5c07b;
+    text-shadow: 0 0 8px rgba(229, 192, 123, 0.3);
+    animation: fadeInText 1s ease forwards;
+  }
+  
+  /* ========== Inputs & Buttons ========== */
+  .dark-mode input,
+  .dark-mode textarea {
+    background: rgba(58, 50, 44, 0.95);
+    border: 2px solid #8c6849;
+    color: #d4c5a1;
+    padding: 10px;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  
+  .dark-mode input:focus,
+  .dark-mode textarea:focus {
+    border-color: #e5c07b;
+    background: rgba(75, 60, 50, 0.95);
+    box-shadow: 0 0 10px rgba(229, 192, 123, 0.2);
+  }
+  
+  .dark-mode button {
+    background: #8c6849;
+    color: #f8e4c6;
+    border: 2px solid #5a4330;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .dark-mode button:hover {
+    background: #5a4330;
+    box-shadow: 0 0 10px rgba(229, 192, 123, 0.3);
+  }
+  
+  /* ========== Footer ========== */
+  .dark-mode footer {
+    background: #3b2f2f;
+    border-top: 5px solid #7c5c3b;
+    padding: 1.5em;
+    text-align: center;
+    color: #e5c07b;
+    animation: fadeInUp 1s ease-in-out;
+  }
+  
+  /* ========== Toggle Button ========== */
+  .dark-mode-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #3b2f2f;
+    color: #e5c07b;
+    font-size: 1.5em;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    z-index: 1000;
+    box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  }
+  
+  .dark-mode-btn:hover {
+    background: #574b3a;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* ========== Animations ========== */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInText {
+    from { opacity: 0; letter-spacing: 0.1em; }
+    to { opacity: 1; letter-spacing: normal; }
+  }
+  
+  @keyframes glowBar {
+    from { box-shadow: 0 2px 6px rgba(229, 192, 123, 0.6); }
+    to { box-shadow: 0 2px 12px rgba(229, 192, 123, 1); }
+  }
+  
