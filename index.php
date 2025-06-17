@@ -6,6 +6,9 @@ include 'db/dbconnect.php';  // Database connection
 $isLoggedIn = isset($_SESSION['user_id']);
 $user_id = $isLoggedIn ? $_SESSION['user_id'] : null;
 
+$isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+
+
 // Handle search functionality
 $search_query = "";
 if (isset($_GET['search'])) {
@@ -18,6 +21,13 @@ if (isset($_GET['search'])) {
 } else {
     $novels = $conn->query("SELECT * FROM Novels ORDER BY created_at DESC LIMIT 10");
 }
+
+// Getting user’s library books (for horizontal shelf)
+/* 30 random books, period */
+$stmt = $conn->prepare("SELECT novel_id, title FROM Novels ORDER BY RAND() LIMIT 30");
+$stmt->execute();
+$books = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
 
 // Fetch user's library books
 $user_library = null;
@@ -53,14 +63,20 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
 
     <!-- ------------------linking css js files------------------- -->
     <link rel="stylesheet" href="css/indexstyle.css"> 
-    <link rel="stylesheet" href="css/indexdm.css"> 
-    <script src="/js/scripts.js" defer></script>
+    <link rel="stylesheet" href="css/indexdm.css">
 
      <!--=============== BOXICONS ===============-->
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"/>
+     <!-- for user icon -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
      <link rel="preconnect" href="https://fonts.googleapis.com">
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- for libre fonts for novels title -->
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+
 
      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
      <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,17 +119,29 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
         <div class="nav">
             <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
                 <li><a href="template/explore.php">Explore</a></li>
 
-                <?php if ($isLoggedIn): ?>
-                    <li><a href="pages/reader_dashboard.php">Dashboard</a></li>
-                    <li><a href="pages/reader/library.php">Library</a></li>
-                    <li><a href="pages/logout.php">Logout</a></li>
-                <?php else: ?>
-                    <li><a href="pages/login.php">Login</a></li>
-                    <li><a href="pages/register.php">Sign Up</a></li>
-                <?php endif; ?>
+            <?php if ($isLoggedIn): ?>
+            
+                <li><a href="pages/writer_dashboard.php">Writer</a></li>
+                <li><a href="pages/reader/library.php">Library</a></li>
+
+                <!-- User Dropdown -->
+                <li class="dropdown">
+                    <a href="#"><i class="fa fa-user"></i></a>
+
+                    <ul class="dropdown-content">
+                        <li><a href="pages/reader_dashboard.php">Profile</a></li>
+                        <?php if ($isAdmin): ?>
+                            <li><a href="pages/admin_dashboard.php">Admin</a></li>
+                        <?php endif; ?>
+                        <li><a href="pages/logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            <?php else: ?>
+                <li><a href="pages/login.php">Login</a></li>
+                <li><a href="pages/register.php">Sign Up</a></li>
+            <?php endif; ?>
             </ul>
         </nav>    
         </div>
@@ -129,7 +157,7 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
 
 <body>
 
-<!-- <button onclick="toggleDarkMode()" class="dark-mode-btn" title="Toggle Dark Mode">🌓</button> -->
+<!-- Toggle Dark Mode"-->
 <button class="dark-mode-btn" title="Toggle Theme">
   <i class="fas fa-moon"></i>
 </button>
@@ -155,13 +183,262 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
                     <h3><?= htmlspecialchars($row['title']) ?></h3>
                     <p>By <?= htmlspecialchars($row['author_name']) ?></p>
                     <p><?= htmlspecialchars($row['genre']) ?></p>
-                    <a href="template/novel/novel_info.php?id=<?= $row['novel_id'] ?>">Read More</a>
+                    <a href="/variant/template/novel/novel_info.php?novel_id=<?= $novel['novel_id'] ?>">Read More</a>
+
                 </div>
             <?php endwhile; ?>
         </div>
     <?php endif; ?>
 
 </section>
+
+
+
+    <!-- Horizontal bookshelf moving slider --------------------------------------------------------->
+
+<?php
+  /* 60 random books, 30 per row */
+  $stmt  = $conn->prepare("SELECT novel_id, title FROM Novels ORDER BY RAND() LIMIT 60");
+  $stmt->execute();
+  $books = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+  /* split books into two shelves */
+  $topRow    = array_slice($books, 0, 30);
+  $bottomRow = array_slice($books, 30, 30);
+
+  /* colour palettes for spines */
+  /* colour palettes for spines + matching font color */
+  $palettes = [
+      [['#2b1c14', '#3e2723', '#1c0f0a'], '#e8dbc4'], // Espresso Depth → Muted Parchment
+      [['#5a3e28', '#7e5b3e', '#926f34'], '#f4e5c6'], // Golden Walnut → Faded Buttercream
+      [['#705542', '#9c744e', '#ffc47e'], '#342015'], // Glowing Bronze → Soft Chestnut
+      [['#4e342e', '#5a3e30', '#6a3d27'], '#f0dfb3'], // Dark Wood Rich → Gentle Goldenrod
+      [['#3c1b0d', '#5a2e14', '#753f21'], '#f0d8b0'], // Mahogany Red-Brown → Light Caramel
+      [['#443126', '#bea665', '#876e49'], '#2a1a11'], // Bronze Beam → Muted Brown
+      [['#3f2e25', '#7c4a31', '#a47c59'], '#f8f1e3'], // Polished Oak → Soft Ivory
+      [['#6a3d27', '#8c5a42', '#c39766'], '#f5e6c9'], // Burnished Bark → Cream Tint
+      [['#402315', '#5b3926', '#9c744e'], '#ebd4b5'], // Solid Timber → Dusty Almond
+      [['#4c2b0f', '#7e501e', '#f5be68'], '#38261a'], // Golden Amber Glow → Deep Muted Espresso
+    ];
+    
+
+/* helper that prints one shelf row and generates random  */
+  function buildRow(string $rowId, array $books, array $palettes): void {
+      // you may need   global $library_novels;   if you already track saved books
+      echo '<div class="shelf-track" id="'.$rowId.'">';
+
+      foreach ($books as $b) {
+          [$pal, $fontColor] = $palettes[array_rand($palettes)];
+          $w  = rand(60, 85);          //width
+          $h  = rand(200, 280);         //height
+          $fs = rand(8, 12);            //fontsize
+          $sc = rand(90, 110) / 100;
+
+          // optional: check if in library to mark as saved
+          $saved = in_array($b['novel_id'], $library_novels ?? []) ? 'saved' : '';
+          $icon  = $saved ? '✓' : '＋';
+
+          echo '
+          <div class="book-wrap" style="position:relative;display:inline-block;">
+          
+            <a class="book"
+              href="template/novel/novel_info.php?novel_id='.$b['novel_id'].'"
+              target="_blank"
+              title="'.htmlspecialchars($b['title']).'"
+              style="
+                --c1: '.$pal[0].';
+                --c2: '.$pal[1].';
+                --c3: '.$pal[2].';
+                width: '.$w.'px; height: '.$h.'px;
+                font-size: '.$fs.'px; --scale: '.$sc.';
+                color: '.$fontColor.';
+                background:linear-gradient(to right, '.$pal[0].' 10%, '.$pal[1].' 45%, '.$pal[2].' 90%);
+              ">
+              '.htmlspecialchars($b['title']).'
+            </a>
+          
+            <button class="bookmark-btn'.($saved ? ' saved' : '').'"
+                    data-novel="'.$b['novel_id'].'"
+                    title="'.($saved ? 'Remove from Library' : 'Add to Library').'">
+                <i class="'.($saved ? 'fas' : 'far').' fa-bookmark"></i>
+            </button>
+          
+          </div>';
+          
+          
+      }
+
+      echo '</div>';
+  }
+
+?>
+<section class="horizontal-bookshelf">
+  <div class="content">
+    <h2 style="color:#b48845">Browse</h2>
+
+    <div class="shelf-wrapper"><?php buildRow('track1', $topRow, $palettes); ?></div>
+    <div class="shelf-wrapper"><?php buildRow('track2', $bottomRow, $palettes); ?></div>
+  </div>
+</section>
+
+<script>
+  /* duplicate each track once for a seamless loop */
+  ['track1','track2'].forEach(id=>{
+    const t = document.getElementById(id);
+    t.innerHTML += t.innerHTML;
+  });
+  </script>
+
+  <script>
+  /* make bookmark clickable only on hover */
+  document.querySelectorAll('.bookmark-btn').forEach(btn=>{
+    btn.style.pointerEvents = 'none';
+  });
+  document.querySelectorAll('.book-wrap').forEach(wrap=>{
+    wrap.addEventListener('mouseenter', () =>
+      wrap.querySelector('.bookmark-btn').style.pointerEvents = 'auto'
+    );
+  });
+
+  document.addEventListener('click', async e => {
+    const btn = e.target.closest('.bookmark-btn');
+    if (!btn) return;
+
+    const icon = btn.querySelector('i');
+    const id   = btn.dataset.novel;
+
+    try {
+      const res  = await fetch('/variant/pages/reader/library_toggle.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'novel_id=' + encodeURIComponent(id)
+      });
+      const data = await res.json();
+
+      if (data.status === 'error') {
+        console.error('DB error:', data.msg);
+        alert('Could not save. Try again.'); return;
+      }
+
+      // pop effect
+      btn.classList.remove('clicked'); void btn.offsetWidth; btn.classList.add('clicked');
+
+      if (data.status === 'added') {
+        btn.classList.add('saved');
+        icon.classList.replace('far','fas');
+        btn.title = 'Remove from Library';
+      } else if (data.status === 'removed') {
+        btn.classList.remove('saved');
+        icon.classList.replace('fas','far');
+        btn.title = 'Add to Library';
+      }
+
+    } catch(err){
+      console.error(err);
+      alert('Could not update the library.');
+    }
+  });
+</script>
+
+
+<!-- Chatbot section for better Recommendation -->
+
+<!--  Chat bubble toggle button -->
+
+<button id="ariaBubble" class="aria-bubble">💬</button>
+
+<!-- Hidden chat widget -->
+<div id="ariaPanel" class="aria-container hidden">
+  <div class="aria-header">Loki</div>
+
+  <div class="aria-body" id="ariaBody">
+    <div class="message bot"><p>Welcome! 😊 Ask me about books, writing tips, or anything!</p></div>
+  </div>
+
+  <div class="aria-footer">
+    <input type="text" id="ariaInput" placeholder="Type your message…">
+    <button id="ariaSend">Send</button>
+  </div>
+</div>
+
+
+<script>
+(() => {
+  // Grab elements
+  const bubble = document.getElementById('ariaBubble');
+  const panel  = document.getElementById('ariaPanel');
+  const send   = document.getElementById('ariaSend');
+  const input  = document.getElementById('ariaInput');
+  const body   = document.getElementById('ariaBody');
+
+  /* Toggle widget */
+  bubble.onclick = () => panel.classList.toggle('hidden');
+
+  /* Send events */
+  send.onclick = handleSend;
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+
+  /* Helpers */
+  function addMsg(text, who='bot'){
+    const div = document.createElement('div');
+    div.className = `message ${who}`;
+    div.innerHTML = `<p>${text}</p>`;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  async function handleSend(){
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMsg(msg,'user');
+    input.value='';
+
+    // placeholder while waiting
+    const wait = document.createElement('div');
+    wait.className='message bot';
+    wait.innerHTML='<p>…thinking…</p>';
+    body.appendChild(wait); body.scrollTop = body.scrollHeight;
+
+    try{
+      const res  = await fetch('/Variant/chatbot.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'message='+encodeURIComponent(msg)
+      });
+      const txt = await res.text();
+      wait.remove();
+      addMsg(txt,'bot');
+    }catch(err){
+      wait.remove();
+      addMsg('Sorry, something went wrong.','bot');
+    }
+  }
+})();
+</script>
+
+
+
+
+    <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
+    
+    <div class="recommendations">
+    
+    <!-- Recommended Books Section -->
+           <h2>Recommended Books</h2>
+           <div class="novels">
+               <?php while ($row = $recommended_books->fetch_assoc()): ?>
+                   <div class="novel">
+                       <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
+                       <h3><?= htmlspecialchars($row['title']) ?></h3>
+                       <p>By <?= htmlspecialchars($row['author_name']) ?></p>
+                       <p>⭐ <?= number_format($row['rating'], 1) ?></p>
+                       <a href="/variant/template/novel/novel_info.php?novel_id=<?= $row['novel_id'] ?>">Read More</a>
+                   </div>
+               <?php endwhile; ?>
+           </div>
+         </div>
+   </div>
+   
 
 
     <!------- Slideshow of Popular featured Novels with Smooth Transition -->
@@ -199,7 +476,7 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
 
                     <?php if ($is_in_library): ?>
                         <input type="hidden" name="remove_novel_id" value="<?= $novels['novel_id']; ?>">
-                        <button type="submit" name="remove" class="remove-btn">Remove from Library</button>
+                        <button type="submit" name="remove" class="remove-btn">In Library</button>
                     <?php else: ?>
                         <button type="submit" name="add" class="btn">Add To Library</button>
                     <?php endif; ?>
@@ -267,75 +544,13 @@ $recommended_books = $conn->query("SELECT * FROM Novels ORDER BY rating DESC LIM
                         <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
                         <h3><?= htmlspecialchars($row['title']) ?></h3>
                         <p>By <?= htmlspecialchars($row['author_name']) ?></p>
-                        <a href="novel.php?id=<?= $row['novel_id'] ?>">Continue</a>
+                        <a href="/variant/template/novel/novel_info.php?novel_id=<?= $row['novel_id'] ?>">Continue</a>
                     </div>
                 <?php endwhile; ?>
             </div>
         <?php endif; ?>
 
 </section>
-
-    <!--------------- Personalized Recommendations with Hover Effect --------------------------------->
-    
-<div class="recommendations">
-    <div class="rec-container">
- <!-- Recommended Books Section -->
-        <h2>Recommended Books</h2>
-        <div class="novels">
-            <?php while ($row = $recommended_books->fetch_assoc()): ?>
-                <div class="novel">
-                    <img src="<?= $row['cover_image_url'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="150">
-                    <h3><?= htmlspecialchars($row['title']) ?></h3>
-                    <p>By <?= htmlspecialchars($row['author_name']) ?></p>
-                    <p>⭐ <?= number_format($row['rating'], 1) ?></p>
-                    <a href="novel.php?id=<?= $row['novel_id'] ?>">Read More</a>
-                </div>
-            <?php endwhile; ?>
-        </div>
-      </div>
-</div>
-
-
-
-  <script>
-  document.querySelectorAll('.genre-card').forEach(card => {
-    card.addEventListener('click', function() {
-        const genre = this.getAttribute('data-genre');
-        fetchBooks(genre);
-    });
-});
-
-function fetchBooks(genre) {
-    // Simulate fetching books from a database or API
-    const books = [
-        { title: 'Book 1', genre: 'fiction', image: 'images/book (1).png' },
-        { title: 'Book 2', genre: 'fantasy', image: 'https://in.pinterest.com/pin/48343395994947180/' },
-        { title: 'Book 3', genre: 'mystery', image: 'images/book.png' },
-        { title: 'Book 4', genre: 'sci-fi', image: 'images/book (1).png' },
-        { title: 'Book 5', genre: 'non-fiction', image: 'https://via.placeholder.com/150' },
-        { title: 'Book 6', genre: 'romance', image: 'https://via.placeholder.com/150' },
-        { title: 'Book 7', genre: 'thriller', image: 'https://via.placeholder.com/150' }
-    ];
-
-    const filteredBooks = books.filter(book => book.genre.toLowerCase() === genre.toLowerCase());
-    displayBooks(filteredBooks);
-}
-
-function displayBooks(books) {
-    const bookList = document.getElementById('book-list');
-    bookList.innerHTML = '';
-    books.forEach(book => {
-        const bookCard = document.createElement('div');
-        bookCard.className = 'book-card';
-        bookCard.innerHTML = `
-            <img class="book-image" src="${book.image}" alt="${book.title}">
-            <h3 class="book-title">${book.title}</h3>
-            <p class="book-genre">${book.genre}</p>
-        `;
-        bookList.appendChild(bookCard);
-    });
-}
-</script>
 
 
 
@@ -359,20 +574,21 @@ function displayBooks(books) {
     <div class="footer__container">
   
 
-      <div class="footer__social col">
-        <a href="#" class="footer__social-link"><i class="bx bxl-facebook-circle"></i></a>
-        <a href="https://github.com/Aarya-Shinde/Variant/" class="footer__social-link"><i class="bx bxl-github"></i></a>
-        <a href="#" class="footer__social-link"><i class="bx bxl-instagram"></i></a>
+      <div class="footer__social">
+        <a href="#" class="footer__social"><i class="bx bxl-facebook-circle"></i></a>
+        <a href="https://github.com/Aarya-Shinde/Variant/" class="footer__social"><i class="bx bxl-github"></i></a>
+        <a href="#" class="footer__social"><i class="bx bxl-instagram"></i></a>
       </div>
     </div>
   
     <p class="footer__copy">&#169; Aarya Shinde. All rights reserved</p>
      <p>&copy; <?= date("Y") ?> Unified System for Author & Audience. All rights reserved.</p>
-        <p><a href="template/about.html">Contact Us</a> | <a href="privacy.php">Privacy Policy</a></p>
+        <p><a href="template/about.html" class="footer__link">Contact Us</a>   <a href="privacy.php" class="footer__link">Privacy Policy</a></p>
 
   </footer>
   <!-- Footer Section ends here -->
   
+
   <!-- Js for darkmode flip and localstorage -->
   <script>
   document.addEventListener("DOMContentLoaded", () => {
