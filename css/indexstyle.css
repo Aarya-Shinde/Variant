@@ -16,7 +16,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Navbar */
+/************************* Navbar **********************************/
 .navbar {
   display: flex;
   align-items: center;
@@ -29,7 +29,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  position: relative; /* 🔑 Needed for ::after */
+  position: relative; 
 }
 
 
@@ -71,6 +71,7 @@ nav a {
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
+  font-family: Edu AU VIC WA NT Pre, cursive;
 }
 
 nav a::after {
@@ -89,6 +90,59 @@ nav a::after {
 nav a:hover::after {
   transform: scaleX(1);
 }
+
+
+.nav .dropdown > a i {
+  font-size: 1.5rem; /* or 24px */
+  vertical-align: middle;
+}
+
+/* To handle drop down for log in of user including admin */
+/* Dropdown parent */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+
+/* Hide dropdown content initially */
+/* Ensure dropdown-content is hidden initially */
+.dropdown .dropdown-content {
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 150px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  list-style: none;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block !important;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* Style the items */
+.dropdown-content li a {
+  color: #333;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content li a:hover {
+  background-color: #f0f0f0;
+}
+
 
 /* Search */
 .search-container {
@@ -128,9 +182,10 @@ nav a:hover::after {
   transform: scale(1.05);
 }
 
-/* Header Section */
+/**************************** Header Section *********************/
 .header {
-  background: url('/images/mainbg.jpg') center/cover no-repeat;
+
+  background: url('../images/mainbg.jpg') center/cover no-repeat;
   position: relative;
   height: 85vh;
   display: flex;
@@ -188,7 +243,216 @@ nav a:hover::after {
   background: #b48845;
 }
 
-/* Featured Books Section */
+/************************Horizontal bookshelf moving slider****************************/
+
+/* layout frame */
+/* ─── FRAME ───────────────────────────────────────── */
+
+.content{
+  padding:40px 10px;
+  text-align:center;
+}
+
+/* ─── SHELF ZONE ──────────────────────────────────── */
+.shelf-wrapper{
+  overflow:hidden;
+  white-space:nowrap;
+  margin-bottom:40px;              /* space between the two rows */
+}
+.shelf-track{
+  display:inline-flex;
+  align-items:flex-end;            /* books sit ON the plank */
+  gap:6px;
+  animation:scroll 280s linear infinite;
+  position:relative;
+  padding-bottom:26px;             /* plank height */
+}
+/* dark wood plank (wider & highlighted) */
+.shelf-track::before{
+  content:"";
+  position:absolute;
+  left:-200%;bottom:0;
+  width:800%;height:27px;
+  background:linear-gradient(#60411d 0%, #4c2b0f 60%, #3a1f08 100%);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.4);
+  border-radius:5px 5px 0 0;
+  box-shadow:0 2px 4px rgba(0,0,0,.35) inset;
+  animation:scroll 240s linear infinite;
+  
+}
+
+/* endless loop */
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to  {transform:translateX(-50%)}
+}
+
+/* ─── BOOK SPINES ─────────────────────────────────── */
+.book {
+  --scale: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;               /* stack characters vertically */
+  position: relative;
+  text-align: center;
+  hyphens: auto;
+  /* color: #2b1c14; */
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: 'Libre Baskerville', serif;
+  /* font-size: 10px;                      smaller font */
+  line-height: 1.1;                     /* tighter line spacing */
+  border-radius: 4px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.25s;
+  z-index: 1;
+  transform-origin: bottom;
+  transform: scale(var(--scale));
+  writing-mode: initial;                /* horizontal */
+  text-orientation: initial;
+  white-space: normal;                  /* allow wrapping */
+  word-break: break-word;              /* wrap after 10ish chars */
+  padding: 4px 2px;
+  max-width: 70px;
+  background: linear-gradient(to right, var(--c1, #a0522d) 10%, var(--c2, #8b4513) 45%, var(--c3, #69340d) 90%);
+}
+
+.book:hover {
+  transform: scale(calc(var(--scale) * 1.12));
+}
+
+.book::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  width: 8px;
+  height: 14px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+
+@media(max-width:768px){.book{font-size:12px}}
+
+
+/* bookmark icon to add in library styling */
+
+.bookmark-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  color: #f2e0c2;
+  background: rgba(0,0,0,0.25);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  opacity:0;
+  pointer-events:none;         /* << stop blocking the link */
+  transition:opacity .3s, background .3s, color .3s;
+}
+
+.book-wrap:hover .bookmark-btn {
+  opacity:1;
+  pointer-events:auto;  /* << only clickable when visible */
+}
+
+.bookmark-btn:hover {
+  background: #b48845;
+  color: #fffbe8;
+}
+
+.bookmark-btn.saved i {
+  color: #7c0d0d;
+}
+
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.7) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.3) rotate(-10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.bookmark-btn.clicked i {
+  animation: pop-in 0.4s ease;
+}
+
+
+
+
+
+/* *****************Chatbot styling*************** */
+
+ /* Bubble */
+ .aria-bubble{
+  position:fixed; bottom:25px; right:25px;
+  width:60px; height:60px; border-radius:50%;
+  background:#5d4037; color:#fff; font-size:26px;
+  border:none; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,.3);
+  z-index:9999;
+}
+.aria-bubble:hover{transform:scale(1.08)}
+
+/* Panel */
+.aria-container{
+  position:fixed; bottom:100px; right:25px;
+  width:330px; max-height:70vh; display:flex; flex-direction:column;
+  background:#fffaf0; border-radius:12px; box-shadow:0 0 10px rgba(0,0,0,.3);
+  z-index:9998;
+}
+.hidden{display:none!important;}
+
+.aria-header{
+  background:#5d4037; color:#fff; text-align:center; padding:12px;
+  font-weight:bold; border-top-left-radius:12px; border-top-right-radius:12px;
+}
+.aria-body{
+  flex-grow:1; padding:14px; overflow-y:auto; background:#f1e4d1;
+}
+.aria-body .message{margin-bottom:14px; display:flex}
+.message.bot{justify-content:flex-start}
+.message.user{justify-content:flex-end}
+.aria-body .message p{
+  margin:0; padding:9px 14px; border-radius:10px; max-width:75%;
+  word-wrap:break-word; font-size:14px;
+}
+.message.bot  p{background:#d7ccc8; color:#3e2723}
+.message.user p{background:#6d4c41; color:#fff}
+
+.aria-footer{
+  display:flex; padding:10px; background:#f9f9f9; border-top:1px solid #bbb;
+}
+#ariaInput{
+  flex:1; border:1px solid #a1887f; border-radius:20px; padding:10px 14px;
+  outline:none; font-size:14px;
+}
+#ariaSend{
+  margin-left:10px; border:none; border-radius:20px;
+  background:#795548; color:#fff; padding:10px 18px; cursor:pointer;
+}
+
+
+
+
+
+/****************************************** Featured Books Section with slideshow ******************/
 .featured {
   background: #fefaf5;
   padding: 2rem;
@@ -231,12 +495,12 @@ nav a:hover::after {
 
 /* Updated Buttons (Featured & Recommended) */
 .swiper-slide .btn,
-.rec-container a , 
+.recommendations a , 
 .library a {
   background: #3e2c23;
   color: #f3e9d2;
   padding: 0.6rem 1.4rem;
-  border: none;
+  border: none;   
   border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
@@ -246,13 +510,13 @@ nav a:hover::after {
 }
 
 .swiper-slide .btn:hover,
-.rec-container a 
+.recommendations a ,
 .library a{
   background: #6d4c41;
   transform: scale(1.05);
 }
 
-/* Novels */
+/***************************** Library Novels *******************************************/
 .novels {
   display: flex;
   flex-wrap: wrap;
@@ -289,25 +553,25 @@ nav a:hover::after {
   }
 
 
-/* Recommendations */
-.recommendations .rec-container {
+/**************************** Recommendations ***********************************/
+.recommendations {
   background: #f5eee1;
   padding: 2rem;
   border-top: 2px solid #d6b164;
 }
-/* 🧡 Recommended Book Section Buttons Styling */
-.recommendations .rec-container a {
+/*  Recommended Book Section Buttons Styling */
+.recommendations a {
   display: inline-block;
   animation: fadeSlideUp 1s ease;
   text-decoration: none;
 }
-.recommendations .rec-container a:hover {
+.recommendations a:hover {
   background: #3e2c23;
   transform: scale(1.05);
 }
 
 
-/* About Us */
+/********************************** About Us ************************************/
 /* About Us Box Effect */
 .about-us {
   background: #f7eede;
@@ -322,7 +586,7 @@ nav a:hover::after {
   animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
-/* Footer */
+/***************** Footer *******************************/
 .footer {
   background: #3e2c23;
   color: #f3e9d2;
@@ -340,29 +604,28 @@ nav a:hover::after {
 .footer__content,
 .footer__social {
   margin: 1rem;
+  font-size: 2rem;
 }
 
-.footer__link {
+.footer__social {
   color: #f3e9d2;
   text-decoration: none;
-  display: block;
-  margin: 0.5rem 0;
+  margin: 0.5rem 10rem 1rem;
   transition: color 0.3s ease;
 }
 
-.footer__link:hover {
-  color: #d6b164;
-}
-
-.footer__social-link {
+.footer a {
   margin-right: 1rem;
-  font-size: 1.5rem;
   color: #d6b164;
   transition: transform 0.3s ease;
+  text-decoration: none;
 }
-
-.footer__social-link:hover {
+.footer a:hover {
+  color: #fddc95;
   transform: scale(1.2);
+}
+.footer__link{
+  font-size: 1rem;
 }
 
 /* === Animations === */
