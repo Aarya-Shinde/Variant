@@ -1,0 +1,305 @@
+body.dark-mode {
+    background-color: #3b2f2f;
+    color: #f5f0e1;
+    font-family: var(--font-primary);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Navbar */
+body.dark-mode .navbar {
+    background-color: #3a2618;
+    color: #e5c07b;
+    position: relative;
+    border-bottom: 2px solid #e5c07b;
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
+    animation: fadeInDown 0.8s ease-in-out;
+}
+
+body.dark-mode .navbar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #b9962d, #d4af37, #b9962d);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+body.dark-mode .nav ul li a {
+    color: #f5f0e1;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .nav ul li a:hover {
+    color: #d4af37;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* Search */
+body.dark-mode .search-container input,
+body.dark-mode .search-filter input,
+body.dark-mode .search-filter select {
+    background-color: #2d1c12;
+    color: #f5f0e1;
+    border: 1px solid #6b4c33;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .search-btn {
+    background-color: #d4af37;
+    color: #1c1208;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .search-btn:hover {
+    background-color: #b9962d;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+/* Book Grid */
+body.dark-mode .book-grid {
+    background-color: #2a1d13;
+}
+
+body.dark-mode .book-card {
+    background-color: #3a281b;
+    border: 2px solid #6b4c33;
+    border-bottom: 4px solid #d4af37;
+    border-radius: 12px;
+    color: #f5f0e1;
+    padding: 1.5em;
+    margin: 1em;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeInCard 0.8s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-mode .book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    border-color: #d4af37;
+}
+
+body.dark-mode .book-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(to right, #b9962d, #d4af37, #b9962d);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    border-radius: 2px;
+    animation: glowBar 2s infinite alternate;
+}
+
+body.dark-mode .content .title,
+body.dark-mode .content .author,
+body.dark-mode .content .description {
+    color: #f5f0e1;
+    text-shadow: 0 0 4px rgba(212, 175, 55, 0.2);
+}
+
+/* Buttons */
+body.dark-mode .content button {
+    background-color: #d4af37;
+    color: #1c1208;
+    box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .content button:hover {
+    background-color: #b9962d;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Toggle Button */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #3a2618;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    border-radius: 50%;
+    padding: 12px 14px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    z-index: 999;
+}
+
+.dark-mode-toggle:hover {
+    background-color: #4b301f;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowBar {
+    0% { box-shadow: 0 0 6px rgba(212, 175, 55, 0.3); }
+    100% { box-shadow: 0 0 14px rgba(212, 175, 55, 0.6); }
+}
+
+
+
+/* -------Styling for NewNovels----- */
+
+/* Dark Mode Body */
+body.dark-mode {
+    background-color: #1c1208;
+    color: #f5f0e1;
+    font-family: var(--font-primary, 'Georgia', serif);
+}
+
+/* Navbar */
+body.dark-mode .navbar {
+    background-color: #3a2618;
+    color: #d4af37;
+    border-bottom: 2px solid #e5c07b;
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
+    position: relative;
+}
+
+body.dark-mode .navbar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(to right, #b9962d, #d4af37, #b9962d);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+/* Navbar Links */
+body.dark-mode .nav ul li a {
+    color: #f5f0e1;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+body.dark-mode .nav ul li a:hover {
+    color: #d4af37;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* Search Bar */
+body.dark-mode .search-container input {
+    background-color: #2d1c12;
+    color: #f5f0e1;
+    border: 1px solid #6b4c33;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+body.dark-mode .search-btn {
+    background-color: #d4af37;
+    color: #1c1208;
+    border: none;
+    padding: 6px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .search-btn:hover {
+    background-color: #b9962d;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+/* Section Title */
+body.dark-mode .new-novels h2 {
+    color: #d4af37;
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 1rem;
+    text-shadow: 1px 1px 4px #000;
+}
+
+/* Novels Grid */
+body.dark-mode .novels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+/* Novel Card */
+body.dark-mode .novel-card {
+    background-color: #3a281b;
+    border: 1px solid #6b4c33;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .novel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.3);
+}
+
+/* Novel Card Content */
+body.dark-mode .novel-card h3,
+body.dark-mode .novel-card p {
+    color: #f5f0e1;
+}
+
+body.dark-mode .novel-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #6b4c33;
+}
+
+/* Buttons */
+body.dark-mode .btn,
+body.dark-mode .remove-btn {
+    background-color: #d4af37;
+    color: #1c1208;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .btn:hover,
+body.dark-mode .remove-btn:hover {
+    background-color: #b9962d;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Toggle Button Style */
+/* Toggle Button */
+.dark-toggle {
+    display: flex;
+    align-items: center;
+  }
+  
+  .dark-mode-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  
+  .dark-mode-btn:hover {
+    transform: rotate(20deg);
+  }
