@@ -208,30 +208,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="add_chapter.php?novel_id=<?php echo $novel_id; ?>" class="btn btn-primary">Create Chapter</a>
 
             <!-- Upload Novel Button -->
-            <button class="btn btn-secondary mt-3" onclick="showUploadOptions()">Upload Novel File</button>
 
-            <!-- File Upload Modal -->
-            <div id="uploadModal" class="modal" style="display: none;">
-                <div class="modal-content p-3">
-                    <h4>Select File Format</h4>
-                    <form action="upload_handler.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="novel_id" value="<?php echo $novel_id; ?>">
+            <form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" name="epub_file" accept=".epub" required>
+  <input type="number" name="novel_id" placeholder="Novel ID" required>
+  <button type="submit">Upload EPUB</button>
+</form>
 
-                        <label for="file_format">Choose Format:</label>
-                        <select name="file_format" id="file_format" class="form-control">
-                            <option value="epub">EPUB</option>
-                            <option value="pdf">PDF</option>
-                            <option value="txt">TXT</option>
-                        </select>
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const response = await fetch('upload_handler.php', {
+    method: 'POST',
+    body: formData
+  });
+  const result = await response.text();
+  alert(result);
+});
+</script>
 
-                        <label for="file">Upload File:</label>
-                        <input type="file" name="file" id="file" class="form-control" required>
 
-                        <button type="submit" class="btn btn-primary mt-3">Upload</button>
-                        <button type="button" class="btn btn-danger mt-3" onclick="closeModal()">Cancel</button>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 
