@@ -1,0 +1,364 @@
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    /* Antique Parchment Background */
+    body {
+    font-family: 'EB Garamond', serif;
+    background: url('https://www.toptal.com/designers/subtlepatterns/uploads/agedpaper.png');
+    color: #4a3c31;
+    line-height: 1.6;
+    }
+
+    /* Navbar *****************************************************************************/
+    .navbar {
+    background: #5a3212;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 6px solid #c49a6c;
+    box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .navbar .logo a {
+    text-decoration: none;
+    color: #f4e7d1;
+    font-size: 1.8em;
+    font-family: 'Merriweather', serif;
+    }
+
+    .nav-links a {
+    color: #fff8dc;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 1.2em;
+    transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+    color: #d4a373;
+    }
+
+    /* Main Container */
+    .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 248, 235, 0.95);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #d4a373;
+    border-radius: 10px;
+
+    background-size: cover;
+    }
+
+    /* Headers */
+    h1, h2 {
+    font-family: 'Merriweather', serif;
+    color: #5a3212;
+    margin-bottom: 20px;
+    text-align: center;
+    }
+
+    /* Book Details Section ******************************************************/
+    .book-section {
+    padding: 20px;
+    background: #f8f1e9;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    }
+
+    .book-title {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    color: #6b2d1a;
+    }
+
+    .book-cover {
+    display: block;
+    margin: 20px auto;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .summary {
+    text-align: center;
+    margin: 15px 0;
+    font-size: 1.1em;
+    }
+
+    .tags {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    }
+
+    .tag {
+    background: #c49a6c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    }
+
+    /* Chapters List ***********************************************************/
+    .chapters {
+    list-style: none;
+    padding: 0;
+    }
+
+    .chapters li {
+    background: rgba(255, 250, 240, 0.9);
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 5px solid #a0522d;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    }
+
+    .chapters li:hover {
+    background: #e4c9a5;
+    }
+   
+    .chapters li a {
+      text-decoration: none;  /* Removes underline */
+      color: inherit;  /* Inherits the list item's text color */
+      display: block;  /* Makes the link fill the list item */
+      padding: 5px 0;  /* Better spacing inside */
+    }
+
+    /* Add a hover effect for better readability */
+    .chapters li a:hover {
+      color: #7a3e2c; /* Slightly darker brown on hover */
+      text-decoration: none; /* Ensure underline doesn’t appear */
+    }
+
+
+    /* Author Info */
+    .author {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #5a3212;
+    }
+
+/* Buttons */
+button {
+  background: #8b5e34; /* Warm brown reminiscent of antique book covers */
+  color: #fff8dc; /* Light parchment-like color for text */
+  font-family: 'Merriweather', serif;
+  font-size: 1.1em;
+  padding: 10px 15px;
+  border: 2px solid #6b2d1a; /* A subtle dark brown border */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background: #5a3212;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+
+button:active {
+  transform: scale(0.95); /* Slightly "pressed" feel */
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+}
+
+/* New Animation */
+@keyframes antique-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px); /* Slide in slightly from above */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End at the original position */
+  }
+}
+
+button {
+  animation: antique-fade-in 0.5s ease-out; /* Apply the animation to buttons */
+}
+
+
+
+
+/* Reviews section styling *************************************************/
+
+    /* Reviews Section Styling */
+    .reviews-section {
+        padding: 20px;
+        background: rgba(245, 222, 179, 0.9);
+        border-radius: 10px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        margin-top: 40px;
+      }
+      .reviews-section h2 {
+        font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        font-size: 1.8em;
+        margin-bottom: 15px;
+        color: #5a4e3c;
+      }
+    
+      /* Individual Review Boxes */
+      .review {
+        background: rgba(255, 250, 240, 0.9);
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 5px solid #a0522d;
+        border-radius: 5px;
+        line-height: 1.5;
+      }
+      .review strong {
+        color: #5a4e3c;
+      }
+      .stars {
+        margin-top: 5px;
+        font-size: 1.2em;
+        color: #FFD700;  /* Gold for stars */
+      }
+    
+      /* Review Submission Form Styling */
+    /* Form Styling */
+    textarea, input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 2px solid #a0522d;
+      border-radius: 6px;
+      background: #fff8dc;
+      font-family: 'Georgia', serif;
+      margin-bottom: 10px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: #7c522b;
+      background: #fff4c1;
+      transition: all 0.3s ease;
+    }
+        
+          /* Star Rating Widget */
+      /* Star Rating Styling */
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin: 10px 0;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 1.5em;
+      color: #ccb88f;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+
+    .star-rating input:checked + label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #4b1800; /* Highlights the selected and hovered stars */
+      text-shadow: 0 0 10px rgba(75, 24, 0, 0.5);
+    }
+
+
+    
+      /* Responsive Behavior */
+      @media (max-width: 600px) {
+        .reviews-section {
+          padding: 15px;
+        }
+        .reviews-section h2 {
+          font-size: 1.6em;
+        }
+      }
+      
+/* Comment section styleing **************************************************/
+    .comments {
+    margin-top: 40px;
+    border-top: 2px dashed #ccb88f;
+    padding-top: 20px;
+    }
+    .comments h2 {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #5a4e3c;
+    }
+    .comments textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ccb88f;
+    border-radius: 3px;
+    background-color: #fff;
+    font-family: 'Georgia', serif;
+    color: #333;
+    margin-bottom: 10px;
+    resize: vertical;
+    }
+    .read-more {
+    background: #5a4e3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+    .read-more:hover {
+    background-color: #7a6b5c;
+    }
+    .comment {
+    background: #fff7e8;
+    padding: 15px;
+    margin-top: 15px;
+    border-left: 4px solid #ccb88f;
+    border-radius: 3px;
+    font-family: 'Georgia', serif;
+    }
+    /* Responsive Behavior for Navigation Links */
+    @media (max-width: 600px) {
+    .nav-links {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    }
+    .nav-links a {
+    margin: 5px 0;
+    }
+    }
+
+   /* Footer *******************************************************/
+footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+  background: #5a3212;
+  color: #fff8dc;
+  font-size: 1em;
+  font-family: 'Merriweather', serif;
+}
+
+
+  
+
+
