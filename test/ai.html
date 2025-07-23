@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Smart Book & Writing Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f5f1;
+      padding: 30px;
+    }
+    .search-wrapper {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+    }
+    #search {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+    }
+    .results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: scaleY(0.9);
+      transform-origin: top;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 100;
+    }
+    .results.visible {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+    .result-item {
+      display: flex;
+      padding: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .result-item:hover {
+      background: #f0e5da;
+    }
+    .result-item img {
+      width: 40px;
+      height: 60px;
+      object-fit: cover;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .result-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .title { font-weight: bold; color: #5a3825; }
+    .author { font-size: 0.9rem; color: #8b5e3c; }
+    #cards {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+    }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card-body {
+      padding: 8px;
+    }
+    .card-title { font-size: 0.95rem; font-weight: bold; color: #5a3825; }
+    .card-author { font-size: 0.85rem; color: #8b5e3c; }
+  </style>
+</head>
+<body>
+
+<div class="search-wrapper">
+  <input type="text" id="search" placeholder="Type a topic or book name..." autocomplete="off">
+  <div class="results" id="results"></div>
+  <div id="cards"></div>
+</div>
+
+<script>
+  const searchInput = document.getElementById('search');
+  const resultsBox = document.getElementById('results');
+  const cards = document.getElementById('cards');
+  let timer;
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    clearTimeout(timer);
+    cards.innerHTML = '';
+
+    if (q.length < 2) {
+      resultsBox.classList.remove('visible');
+      return;
+    }
+
+    timer = setTimeout(() => {
+      fetch(https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=7)
+        .then(res => res.json())
+        .then(data => {
+          const docs = data.docs || [];
+          if (!docs.length) {
+            resultsBox.innerHTML = <div class="result-item">No matches found</div>;
+            resultsBox.classList.add('visible');
+            return;
+          }
+          resultsBox.innerHTML = '';
+          docs.forEach(d => {
+            const img = d.cover_i 
+              ? <img src="https://covers.openlibrary.org/b/id/${d.cover_i}-S.jpg">
+              : <div style="width:40px;height:60px;background:#ddd;margin-right:10px;border-radius:4px;"></div>;
+            const title = d.title || 'Unknown';
+            const author = (d.author_name || ['Unknown'])[0];
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = ${img}<div class="result-text"><div class="title">${title}</div><div class="author">${author}</div></div>;
+            item.onclick = () => selectBook(title);
+            resultsBox.appendChild(item);
+          });
+          resultsBox.classList.add('visible');
+        })
+        .catch(() => {
+          resultsBox.innerHTML = <div class="result-item">Search error</div>;
+          resultsBox.classList.add('visible');
+        });
+    }, 250);
+  });
+
+  document.addEventListener('click', e => {
+    if (!searchInput.contains(e.target)) {
+      resultsBox.classList.remove('visible');
+    }
+  });
+
+  function selectBook(title) {
+    searchInput.value = title;
+    resultsBox.classList.remove('visible');
+    loadCards(title);
+  }
+
+  function loadCards(query) {
+    cards.innerHTML = 'Loading...';
+    fetch(https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=6)
+      .then(res => res.json())
+      .then(data => {
+        cards.innerHTML = '';
+        (data.docs || []).forEach(d => {
+          const cover = d.cover_i 
+            ? <img src="https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg">
+            : <div style="height:180px;background:#ddd;"></div>;
+          cards.innerHTML += `
+            <div class="card">
+              ${cover}
+              <div class="card-body">
+                <div class="card-title">${d.title}</div>
+                <div class="card-author">${(d.author_name||['Unknown'])[0]}</div>
+              </div>
+            </div>`;
+        });
+      })
+      .catch(() => { cards.innerHTML = 'Error loading books.' });
+  }
+</script>
+
+</body>
+</html>
