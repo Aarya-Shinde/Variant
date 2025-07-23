@@ -4,193 +4,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Team A4</title>
-    <!-- <link rel="stylesheet" href="styles.css"> External CSS file -->
-    <style>
-        /* General Styles */
+
+    <!-- ---Dark mode icon import--- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+       /* === Base Reset === */
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        /* === Body Styling === */
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e4cba0;
-            color: #383838;
-            overflow-x: hidden;
+        font-family: 'Georgia', serif;
+        background-color: #fffaf0;
+        color: #3e2c23;
+        line-height: 1.6;
+        transition: background 0.4s ease, color 0.4s ease;
         }
 
-        h1, h2, h3 {
-            font-family: 'Poppins', sans-serif;
+        .dark-mode body {
+        background-color: #1e1a17;
+        color: #e5c07b;
         }
 
-        a {
-            text-decoration: none;
-            color: #d4a373;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Header Section */
+        /* === Header Section === */
         .header {
-            background: linear-gradient(rgba(253, 223, 167, 0.945), rgba(0, 3, 29, 0.5)), 
-                        url('images/team-a4.jpg') no-repeat center center/cover;
-            color: #fdfcfa;
-            text-align: center;
-            padding: 150px 20px;
-            position: relative;
+        text-align: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(to right, #241000, #ebc69d);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
-            font-size: 2.8rem;
-            margin: 0;
-            animation: fadeIn 1.5s ease-in-out;
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        color: #ffeadf;
         }
 
         .header p {
-            font-size: 1.2rem;
-            font-style: italic;
-            margin: 15px 0;
-            animation: fadeIn 2s ease-in-out;
+        font-size: 1.2rem;
+        font-style: italic;
+        color: #ce907c;
+        margin-bottom: 1rem;
         }
 
         .header button {
-            background-color: #d4a373;
-            color: #fff;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: bounceIn 2s ease;
+        background-color: #6d4c41;
+        color: #fffaf0;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .header button:hover {
-            background-color: #ad7d4d;
+        background-color: #8d6e63;
+        transform: scale(1.05);
+        
         }
 
-        /* About Section */
+        /* === About Section === */
         .about-section {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            line-height: 1.8;
+        padding: 3rem 2rem;
+        background-color: #fdf6e3;
+        text-align: center;
         }
 
         .about-section h2 {
-            font-size: 2.4rem;
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #8d6e63;
         }
 
         .about-section p {
-            font-size: 1.1rem;
-            text-align: justify;
-            margin: 0 0 20px;
+        max-width: 800px;
+        margin: 0 auto 1rem;
+        font-size: 1.1rem;
         }
 
         .about-section img {
-            width: 100%;
-            max-width: 500px;
-            display: block;
-            margin: 20px auto;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 80%;
+        max-width: 600px;
+        margin-top: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        /* Team Section */
+        /* === Team Section === */
         .team-section {
-            background: #d4a373;
-            padding: 50px 20px;
-            color: #fff;
+        background-color: #f4e7d3;
+        padding: 3rem 2rem;
+        text-align: center;
         }
 
         .team-section h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
+        font-size: 2.5rem;
+        color: #6d4c41;
+        margin-bottom: 2rem;
         }
 
-        .team-section .members {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            justify-content: center;
+        .members {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
         }
 
-        .team-section .member-card {
-            background: #fff;
-            color: #333;
-            text-align: center;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .member-card {
+        background: #fffaf0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        width: 250px;
+        box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
         }
 
-        .team-section .member-card img {
-            width: 100%;
-            max-width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin-bottom: 10px;
+        .member-card:hover {
+        transform: translateY(-5px);
         }
 
-        .team-section .member-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        .member-card img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 1rem;
         }
 
-        .team-section .member-card h3 {
-            margin: 10px 0 5px;
+        .member-card h3 {
+        font-size: 1.3rem;
+        color: #3e2c23;
         }
 
-        .team-section .member-card p {
-            font-size: 0.9rem;
-            color: #666;
+        .member-card p {
+        color: #6d4c41;
+        font-style: italic;
         }
 
-        /* Footer Section */
+        /* === Footer === */
         footer {
-            text-align: center;
-            background: #333;
-            color: #fff;
-            padding: 15px;
-            margin-top: 30px;
+        background: #3e2c23;
+        color: #fffaf0;
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.9rem;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* === Dark Mode Styles === */
+        .dark-mode .header {
+        background: linear-gradient(to right, #3b2f2f, #1e1a17);
+        color: #e5c07b;
         }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .dark-mode .header p {
+        color: #e5c07b;
         }
-    </style>
+
+        .dark-mode .header button {
+        background-color: #8c6849;
+        color: #fffaf0;
+        }
+
+        .dark-mode .about-section,
+        .dark-mode .team-section {
+        background-color: #2d2420;
+        }
+
+        .dark-mode .about-section h2,
+        .dark-mode .team-section h2 {
+        color: #e5c07b;
+        }
+
+        .dark-mode .member-card {
+        background-color: #3b2f2f;
+        color: #e5c07b;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .dark-mode footer {
+        background: #1e1a17;
+        color: #d6b164;
+        }
+
+</style>
 </head>
 <body>
     <!-- Header Section -->
     <section class="header">
         <h1>About Us</h1>
-        <p>"Empowering knowledge, imagination, and innovation."</p>
-        <button><a href="index.html"></a>Explore More</button>
+        <p>"There are no limts to Imagination and our creativity."</p>
+        <button><a href="../index.php">Explore </a></button>
     </section>
+
+    <button class="dark-mode-btn" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      
 
     <!-- About Section -->
     <section class="about-section">
@@ -205,7 +218,7 @@
             real-world challenges. Our project, "Unified System for Author and Audience," showcases our collaborative
             efforts and technical expertise.
         </p>
-        <img src="/images/bg1.jpg" alt="Our Project">
+        <img src="../images/cover.png" alt="Our Project">
     </section>
 
     <!-- Team Section -->
@@ -213,19 +226,9 @@
         <h2>Meet the Team</h2>
         <div class="members">
             <div class="member-card">
-                <img src="/images/bg2.png" alt="Team Member 1">
+                <img src="../images/3.jpg" alt="Team Member 1">
                 <h3>Aarya Shinde</h3>
-                <p>Researcher/Frontend Developer</p>
-            </div>
-            <div class="member-card">
-                <img src="images/member2.jpg" alt="Team Member 2">
-                <h3>Aarya Shinde</h3>
-                <p>Frontend/Backend Developer</p>
-            </div>
-            <div class="member-card">
-                <img src="images/member3.jpg" alt="Team Member 3">
-                <h3>Atharv Urkude</h3>
-                <p>UI/UX Designer/Developer</p>
+                <p>Frontend & Backend Developer</p>
             </div>
         </div>
     </section>
@@ -234,5 +237,25 @@
     <footer>
         &copy; 2025 Team A4 | SRTTC Pune | All Rights Reserved
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const darkModeBtn = document.querySelector(".dark-mode-btn");
+          const icon = darkModeBtn.querySelector("i");
+      
+          // Load theme from localStorage
+          const isDarkMode = localStorage.getItem("theme") === "dark";
+          document.body.classList.toggle("dark-mode", isDarkMode);
+          icon.classList.replace(isDarkMode ? "fa-moon" : "fa-sun", isDarkMode ? "fa-sun" : "fa-moon");
+      
+          // Toggle on click
+          darkModeBtn.addEventListener("click", () => {
+            const isDark = document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            icon.classList.replace(isDark ? "fa-moon" : "fa-sun", isDark ? "fa-sun" : "fa-moon");
+          });
+        });
+      </script>
+      
 </body>
 </html>
