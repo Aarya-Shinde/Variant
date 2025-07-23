@@ -23,7 +23,7 @@ $username = $user ? htmlspecialchars($user['username']) : "Admin";
 // Fetch total counts
 $totalBooks = $conn->query("SELECT COUNT(*) AS count FROM Novels")->fetch_assoc()['count'];
 $totalUsers = $conn->query("SELECT COUNT(*) AS count FROM Users")->fetch_assoc()['count'];
-// $totalCategories = $conn->query("SELECT COUNT(*) AS count FROM Categories")->fetch_assoc()['count'];
+$totalFanfics = $conn->query("SELECT COUNT(*) AS count FROM Fanfic")->fetch_assoc()['count'];
 // $totalReports = $conn->query("SELECT COUNT(*) AS count FROM Reports")->fetch_assoc()['count'];
 
 //Search novels query
@@ -50,11 +50,14 @@ if (!empty($search)) {
 
 // Handle novel deletion
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
-    $delete_id = $_POST['delete_id'];
-    $conn->query("DELETE FROM Novels WHERE id = '$delete_id'");
-    header("Location: dashboard.php");
+    $delete_id = intval($_POST['delete_id']);
+    $stmt = $conn->prepare("DELETE FROM Novels WHERE novel_id = ?");
+    $stmt->bind_param("i", $delete_id);
+    $stmt->execute();
+    header("Location: admin_dashboard.php");
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             <li><a href="admin/manage_novels.php"><i class="fa fa-book"></i> Manage Novels</a></li>
             <li><a href="admin/trending.php"><i class="fa fa-fire"></i> Trending</a></li>
             <li><a href="admin/users.php"><i class="fa fa-users"></i> Users</a></li>
-            <li><a href="reports.php"><i class="fa fa-flag"></i> Reports</a></li>
+            <li><a href="admin/reports.php"><i class="fa fa-flag"></i> Reports</a></li>
             <li><a href="logout.php" class="btn btn-light"><i class="fa fa-sign-out"></i> Logout</a></li>
         </ul>
     </div>
@@ -97,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         <!-- Stats Section -->
         <div class="stats">
             <div class="stat-card">Total Books: <strong><?php echo $totalBooks; ?></strong></div>
+            <div class="stat-card">Total Fanfics: <strong><?php echo $totalFanfics; ?></strong></div>
             <div class="stat-card">Total Users: <strong><?php echo $totalUsers; ?></strong></div>
-            <div class="stat-card">Categories: <strong><?php echo $totalCategories; ?></strong></div>
-            <div class="stat-card">Reports: <strong><?php echo $totalReports; ?></strong></div>
+            <!-- <div class="stat-card">Reports: <strong><?php echo $totalReports; ?></strong></div> -->
         </div>
 
         <!-- Search & Display Novels -->
@@ -116,6 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
                         <h5><?php echo htmlspecialchars($novel['title']); ?></h5>
                         <p>By: <?php echo htmlspecialchars($novel['author_name']); ?></p>
                         <a href="admin/edit_novel.php?id=<?php echo $novel['novel_id']; ?>" class="btn btn-primary">Edit</a>
+                        <form method="POST" action="" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this novel?');">
+                            <input type="hidden" name="delete_id" value="<?php echo $novel['novel_id']; ?>">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                        
                     </div>
                 <?php endforeach; ?>
             </div>

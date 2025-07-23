@@ -162,9 +162,9 @@ $result = $stmt->get_result();
     <!-- -----sidebar------>
 
     <div class="sidebar">
-    <div class="logo"> <a href="index.php"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 70px;"></a> </div>
+    <div class="logo"> <a href="../index.php"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 70px;"></a> </div>
 
-    <a href="../index.php"><i class="fa fa-home"></i> Home</a>
+    <a href="#" onclick="toggleDarkMode()"><i class="fa fa-moon-o"></i> Dark Mode</a>
     <a href="reader_dashboard.php"><i class="fa fa-user"></i> Profile</a>
     <a href="#" onclick="loadPage('reader_space')"><i class="fa fa-book"></i> Reader's Space</a>
     <a href="#" onclick="loadPage('settings')"><i class="fa fa-cog"></i> Settings</a>
