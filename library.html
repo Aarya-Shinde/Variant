@@ -190,7 +190,7 @@ $result = $stmt->get_result();
             <div class="bookshelf">
                 <div class="shelf-row">
                     <?php while ($row = $result->fetch_assoc()) { ?>
-                        <div class="book" onclick="viewBook('<?php echo htmlspecialchars($row['title']); ?>')">
+                        <div class="book" onclick="viewBook('<?php echo htmlspecialchars($row['title']); ?>')"">
                             <?php echo htmlspecialchars($row['title']); ?>
                         </div>
                     <?php } ?>
