@@ -1,3 +1,35 @@
+<?php
+session_start();
+require '../../db/dbconnect.php'; // Adjust path as needed
+
+$user_id = $_SESSION['user_id'] ?? null;
+$novel_id = $_GET['novel_id'] ?? null;
+
+if (!$novel_id) {
+    die("Invalid novel ID.");
+}
+
+// Fetch novel details
+$stmt = $conn->prepare("SELECT * FROM Novels WHERE novel_id = ?");
+$stmt->bind_param("i", $novel_id);
+$stmt->execute();
+$novel = $stmt->get_result()->fetch_assoc();
+
+if (!$novel) {
+    die("Novel not found.");
+}
+
+// Check if the novel is in the user's library
+$is_in_library = false;
+if ($user_id) {
+    $check_stmt = $conn->prepare("SELECT * FROM Library WHERE user_id = ? AND novel_id = ?");
+    $check_stmt->bind_param("ii", $user_id, $novel_id);
+    $check_stmt->execute();
+    $is_in_library = $check_stmt->get_result()->num_rows > 0;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,16 +51,16 @@
  
     <!-- variant logo image here -->
     <div class="logo"> 
-    <a href="../../index.html">
+    <a href="../../index.php">
     <img src="../../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
     </a>
 
 </div>
 
     <div class="nav-links">
-      <a href="../../index.html">Home</a>
+      <a href="../../index.php">Home</a>
       <a href="../explore.php">Novels</a>
-      <a href="../../pages/writer_dashboard.php">Writer</a>
+      <a href="../../pages/reader/library.php">Library</a>
       <a href="../../pages/reader_dashboard.php">User</a>
     </div>
     <button class="dark-mode-btn">
@@ -41,28 +73,39 @@
   <!-- Main Content -->
   <div class="container" id="home">
 
-    <!-- Book Details Section -->
-    <section class="book-section">
-      <h1 class="book-title" id="bookTitle"></h1>
-      <img src="" alt="Book Cover" class="book-cover" id="bookCover">
-      <p class="summary" id="bookSummary"></p>
+<!-- Book Details Section -->
+<section class="book-section">
+    <h1 class="book-title" id="bookTitle"></h1>
+    <img src="" alt="Book Cover" class="book-cover" id="bookCover">
+    <p class="summary" id="bookSummary"></p>
+    <p class="publish-date"><strong>Published on:</strong> <span id="publishDate"></span></p>
+    <div class="tags" id="tagsContainer"></div>
 
-      <p class="publish-date"><strong>Published on:</strong> <span id="publishDate"></span></p>
+    <?php if ($user_id): ?>
+        <form action="../../pages/reader/library.php" method="POST">
+            <input type="hidden" name="novel_id" value="<?= $novel_id ?>">
+            <input type="hidden" name="title" value="<?= htmlspecialchars($novel['title']) ?>">
+            <input type="hidden" name="author" value="<?= htmlspecialchars($novel['author_name']) ?>">
 
-      <div class="tags" id="tagsContainer"></div>
+            <?php if ($is_in_library): ?>
+                <input type="hidden" name="remove_novel_id" value="<?= $novel_id ?>">
+                <button type="submit" name="remove" class="remove-btn">In Library</button>
+            <?php else: ?>
+                <button type="submit" name="add" class="btn">Add to Library</button>
+            <?php endif; ?>
+        </form>
+    <?php else: ?>
+        <p><a href="../../pages/login.php">Login</a> to manage your library.</p>
+    <?php endif; ?>
+</section>
 
-    <form action="\Variant\pages\reader\library.php" method="POST">     
-        <input type="hidden" name="novel_id" value="<?php echo isset($_GET['novel_id']) ? $_GET['novel_id'] : ''; ?>">
-        <input type="hidden" name="title" value="<?php echo $book_title; ?>">
-        <input type="hidden" name="author" value="<?php echo $author; ?>">
-        <button type="submit" class="btn btn-primary">Add to Library</button>
-    </form>
 
 
 
       <h2>Chapters</h2>
       <ul class="chapters" id="chapterList">
           <!-- Chapters will be dynamically inserted here -->
+           
       </ul>
 
      <div id="pagination"></div>
@@ -400,4 +443,3 @@
 
 </body>
 </html>
-
