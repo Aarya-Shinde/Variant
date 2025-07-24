@@ -174,9 +174,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Navbar -->
     <div class="nav-bar">
         <a href="../index.php">Home</a>
-        <a href="../library.html">Library</a>
-        <a href="../reader.html">Reader</a>
-        <a href="../writer.html">Writer</a>
+        <a href="./reader/library.php">Library</a>
+        <a href="reader_dashboard.php">Reader</a>
+        <a href="writer_dashboard.php">Writer</a>
     </div>
 
     <!-- Registration Form -->
