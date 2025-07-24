@@ -1,0 +1,146 @@
+:root {
+    --background-light: #fffaf0;
+    --text-light: #3e2723;
+    --border-light: #d4c0a1;
+    --background-dark: #121212;
+    --text-dark: #f5f5f5;
+    --border-dark: #333;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: var(--background-light);
+    color: var(--text-light);
+    margin: 0;
+    padding: 20px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: auto;
+    background: var(--background-light);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-light);
+}
+
+.novel-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #8b4513;
+    text-align: center;
+}
+
+.author {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #5d4037;
+}
+
+.chapter-title {
+    font-size: 1.8rem;
+    margin-top: 20px;
+    color: #8b4513;
+    text-align: center;
+}
+
+.chapter-content {
+    text-align: justify;
+    line-height: 1.8;
+    font-family: 'Georgia', serif;
+    max-width: 90%;
+    margin: auto;
+    display: block; /* Ensures it's a block element */
+}
+
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background: #8b4513;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:disabled {
+    background: #d4c0a1;
+    cursor: not-allowed;
+}
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.toc {
+    background: #fdf8f2;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.toc select {
+    width: 100%;
+    padding: 8px;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* 🔹 Dark Mode Styling */
+.dark-mode {
+    background: var(--background-dark);
+    color: var(--text-dark);
+}
+
+.dark-mode .container {
+    background: var(--background-dark);
+    border: 2px solid #e5c07b;
+}
+
+.dark-mode .toc {
+    background: #1e1e1e;
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .btn {
+    background: #5d4037;
+    border: 2px solid #e5c07b;
+}
+
+/* 🔹 Dark Mode Toggle Button */
+.dark-mode-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 12px;
+    background: #8b4513;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.dark-mode-btn:hover {
+    background: #5d4037;
+    transform: scale(1.1);
+}
+
+.dark-mode-btn i {
+    transition: color 0.3s;
+}
