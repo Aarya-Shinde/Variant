@@ -83,6 +83,8 @@ if ($stmt = $conn->prepare($reviews_sql)) {
     $stmt->close();
 }
 
+
+
 $conn->close();
 
 // Output JSON response
