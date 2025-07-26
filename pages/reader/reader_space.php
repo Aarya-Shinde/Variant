@@ -204,7 +204,7 @@
 
         <!-- Center: Buttons Navigation -->
         <div class="button-container">
-            <a class="button" href="diary.html">Diary</a>
+            <a class="button" href="/Variant/pages/reader/diary/diary.html">Diary</a>
             <!-- Library button (opens in a new tab) -->
             <a class="button" href="/Variant/pages/reader/library.php">Library</a>
 
