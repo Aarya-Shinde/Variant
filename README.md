@@ -31,8 +31,8 @@ Welcome to the **Unified System for Author and Audience**, a feature-rich platfo
 ---
 
 ## 🛠️ Tech Stack  
-- **Frontend**: React.js, HTML, CSS, JavaScript  
-- **Backend**: Node.js, Express.js, PHP  
+- **Frontend**: PHP, HTML, CSS, JavaScript  
+- **Backend**: JS, Python, Flask, PHP, Selenium, Scrapy, Webscraper 
 - **Database**: MySQL  
 - **Authentication & Communication**: Email/Password, WebSocket  
 - **File Storage**: Firebase Storage  
@@ -40,7 +40,7 @@ Welcome to the **Unified System for Author and Audience**, a feature-rich platfo
 
 ---
 
-## 📌 Key Skills Utilized  
+## Key Skills Utilized  
 1. **Full-Stack Development**: Designed scalable and interactive user interfaces and APIs.  
 2. **AI Integration**: Developed an AI chatbot for intelligent book recommendations and metadata automation.  
 3. **Data Analysis**: Generated insights and reports for admins to track trends and platform usage.  
