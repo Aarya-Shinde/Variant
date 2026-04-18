@@ -2,7 +2,7 @@
 
 $db_server = "localhost";
 $db_user = "root";
-$db_pass = "@pokemon1"; 
+$db_pass = "your password"; 
 $db_name = "Variant";
 
 // Attempt to connect to the database
