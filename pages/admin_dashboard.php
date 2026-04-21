@@ -52,12 +52,12 @@ $totalFanfics = $conn->query("SELECT COUNT(*) AS count FROM Fanfic")->fetch_asso
                 </a> </div>
 
         <ul>
-            <li><a href="admin_dashboard.php"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="admin/manage_novels.php"><i class="fa fa-book"></i> Manage Novels</a></li>
-            <li><a href="admin/all_novels.php"><i class="fa fa-fire"></i> All Novels</a></li>
-            <li><a href="admin/users.php"><i class="fa fa-users"></i> Users</a></li>
-            <li><a href="admin/reports.php"><i class="fa fa-flag"></i> Reports</a></li>
-            <li><a href="logout.php" class="btn btn-light"><i class="fa fa-sign-out"></i> Logout</a></li>
+            <li><a href="admin_dashboard.php"> Dashboard</a></li>
+            <li><a href="admin/manage_novels.php"> Manage Novels</a></li>
+            <li><a href="admin/all_novels.php"> All Novels</a></li>
+            <li><a href="admin/users.php"> Users</a></li>
+            <li><a href="admin/reports.php"> Reports</a></li>
+            <li><a href="logout.php" class="btn btn-light"> Logout</a></li>
         </ul>
     </div>
 
