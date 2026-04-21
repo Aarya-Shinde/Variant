@@ -26,38 +26,6 @@ $totalUsers = $conn->query("SELECT COUNT(*) AS count FROM Users")->fetch_assoc()
 $totalFanfics = $conn->query("SELECT COUNT(*) AS count FROM Fanfic")->fetch_assoc()['count'];
 // $totalReports = $conn->query("SELECT COUNT(*) AS count FROM Reports")->fetch_assoc()['count'];
 
-//Search novels query
-
-$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-
-$novels = [];
-if (!empty($search)) {
-    $searchQuery = "SELECT * FROM Novels WHERE title LIKE '%$search%' OR author_name LIKE '%$search%'";
-    $searchResult = $conn->query($searchQuery);
-
-    while ($row = $searchResult->fetch_assoc()) {
-        $novels[] = $row;
-    }
-} else {
-    $novelQuery = "SELECT * FROM Novels";
-    $novelResult = $conn->query($novelQuery);
-
-    while ($row = $novelResult->fetch_assoc()) {
-        $novels[] = $row;
-    }
-}
-
-
-// Handle novel deletion
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
-    $delete_id = intval($_POST['delete_id']);
-    $stmt = $conn->prepare("DELETE FROM Novels WHERE novel_id = ?");
-    $stmt->bind_param("i", $delete_id);
-    $stmt->execute();
-    header("Location: admin_dashboard.php");
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         <ul>
             <li><a href="admin_dashboard.php"><i class="fa fa-home"></i> Dashboard</a></li>
             <li><a href="admin/manage_novels.php"><i class="fa fa-book"></i> Manage Novels</a></li>
-            <li><a href="admin/trending.php"><i class="fa fa-fire"></i> Trending</a></li>
+            <li><a href="admin/all_novels.php"><i class="fa fa-fire"></i> All Novels</a></li>
             <li><a href="admin/users.php"><i class="fa fa-users"></i> Users</a></li>
             <li><a href="admin/reports.php"><i class="fa fa-flag"></i> Reports</a></li>
             <li><a href="logout.php" class="btn btn-light"><i class="fa fa-sign-out"></i> Logout</a></li>
@@ -102,35 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
             <div class="stat-card">Total Books: <strong><?php echo $totalBooks; ?></strong></div>
             <div class="stat-card">Total Fanfics: <strong><?php echo $totalFanfics; ?></strong></div>
             <div class="stat-card">Total Users: <strong><?php echo $totalUsers; ?></strong></div>
-            <!-- <div class="stat-card">Reports: <strong><?php echo $totalReports; ?></strong></div> -->
+            <!-- <div class="stat-card">Reports: <strong></strong></div> -->
         </div>
 
-        <!-- Search & Display Novels -->
-        <form method="GET" action="" class="search-box">
-            <input type="text" name="search" placeholder="Search Novel..." class="form-control">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-         <!-- Working the search button -->
-                <?php if (!empty($novels)): ?>
-            <div class="novel-container">
-                <?php foreach ($novels as $novel): ?>
-                    <div class="novel-card">
-                        <img src="<?php echo htmlspecialchars($novel['cover_image_url']); ?>" alt="Cover Image">
-                        <h5><?php echo htmlspecialchars($novel['title']); ?></h5>
-                        <p>By: <?php echo htmlspecialchars($novel['author_name']); ?></p>
-                        <a href="admin/edit_novel.php?id=<?php echo $novel['novel_id']; ?>" class="btn btn-primary">Edit</a>
-                        <form method="POST" action="" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this novel?');">
-                            <input type="hidden" name="delete_id" value="<?php echo $novel['novel_id']; ?>">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
 
-                        
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php else: ?>
-            <p class="text-muted">No novels found.</p>
-        <?php endif; ?>
 
     </div>
 
