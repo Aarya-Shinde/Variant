@@ -5,6 +5,6 @@ dbconnect.php
 dbconnect.py
 
 # Folders to be ignored by git
-/_pycache_/
-/Book Data/
-/Fanfic Data/
+__pycache__/
+web scraper/Fanfic Data/
+web scraper/Book Data/
