@@ -2,7 +2,7 @@
 <div class="sidebar">
     <div class="logo"> 
         <a href="../index.php">
-            <img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+            <img src="../../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
         </a>
     </div>
 
