@@ -45,21 +45,7 @@ $totalFanfics = $conn->query("SELECT COUNT(*) AS count FROM Fanfic")->fetch_asso
 <body>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-                <!-- variant logo image here -->
-                <div class="logo"> 
-                <a href="../index.php"><img src="../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
-                </a> </div>
-
-        <ul>
-            <li><a href="admin_dashboard.php"> Dashboard</a></li>
-            <li><a href="admin/manage_novels.php"> Manage Novels</a></li>
-            <li><a href="admin/all_novels.php"> All Novels</a></li>
-            <li><a href="admin/users.php"> Users</a></li>
-            <li><a href="admin/reports.php"> Reports</a></li>
-            <li><a href="logout.php" class="btn btn-light"> Logout</a></li>
-        </ul>
-    </div>
+<?php include './admin/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -70,10 +56,7 @@ $totalFanfics = $conn->query("SELECT COUNT(*) AS count FROM Fanfic")->fetch_asso
             <div class="stat-card">Total Books: <strong><?php echo $totalBooks; ?></strong></div>
             <div class="stat-card">Total Fanfics: <strong><?php echo $totalFanfics; ?></strong></div>
             <div class="stat-card">Total Users: <strong><?php echo $totalUsers; ?></strong></div>
-            <!-- <div class="stat-card">Reports: <strong></strong></div> -->
         </div>
-
-
 
     </div>
 
