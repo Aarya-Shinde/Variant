@@ -20,26 +20,49 @@ $user = $result->fetch_assoc();
 // Handle cases where no user is found
 $username = $user ? htmlspecialchars($user['username']) : "Admin";
 
+// Pagination setup
+$limit = 25;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max($page, 1);
+$offset = ($page - 1) * $limit;
+
 //Search novels query
 
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 
 $novels = [];
+
 if (!empty($search)) {
-    $searchQuery = "SELECT * FROM Novels WHERE title LIKE '%$search%' OR author_name LIKE '%$search%'";
-    $searchResult = $conn->query($searchQuery);
+    // Count total results
+    $countQuery = "SELECT COUNT(*) as total FROM Novels 
+                   WHERE title LIKE '%$search%' OR author_name LIKE '%$search%'";
+    $countResult = $conn->query($countQuery);
+    $total = $countResult->fetch_assoc()['total'];
 
-    while ($row = $searchResult->fetch_assoc()) {
-        $novels[] = $row;
-    }
+    // Fetch paginated results
+    $query = "SELECT * FROM Novels 
+              WHERE title LIKE '%$search%' OR author_name LIKE '%$search%' 
+              LIMIT $limit OFFSET $offset";
+    $result = $conn->query($query);
+
 } else {
-    $novelQuery = "SELECT * FROM Novels";
-    $novelResult = $conn->query($novelQuery);
+    // Count total
+    $countQuery = "SELECT COUNT(*) as total FROM Novels";
+    $countResult = $conn->query($countQuery);
+    $total = $countResult->fetch_assoc()['total'];
 
-    while ($row = $novelResult->fetch_assoc()) {
-        $novels[] = $row;
-    }
+    // Fetch paginated
+    $query = "SELECT * FROM Novels LIMIT $limit OFFSET $offset";
+    $result = $conn->query($query);
 }
+
+// Store results
+while ($row = $result->fetch_assoc()) {
+    $novels[] = $row;
+}
+
+// Total pages
+$totalPages = ceil($total / $limit);
 
 
 // Handle novel deletion
@@ -70,6 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
 
 </head>
 <body>
+
+ <!-- Sidebar -->
+<?php include './sidebar.php'; ?>
+
         <!-- Main Content -->
     <div class="main-content">
 
@@ -100,6 +127,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         <?php else: ?>
             <p class="text-muted">No novels found.</p>
         <?php endif; ?>
+
+        <!-- Pagination -->
+         <?php if ($totalPages > 1): ?>
+        <div class="pagination justify-content-center mt-4">
+
+            <!-- Prev -->
+            <?php if ($page > 1): ?>
+                <a class="btn btn-outline-primary mx-1"
+                href="?page=<?php echo $page - 1; ?>&search=<?php echo $search; ?>">Prev</a>
+            <?php endif; ?>
+
+            <?php
+            $range = 2; // pages around current
+            $start = max(1, $page - $range);
+            $end = min($totalPages, $page + $range);
+
+            // Show first page
+            if ($start > 1) {
+                echo '<a class="btn btn-outline-primary mx-1" href="?page=1&search='.$search.'">1</a>';
+                if ($start > 2) echo '<span class="mx-1">...</span>';
+            }
+
+            // Middle pages
+            for ($i = $start; $i <= $end; $i++):
+            ?>
+                <a class="btn <?php echo ($i == $page) ? 'btn-primary' : 'btn-outline-primary'; ?> mx-1"
+                href="?page=<?php echo $i; ?>&search=<?php echo $search; ?>">
+                <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+
+            <?php
+            // Show last page
+            if ($end < $totalPages) {
+                if ($end < $totalPages - 1) echo '<span class="mx-1">...</span>';
+                echo '<a class="btn btn-outline-primary mx-1" href="?page='.$totalPages.'&search='.$search.'">'.$totalPages.'</a>';
+            }
+            ?>
+
+            <!-- Next -->
+            <?php if ($page < $totalPages): ?>
+                <a class="btn btn-outline-primary mx-1"
+                href="?page=<?php echo $page + 1; ?>&search=<?php echo $search; ?>">Next</a>
+            <?php endif; ?>
+
+        </div>
+        <?php endif; ?>
+
+
+
 
     </div>
 </body>
