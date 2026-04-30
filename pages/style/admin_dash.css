@@ -4,23 +4,56 @@ body {
     color: #3e2723;
 }
 
+/* Sidebar Container Refinement */
+/* Sidebar Container */
 .sidebar {
-    width: 250px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
+    width: 260px;
+    background: rgba(30, 20, 15, 0.9); /* Deep earthy dark */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    color: #f5ebe0;
     position: fixed;
-    height: 100%;
-    padding: 1rem;
-    border-radius: 0px 0 0 10px;
-    backdrop-filter: blur(10px);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
 
-.sidebar .logo {
-    font-size: 1.8rem;
-    font-weight: bold;
+/* Stylized Text Logo */
+.logo-text {
+    padding: 2.5rem 1.5rem;
     text-align: center;
-    margin-bottom: 2rem;
-    color: #8b4513;
+}
+
+.logo-text a {
+    text-decoration: none;
+    color: #fff;
+    font-family: 'Playfair Display', serif; /* Or any serif font */
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    display: block;
+}
+
+.logo-dot {
+    color: #8b4513; /* Signature brown accent */
+}
+
+.logo-text small {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+/* Navigation List */
+.sidebar-nav {
+    flex-grow: 1;
+    padding: 0 1rem;
 }
 
 .sidebar ul {
@@ -29,23 +62,54 @@ body {
 }
 
 .sidebar ul li {
-    margin: 1.5rem 0;
+    margin-bottom: 0.5rem;
 }
 
 .sidebar ul li a {
     text-decoration: none;
-    color: white;
-    font-size: 1.2rem;
-    display: block;
-    padding: 0.7rem 1rem;
-    border-radius: 8px;
-    transition: 0.3s;
-    background-color: rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
+/* Hover & Active States */
 .sidebar ul li a:hover {
-    background-color: #8b4513;
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.sidebar ul li a.active {
+    background: #8b4513;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+/* Footer / Logout Area */
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logout-link {
+    text-decoration: none;
+    color: #e63946; /* Subtle red for logout */
+    font-weight: 600;
+    display: block;
+    text-align: center;
+    padding: 0.8rem;
+    border: 1px solid rgba(230, 57, 70, 0.3);
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.logout-link:hover {
+    background: #e63946;
+    color: #fff;
 }
 
 .main-content {
