@@ -53,18 +53,8 @@ while ($row = $result->fetch_assoc()) {
 </head>
 <body>
 
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light" href="#">Variant</a>
-        <div class="ml-auto">
-            <a href="../admin_dashboard.php">Dashboard</a>
-            <a href="../../index.html">Home</a>
-            <a href="../logout.php" class="btn btn-danger btn-sm">Logout</a>
-        </div>
-    </div>
-</nav>
+ <!-- Sidebar -->
+<?php include './sidebar.php'; ?>
 
     <div class="container">
         <h2 class="mt-3">Manage Users</h2>
