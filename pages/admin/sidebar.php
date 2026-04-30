@@ -1,17 +1,50 @@
+<?php
+// Get current page filename for active state
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <link rel="stylesheet" href="../style/admin_dash.css">
 <div class="sidebar">
-    <div class="logo"> 
+    <div class="logo-text">
         <a href="../index.php">
-            <img src="../../images/logowrite.png" alt="Variant Logo" style="max-height: 40px;">
+            VARIANT<span class="logo-dot">.</span>
         </a>
+        <small>ADMIN</small>
     </div>
 
-    <ul>
-        <li><a href="admin_dashboard.php">Dashboard</a></li>
-        <li><a href="admin/manage_novels.php">Manage Novels</a></li>
-        <li><a href="admin/all_novels.php">All Novels</a></li>
-        <li><a href="admin/users.php">Users</a></li>
-        <li><a href="admin/reports.php">Reports</a></li>
-        <li><a href="logout.php" class="btn btn-light">Logout</a></li>
-    </ul>
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="/variant/pages/admin/admin_dashboard.php" class="<?= $current_page == 'admin_dashboard.php' ? 'active' : '' ?>">
+                    <i class="nav-icon"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/variant/pages/admin/manage_novels.php" class="<?= $current_page == 'manage_novels.php' ? 'active' : '' ?>">
+                    <i class="nav-icon"></i> Manage Novels
+                </a>
+            </li>
+            <li>
+                <a href="/variant/pages/admin/all_novels.php" class="<?= $current_page == 'all_novels.php' ? 'active' : '' ?>">
+                    <i class="nav-icon"></i> All Novels
+                </a>
+            </li>
+            <li>
+                <a href="/variant/pages/admin/users.php" class="<?= $current_page == 'users.php' ? 'active' : '' ?>">
+                    <i class="nav-icon"></i> Users
+                </a>
+            </li>
+            <li>
+                <a href="/variant/pages/admin/reports.php" class="<?= $current_page == 'reports.php' ? 'active' : '' ?>">
+                    <i class="nav-icon"></i> Reports
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        <a href="logout.php" class="logout-link">
+            <span>Logout</span>
+        </a>
+    </div>
 </div>
