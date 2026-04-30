@@ -33,31 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Novels</title>
-<style>
-
-    body {
-        font-family: 'Georgia', serif;
-        background: linear-gradient(to right, #f2e6d9, #d4b8a7);
-        color: #333;
-        margin: 0px;
-        line-height: 1.6;
-    }
-    .navbar {
-        background: rgba(0, 0, 0, 0.8);
-        padding: 1rem;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .navbar a {
-        color: white;
-        margin-right: 20px;
-        text-decoration: none;
-        font-size: 1.2rem;
-        transition: 0.3s;
-    }
-    .navbar a:hover {
-        color: #f1c40f;
-    }
+    <title>Admin Dashboard</title>
+<!-- <style>
 
     .container {
         background: rgba(255, 255, 255, 0.9);
@@ -120,22 +97,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         transform: scale(1.05);
         opacity: 0.8;
     }
-</style>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light" href="#">Variant</a>
-        <div class="ml-auto">
-            <a href="../admin_dashboard.php">Dashboard</a>
-            <a href="../../index.html">Home</a>
-            <a href="../logout.php" class="btn btn-danger btn-sm">Logout</a>
-        </div>
-    </div>
-</nav>
+</style> -->
 
 </head>
+
 <body>
+
+ <!-- Sidebar -->
+<?php include './sidebar.php'; ?>
 
 <div class="container">
     <h2>Manage Novels</h2>
@@ -148,8 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         <a href="add_novel.php" class="btn btn-success" style="margin-left: 600px;">Add Novel</a>
     </div>
 
-
-
+<!-- Manage Novels Table -->
     <table class="novel-table">
         <thead>
             <tr>
