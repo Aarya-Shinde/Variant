@@ -15,7 +15,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <nav class="sidebar-nav">
         <ul>
             <li>
-                <a href="/variant/pages/admin/admin_dashboard.php" class="<?= $current_page == 'admin_dashboard.php' ? 'active' : '' ?>">
+                <a href="/variant/pages/admin_dashboard.php" class="<?= $current_page == 'admin_dashboard.php' ? 'active' : '' ?>">
                     <i class="nav-icon"></i> Dashboard
                 </a>
             </li>
